@@ -1,18 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RG Creator AI Chat</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RG Creator AI Chat</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#0d1117;
+color:white;
+}
+
+header{
+background:#161b22;
+padding:20px;
+text-align:center;
+font-size:28px;
+font-weight:bold;
+}
+
+.chat-box{
+height:60vh;
+overflow-y:auto;
+padding:20px;
+}
+
+.ai{
+background:#1f2937;
+padding:12px;
+border-radius:12px;
+margin-bottom:15px;
+}
+
+.user{
+background:#2563eb;
+padding:12px;
+border-radius:12px;
+margin-bottom:15px;
+text-align:right;
+}
+
+.input-area{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+display:flex;
+padding:10px;
+background:#161b22;
+}
+
+input{
+flex:1;
+padding:12px;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+
+button{
+margin-left:10px;
+padding:12px 20px;
+border:none;
+border-radius:10px;
+background:#00E5FF;
+font-weight:bold;
+cursor:pointer;
+}
+</style>
+
 </head>
 
-<body style="background:#0d1117;color:white;font-family:Arial;text-align:center;padding:50px;">
+<body>
 
-<h1>🤖 RG Creator AI Chat</h1>
+<header>🤖 RG Creator AI Chat</header>
 
-<p>AI Chat is coming soon...</p>
+<div class="chat-box" id="chat">
+<div class="ai">
+👋 Hello! Welcome to RG Creator AI.
+</div>
+</div>
 
-<a href="../index.html">⬅ Back to Home</a>
+<div class="input-area">
+<input type="text" id="msg" placeholder="Type your message...">
+<button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+function sendMessage(){
+
+let input=document.getElementById("msg");
+
+if(input.value=="") return;
+
+let chat=document.getElementById("chat");
+
+chat.innerHTML += `
+<div class="user">${input.value}</div>
+<div class="ai">⚠ AI is not connected yet.</div>
+`;
+
+input.value="";
+
+chat.scrollTop=chat.scrollHeight;
+
+}
+</script>
 
 </body>
 </html>
