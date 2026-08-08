@@ -14,17 +14,28 @@ export default async function handler(req, res) {
       });
     }
 
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    if (!apiKey) {
+      return res.status(500).json({
+        error: "GEMINI_API_KEY is not configured in Vercel."
+      });
+    }
+
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent",
+      "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-flash-image:generateContent",
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
-          "x-goog-api-key": process.env.GEMINI_API_KEY
+          "x-goog-api-key": apiKey
         },
+
         body: JSON.stringify({
           contents: [
             {
+              role: "user",
               parts: [
                 {
                   text: prompt.trim()
@@ -32,8 +43,16 @@ export default async function handler(req, res) {
               ]
             }
           ],
+
           generationConfig: {
-            responseModalities: ["TEXT", "IMAGE"]
+            responseModalities: ["IMAGE"],
+
+            responseFormat: {
+              image: {
+                aspectRatio: "1:1",
+                imageSize: "1K"
+              }
+            }
           }
         })
       }
@@ -42,6 +61,11 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
+      console.error(
+        "Gemini Image API Error:",
+        data
+      );
+
       return res.status(response.status).json({
         error: "Gemini Image API Error",
         details:
@@ -53,36 +77,51 @@ export default async function handler(req, res) {
     const parts =
       data?.candidates?.[0]?.content?.parts || [];
 
-    const imagePart = parts.find(
-      part => part?.inlineData?.data
-    );
+    const imagePart =
+      parts.find(
+        part =>
+          part?.inlineData?.data
+      );
 
     if (!imagePart) {
-      const textPart = parts.find(
-        part => part?.text
+      console.error(
+        "No image returned:",
+        JSON.stringify(data)
       );
 
       return res.status(500).json({
         error: "No image was returned.",
         details:
-          textPart?.text ||
           "Gemini did not return an image."
       });
     }
 
+    const base64 =
+      imagePart.inlineData.data;
+
+    const mimeType =
+      imagePart.inlineData.mimeType ||
+      "image/png";
+
     return res.status(200).json({
-      image: imagePart.inlineData.data,
-      mimeType:
-        imagePart.inlineData.mimeType ||
-        "image/png"
+      image:
+        `data:${mimeType};base64,${base64}`,
+
+      mimeType
     });
 
   } catch (error) {
-    console.error("Image API Error:", error);
+
+    console.error(
+      "Image API Error:",
+      error
+    );
 
     return res.status(500).json({
       error: "Server Error",
-      details: error.message
+      details:
+        error?.message ||
+        "Unknown server error."
     });
   }
 }
