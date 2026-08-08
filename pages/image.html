@@ -1,513 +1,600 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-<title>RG Creator AI - Image Generator</title>
+  <title>RG Creator AI - Image Generator</title>
 
-<style>
-*{
-  box-sizing:border-box;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body{
-  margin:0;
-  min-height:100vh;
-  background:#000;
-  color:#fff;
-  font-family:Arial,Helvetica,sans-serif;
-}
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100%;
+    }
 
-.topbar{
-  height:58px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 14px;
-  border-bottom:1px solid #292929;
-}
+    body {
+      padding: 20px 16px 40px;
+    }
 
-.title{
-  font-size:17px;
-  font-weight:600;
-}
+    .page {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
 
-.back{
-  border:0;
-  background:transparent;
-  color:#fff;
-  font-size:22px;
-  cursor:pointer;
-}
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
 
-.container{
-  width:min(700px,100%);
-  margin:auto;
-  padding:25px 15px 40px;
-}
+    .back-btn {
+      width: 42px;
+      height: 42px;
+      border: none;
+      background: transparent;
+      color: #fff;
+      font-size: 26px;
+      cursor: pointer;
+      padding: 0;
+    }
 
-h1{
-  text-align:center;
-  font-size:25px;
-  margin:10px 0 8px;
-}
+    .title-area h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 600;
+    }
 
-.subtitle{
-  text-align:center;
-  color:#888;
-  font-size:14px;
-  margin-bottom:25px;
-}
+    .title-area p {
+      margin: 4px 0 0;
+      color: #888;
+      font-size: 13px;
+    }
 
-.prompt-box{
-  background:#111;
-  border:1px solid #292929;
-  border-radius:18px;
-  padding:10px;
-}
+    .generator {
+      width: 100%;
+    }
 
-textarea{
-  width:100%;
-  min-height:120px;
-  resize:none;
-  border:0;
-  outline:0;
-  background:transparent;
-  color:#fff;
-  font-size:16px;
-  line-height:1.5;
-  font-family:Arial,Helvetica,sans-serif;
-}
+    .prompt-label {
+      display: block;
+      margin-bottom: 10px;
+      color: #aaa;
+      font-size: 14px;
+    }
 
-textarea::placeholder{
-  color:#777;
-}
+    #prompt {
+      width: 100%;
+      min-height: 130px;
+      resize: vertical;
 
-.generate-row{
-  display:flex;
-  justify-content:flex-end;
-  margin-top:8px;
-}
+      background: #111;
+      color: #fff;
 
-.generate{
-  border:0;
-  border-radius:20px;
-  padding:11px 19px;
-  background:#fff;
-  color:#000;
-  font-size:15px;
-  font-weight:600;
-  cursor:pointer;
-}
+      border: 1px solid #292929;
+      border-radius: 18px;
 
-.generate:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-}
+      padding: 16px;
+      font-size: 16px;
+      line-height: 1.5;
 
-.status{
-  text-align:center;
-  color:#888;
-  margin:20px 0;
-  min-height:20px;
-}
+      outline: none;
+    }
 
-.result{
-  display:none;
-  margin-top:20px;
-}
+    #prompt:focus {
+      border-color: #555;
+    }
 
-.result img{
-  width:100%;
-  max-height:700px;
-  object-fit:contain;
-  border-radius:18px;
-  background:#111;
-}
+    #prompt::placeholder {
+      color: #666;
+    }
 
-.download{
-  display:none;
-  width:100%;
-  margin-top:12px;
-  padding:13px;
-  border:1px solid #333;
-  background:#111;
-  color:#fff;
-  border-radius:13px;
-  font-size:15px;
-  cursor:pointer;
-}
+    .generate-btn {
+      width: 100%;
+      margin-top: 14px;
 
-.download:hover{
-  background:#1b1b1b;
-}
+      border: none;
+      border-radius: 16px;
 
-.error{
-  color:#ff7070;
-  text-align:center;
-  line-height:1.5;
-}
+      background: #fff;
+      color: #000;
 
-@media(max-width:600px){
+      min-height: 52px;
 
-  .container{
-    padding:20px 12px 30px;
-  }
+      font-size: 16px;
+      font-weight: 600;
 
-  h1{
-    font-size:23px;
-  }
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
 
-}
-</style>
+    .generate-btn:hover {
+      opacity: 0.9;
+    }
+
+    .generate-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .status {
+      display: none;
+      margin-top: 18px;
+      color: #999;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .result {
+      display: none;
+      margin-top: 28px;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result-title {
+      margin-bottom: 12px;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    .image-container {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 18px;
+      background: #111;
+      border: 1px solid #292929;
+    }
+
+    #generatedImage {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .image-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .action-btn {
+      flex: 1;
+      min-height: 48px;
+
+      border: 1px solid #292929;
+      border-radius: 14px;
+
+      background: #111;
+      color: #fff;
+
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .action-btn:hover {
+      background: #181818;
+    }
+
+    .error {
+      display: none;
+
+      margin-top: 18px;
+      padding: 14px;
+
+      border-radius: 14px;
+      border: 1px solid #3a2020;
+
+      background: #160d0d;
+      color: #ff8b8b;
+
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 16px 12px 30px;
+      }
+
+      .title-area h1 {
+        font-size: 20px;
+      }
+
+      #prompt {
+        min-height: 120px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="topbar">
+  <div class="page">
 
-  <button class="back" onclick="goBack()" aria-label="Back">
-    ←
-  </button>
-
-  <div class="title">
-    RG Creator AI
-  </div>
-
-  <div style="width:30px"></div>
-
-</div>
-
-
-<div class="container">
-
-  <h1>🖼️ AI Image Generator</h1>
-
-  <div class="subtitle">
-    Describe the image you want to create
-  </div>
-
-
-  <div class="prompt-box">
-
-    <textarea
-      id="prompt"
-      placeholder="Example: A cinematic sunset over the mountains, ultra realistic, 4K..."
-    ></textarea>
-
-
-    <div class="generate-row">
+    <!-- TOP BAR -->
+    <div class="topbar">
 
       <button
-        class="generate"
-        id="generateButton"
+        class="back-btn"
+        onclick="goBack()"
+        aria-label="Back"
+      >
+        ‹
+      </button>
+
+      <div class="title-area">
+        <h1>AI Image Generator</h1>
+        <p>Create images with RG Creator AI</p>
+      </div>
+
+    </div>
+
+
+    <!-- GENERATOR -->
+    <div class="generator">
+
+      <label
+        class="prompt-label"
+        for="prompt"
+      >
+        Describe the image you want
+      </label>
+
+      <textarea
+        id="prompt"
+        placeholder="Example: A cinematic night city with neon lights, realistic photography..."
+      ></textarea>
+
+
+      <button
+        id="generateBtn"
+        class="generate-btn"
         onclick="generateImage()"
       >
-        Generate
+        Generate Image
       </button>
+
+
+      <div
+        id="status"
+        class="status"
+      >
+        Creating your image...
+      </div>
+
+
+      <!-- ERROR -->
+      <div
+        id="error"
+        class="error"
+      ></div>
+
+
+      <!-- RESULT -->
+      <div
+        id="result"
+        class="result"
+      >
+
+        <div class="result-title">
+          Generated Image
+        </div>
+
+        <div class="image-container">
+
+          <img
+            id="generatedImage"
+            alt="Generated AI image"
+          >
+
+        </div>
+
+
+        <div class="image-actions">
+
+          <button
+            class="action-btn"
+            onclick="downloadImage()"
+          >
+            ↓ Download
+          </button>
+
+          <button
+            class="action-btn"
+            onclick="generateImage()"
+          >
+            ↻ Regenerate
+          </button>
+
+        </div>
+
+      </div>
 
     </div>
 
   </div>
 
 
-  <div
-    class="status"
-    id="status"
-  ></div>
+  <script>
+
+    let generatedImageData = "";
+    let generatedMimeType = "image/png";
 
 
-  <div
-    class="result"
-    id="result"
-  >
+    function goBack() {
 
-    <img
-      id="generatedImage"
-      alt="Generated image"
-    >
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "../index.html";
+      }
 
-    <button
-      class="download"
-      id="downloadButton"
-      onclick="downloadImage()"
-    >
-      ⬇️ Download Image
-    </button>
-
-  </div>
-
-</div>
+    }
 
 
-<script>
+    async function generateImage() {
 
-let generatedImageData = null;
+      const promptElement =
+        document.getElementById("prompt");
 
+      const generateBtn =
+        document.getElementById("generateBtn");
 
-/* =========================
-   GENERATE IMAGE
-========================= */
+      const status =
+        document.getElementById("status");
 
-async function generateImage(){
+      const result =
+        document.getElementById("result");
 
-  const prompt =
-    document
-      .getElementById("prompt")
-      .value
-      .trim();
+      const error =
+        document.getElementById("error");
 
-  const button =
-    document
-      .getElementById("generateButton");
-
-  const status =
-    document
-      .getElementById("status");
-
-  const result =
-    document
-      .getElementById("result");
-
-  const image =
-    document
-      .getElementById("generatedImage");
-
-  const download =
-    document
-      .getElementById("downloadButton");
+      const image =
+        document.getElementById("generatedImage");
 
 
-  if(!prompt){
-
-    status.innerHTML =
-      '<div class="error">Please enter an image description.</div>';
-
-    return;
-
-  }
+      const prompt =
+        promptElement.value.trim();
 
 
-  button.disabled = true;
-
-  button.textContent =
-    "Generating...";
-
-
-  status.textContent =
-    "Creating your image...";
+      // Clear old error
+      error.classList.remove("show");
+      error.textContent = "";
 
 
-  result.style.display =
-    "none";
+      if (!prompt) {
 
-  download.style.display =
-    "none";
+        showError(
+          "Please enter a description for the image."
+        );
+
+        promptElement.focus();
+
+        return;
+      }
 
 
-  try{
+      // Loading
+      generateBtn.disabled = true;
+      generateBtn.textContent = "Generating...";
 
-    const response =
-      await fetch(
-        "/api/image",
-        {
-          method:"POST",
+      status.classList.add("show");
 
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
+      result.classList.remove("show");
 
-          body:JSON.stringify({
-            prompt:prompt
-          })
+
+      try {
+
+        const response = await fetch(
+          "/api/image",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              prompt: prompt
+            })
+          }
+        );
+
+
+        let data = {};
+
+        try {
+          data = await response.json();
+        } catch (jsonError) {
+          throw new Error(
+            "Server returned an invalid response."
+          );
         }
-      );
 
 
-    let data;
+        if (!response.ok) {
 
-    try{
+          throw new Error(
+            data?.details ||
+            data?.error ||
+            `Image generation failed (${response.status}).`
+          );
 
-      data =
-        await response.json();
+        }
 
-    }catch(e){
 
-      throw new Error(
-        "Server returned an invalid response."
-      );
+        if (!data.image) {
 
-    }
+          throw new Error(
+            "No image was returned by the AI."
+          );
 
+        }
 
-    if(!response.ok){
 
-      throw new Error(
-        data.error ||
-        data.details ||
-        "Image generation failed."
-      );
+        generatedImageData =
+          data.image;
 
-    }
+        generatedMimeType =
+          data.mimeType ||
+          "image/png";
 
 
-    if(!data.image){
+        image.src =
+          `data:${generatedMimeType};base64,${generatedImageData}`;
 
-      throw new Error(
-        "No image was returned by the server."
-      );
 
-    }
+        result.classList.add("show");
 
 
-    generatedImageData =
-      data.image;
+        // Scroll to result
+        setTimeout(() => {
 
+          result.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
 
-    image.src =
-      data.image;
+        }, 100);
 
 
-    result.style.display =
-      "block";
+      } catch (err) {
 
+        console.error(
+          "Image generation error:",
+          err
+        );
 
-    download.style.display =
-      "block";
+        showError(
+          err.message ||
+          "Something went wrong while generating the image."
+        );
 
+      } finally {
 
-    status.textContent =
-      "Image generated successfully.";
+        generateBtn.disabled = false;
+        generateBtn.textContent = "Generate Image";
 
-
-  }catch(error){
-
-    console.error(
-      "Image generation error:",
-      error
-    );
-
-
-    status.innerHTML =
-      '<div class="error">❌ ' +
-      escapeHtml(error.message) +
-      '</div>';
-
-  }
-
-
-  button.disabled =
-    false;
-
-  button.textContent =
-    "Generate";
-
-}
-
-
-/* =========================
-   DOWNLOAD
-========================= */
-
-function downloadImage(){
-
-  if(!generatedImageData){
-
-    return;
-
-  }
-
-
-  const link =
-    document.createElement("a");
-
-
-  link.href =
-    generatedImageData;
-
-
-  link.download =
-    "RG-Creator-AI-Image.png";
-
-
-  document.body.appendChild(link);
-
-  link.click();
-
-  link.remove();
-
-}
-
-
-/* =========================
-   BACK
-========================= */
-
-function goBack(){
-
-  if(
-    document.referrer &&
-    document.referrer.includes(
-      window.location.host
-    )
-  ){
-
-    history.back();
-
-  }else{
-
-    window.location.href =
-      "chat.html";
-
-  }
-
-}
-
-
-/* =========================
-   HTML ESCAPE
-========================= */
-
-function escapeHtml(text){
-
-  const div =
-    document.createElement("div");
-
-  div.textContent =
-    text;
-
-  return div.innerHTML;
-
-}
-
-
-/* =========================
-   ENTER
-========================= */
-
-document
-  .getElementById("prompt")
-  .addEventListener(
-    "keydown",
-    function(event){
-
-      if(
-        event.key === "Enter" &&
-        (event.ctrlKey || event.metaKey)
-      ){
-
-        event.preventDefault();
-
-        generateImage();
+        status.classList.remove("show");
 
       }
 
     }
-  );
 
-</script>
+
+    function showError(message) {
+
+      const error =
+        document.getElementById("error");
+
+      error.textContent = message;
+      error.classList.add("show");
+
+    }
+
+
+    function downloadImage() {
+
+      if (!generatedImageData) {
+
+        showError(
+          "Generate an image first."
+        );
+
+        return;
+      }
+
+
+      try {
+
+        const link =
+          document.createElement("a");
+
+
+        link.href =
+          `data:${generatedMimeType};base64,${generatedImageData}`;
+
+
+        const extension =
+          generatedMimeType === "image/jpeg"
+            ? "jpg"
+            : generatedMimeType === "image/webp"
+              ? "webp"
+              : "png";
+
+
+        link.download =
+          `rg-creator-ai-${Date.now()}.${extension}`;
+
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+      } catch (error) {
+
+        console.error(
+          "Download error:",
+          error
+        );
+
+        showError(
+          "Image download failed."
+        );
+
+      }
+
+    }
+
+
+    // Enter = Generate
+    // Shift + Enter = New line
+    document
+      .getElementById("prompt")
+      .addEventListener(
+        "keydown",
+        function(event) {
+
+          if (
+            event.key === "Enter" &&
+            !event.shiftKey
+          ) {
+
+            event.preventDefault();
+
+            generateImage();
+
+          }
+
+        }
+      );
+
+  </script>
 
 </body>
 </html>
