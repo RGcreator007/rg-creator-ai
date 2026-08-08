@@ -1,10 +1,513 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>AI Image Generator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RG Creator AI - Image Generator</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:#000;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.topbar{
+  height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 14px;
+  border-bottom:1px solid #292929;
+}
+
+.title{
+  font-size:17px;
+  font-weight:600;
+}
+
+.back{
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.container{
+  width:min(700px,100%);
+  margin:auto;
+  padding:25px 15px 40px;
+}
+
+h1{
+  text-align:center;
+  font-size:25px;
+  margin:10px 0 8px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#888;
+  font-size:14px;
+  margin-bottom:25px;
+}
+
+.prompt-box{
+  background:#111;
+  border:1px solid #292929;
+  border-radius:18px;
+  padding:10px;
+}
+
+textarea{
+  width:100%;
+  min-height:120px;
+  resize:none;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#fff;
+  font-size:16px;
+  line-height:1.5;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+textarea::placeholder{
+  color:#777;
+}
+
+.generate-row{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:8px;
+}
+
+.generate{
+  border:0;
+  border-radius:20px;
+  padding:11px 19px;
+  background:#fff;
+  color:#000;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.generate:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.status{
+  text-align:center;
+  color:#888;
+  margin:20px 0;
+  min-height:20px;
+}
+
+.result{
+  display:none;
+  margin-top:20px;
+}
+
+.result img{
+  width:100%;
+  max-height:700px;
+  object-fit:contain;
+  border-radius:18px;
+  background:#111;
+}
+
+.download{
+  display:none;
+  width:100%;
+  margin-top:12px;
+  padding:13px;
+  border:1px solid #333;
+  background:#111;
+  color:#fff;
+  border-radius:13px;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.download:hover{
+  background:#1b1b1b;
+}
+
+.error{
+  color:#ff7070;
+  text-align:center;
+  line-height:1.5;
+}
+
+@media(max-width:600px){
+
+  .container{
+    padding:20px 12px 30px;
+  }
+
+  h1{
+    font-size:23px;
+  }
+
+}
+</style>
 </head>
+
 <body>
-<h1>AI Image Generator</h1>
-<p>Coming Soon...</p>
+
+<div class="topbar">
+
+  <button class="back" onclick="goBack()" aria-label="Back">
+    ←
+  </button>
+
+  <div class="title">
+    RG Creator AI
+  </div>
+
+  <div style="width:30px"></div>
+
+</div>
+
+
+<div class="container">
+
+  <h1>🖼️ AI Image Generator</h1>
+
+  <div class="subtitle">
+    Describe the image you want to create
+  </div>
+
+
+  <div class="prompt-box">
+
+    <textarea
+      id="prompt"
+      placeholder="Example: A cinematic sunset over the mountains, ultra realistic, 4K..."
+    ></textarea>
+
+
+    <div class="generate-row">
+
+      <button
+        class="generate"
+        id="generateButton"
+        onclick="generateImage()"
+      >
+        Generate
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div
+    class="status"
+    id="status"
+  ></div>
+
+
+  <div
+    class="result"
+    id="result"
+  >
+
+    <img
+      id="generatedImage"
+      alt="Generated image"
+    >
+
+    <button
+      class="download"
+      id="downloadButton"
+      onclick="downloadImage()"
+    >
+      ⬇️ Download Image
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+let generatedImageData = null;
+
+
+/* =========================
+   GENERATE IMAGE
+========================= */
+
+async function generateImage(){
+
+  const prompt =
+    document
+      .getElementById("prompt")
+      .value
+      .trim();
+
+  const button =
+    document
+      .getElementById("generateButton");
+
+  const status =
+    document
+      .getElementById("status");
+
+  const result =
+    document
+      .getElementById("result");
+
+  const image =
+    document
+      .getElementById("generatedImage");
+
+  const download =
+    document
+      .getElementById("downloadButton");
+
+
+  if(!prompt){
+
+    status.innerHTML =
+      '<div class="error">Please enter an image description.</div>';
+
+    return;
+
+  }
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Generating...";
+
+
+  status.textContent =
+    "Creating your image...";
+
+
+  result.style.display =
+    "none";
+
+  download.style.display =
+    "none";
+
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/image",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+            prompt:prompt
+          })
+        }
+      );
+
+
+    let data;
+
+    try{
+
+      data =
+        await response.json();
+
+    }catch(e){
+
+      throw new Error(
+        "Server returned an invalid response."
+      );
+
+    }
+
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        data.details ||
+        "Image generation failed."
+      );
+
+    }
+
+
+    if(!data.image){
+
+      throw new Error(
+        "No image was returned by the server."
+      );
+
+    }
+
+
+    generatedImageData =
+      data.image;
+
+
+    image.src =
+      data.image;
+
+
+    result.style.display =
+      "block";
+
+
+    download.style.display =
+      "block";
+
+
+    status.textContent =
+      "Image generated successfully.";
+
+
+  }catch(error){
+
+    console.error(
+      "Image generation error:",
+      error
+    );
+
+
+    status.innerHTML =
+      '<div class="error">❌ ' +
+      escapeHtml(error.message) +
+      '</div>';
+
+  }
+
+
+  button.disabled =
+    false;
+
+  button.textContent =
+    "Generate";
+
+}
+
+
+/* =========================
+   DOWNLOAD
+========================= */
+
+function downloadImage(){
+
+  if(!generatedImageData){
+
+    return;
+
+  }
+
+
+  const link =
+    document.createElement("a");
+
+
+  link.href =
+    generatedImageData;
+
+
+  link.download =
+    "RG-Creator-AI-Image.png";
+
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  link.remove();
+
+}
+
+
+/* =========================
+   BACK
+========================= */
+
+function goBack(){
+
+  if(
+    document.referrer &&
+    document.referrer.includes(
+      window.location.host
+    )
+  ){
+
+    history.back();
+
+  }else{
+
+    window.location.href =
+      "chat.html";
+
+  }
+
+}
+
+
+/* =========================
+   HTML ESCAPE
+========================= */
+
+function escapeHtml(text){
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    text;
+
+  return div.innerHTML;
+
+}
+
+
+/* =========================
+   ENTER
+========================= */
+
+document
+  .getElementById("prompt")
+  .addEventListener(
+    "keydown",
+    function(event){
+
+      if(
+        event.key === "Enter" &&
+        (event.ctrlKey || event.metaKey)
+      ){
+
+        event.preventDefault();
+
+        generateImage();
+
+      }
+
+    }
+  );
+
+</script>
+
 </body>
 </html>
