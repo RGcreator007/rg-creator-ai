@@ -3,1186 +3,1569 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>RG Creator AI Chat</title>
+<title>RG Creator AI</title>
 
 <style>
 *{
-    box-sizing:border-box;
+  box-sizing:border-box;
 }
 
-:root{
-    --bg:#080808;
-    --panel:#101010;
-    --panel2:#151515;
-    --border:#292929;
-    --text:#f5f5f5;
-    --muted:#9b9b9b;
-    --user:#202020;
-    --ai:#111111;
-    --button:#1b1b1b;
-}
-
-body.light{
-    --bg:#f5f5f5;
-    --panel:#ffffff;
-    --panel2:#eeeeee;
-    --border:#d7d7d7;
-    --text:#111111;
-    --muted:#666666;
-    --user:#e8e8e8;
-    --ai:#ffffff;
-    --button:#eeeeee;
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  background:#000;
+  color:#f5f5f5;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
 }
 
 body{
-    margin:0;
-    padding:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:Arial,Helvetica,sans-serif;
-    height:100vh;
-    overflow:hidden;
-    transition:.25s;
+  overflow:hidden;
+}
+
+/* APP */
+.app{
+  width:100%;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:#000;
 }
 
 /* TOP BAR */
-
 .topbar{
-    height:64px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 18px;
-    background:var(--bg);
+  height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 14px;
+  flex-shrink:0;
 }
 
-.menu-btn{
-    width:42px;
-    height:42px;
-    border:0;
-    background:transparent;
-    color:var(--text);
-    font-size:24px;
-    border-radius:10px;
-    cursor:pointer;
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
-.logo{
-    font-size:18px;
-    font-weight:600;
-    letter-spacing:.2px;
+.menu-btn,
+.more-btn{
+  width:40px;
+  height:40px;
+  border:0;
+  background:transparent;
+  color:#eee;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:10px;
+  cursor:pointer;
 }
 
-.top-actions{
-    display:flex;
-    gap:8px;
-    align-items:center;
+.menu-btn:active,
+.more-btn:active{
+  background:#1b1b1b;
 }
 
-.icon-btn{
-    width:40px;
-    height:40px;
-    border:1px solid transparent;
-    background:transparent;
-    color:var(--text);
-    border-radius:10px;
-    font-size:20px;
-    cursor:pointer;
-}
-
-.icon-btn:hover{
-    background:var(--panel2);
-    border-color:var(--border);
-}
-
-/* SIDE MENU */
-
-.sidebar{
-    position:fixed;
-    top:0;
-    left:-285px;
-    width:285px;
-    height:100vh;
-    background:var(--panel);
-    border-right:1px solid var(--border);
-    z-index:20;
-    transition:.25s ease;
-    padding:18px;
-}
-
-.sidebar.open{
-    left:0;
-}
-
-.sidebar-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:25px;
-}
-
-.sidebar-title{
-    font-size:18px;
-    font-weight:bold;
-}
-
-.close-menu{
-    background:none;
-    border:0;
-    color:var(--text);
-    font-size:24px;
-    cursor:pointer;
-}
-
-.new-chat{
-    width:100%;
-    padding:13px;
-    border-radius:10px;
-    border:1px solid var(--border);
-    background:var(--panel2);
-    color:var(--text);
-    font-size:15px;
-    cursor:pointer;
-    margin-bottom:18px;
-}
-
-.menu-item{
-    padding:13px 10px;
-    border-radius:9px;
-    color:var(--text);
-    cursor:pointer;
-    margin-bottom:5px;
-}
-
-.menu-item:hover{
-    background:var(--panel2);
-}
-
-.recent-title{
-    color:var(--muted);
-    font-size:13px;
-    margin:22px 5px 10px;
+.logo-title{
+  font-size:16px;
+  font-weight:600;
 }
 
 /* CHAT */
-
-.main{
-    height:calc(100vh - 64px);
-    display:flex;
-    flex-direction:column;
+.chat-area{
+  flex:1;
+  overflow-y:auto;
+  padding:10px 14px 150px;
+  scroll-behavior:smooth;
 }
 
-#chat{
-    flex:1;
-    overflow-y:auto;
-    padding:25px 16px 150px;
-    scroll-behavior:smooth;
+.chat-container{
+  width:100%;
+  max-width:850px;
+  margin:auto;
 }
 
-.chat-inner{
-    width:100%;
-    max-width:850px;
-    margin:auto;
-}
-
+/* MESSAGE ROW */
 .message-row{
-    display:flex;
-    margin:18px 0;
+  margin:18px 0 26px;
 }
 
-.message-row.user{
-    justify-content:flex-end;
+/* USER */
+.user-row{
+  display:flex;
+  justify-content:flex-end;
 }
 
-.message{
-    max-width:78%;
-    padding:14px 16px;
-    border-radius:15px;
-    line-height:1.55;
-    font-size:15px;
-    white-space:pre-wrap;
-    word-wrap:break-word;
+.user-content{
+  max-width:82%;
 }
 
-.message.user{
-    background:var(--user);
-    border:1px solid var(--border);
+.user-bubble{
+  background:#242424;
+  color:#fff;
+  padding:11px 15px;
+  border-radius:18px;
+  border-bottom-right-radius:5px;
+  line-height:1.5;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
 }
 
-.message.ai{
-    background:var(--ai);
-    border:1px solid var(--border);
+/* AI */
+.ai-content{
+  max-width:100%;
+  line-height:1.65;
+  font-size:16px;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
 }
 
-/* AI ACTIONS */
-
-.ai-wrapper{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
+.thinking{
+  color:#8f8f8f;
 }
 
-.ai-actions{
-    display:flex;
-    gap:6px;
-    margin-top:7px;
-    margin-left:4px;
+/* ACTIONS */
+.actions{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  margin-top:8px;
 }
 
 .action-btn{
-    position:relative;
-    width:38px;
-    height:34px;
-    border:1px solid var(--border);
-    background:var(--button);
-    color:var(--text);
-    border-radius:9px;
-    cursor:pointer;
-    font-size:17px;
+  position:relative;
+  width:34px;
+  height:34px;
+  border:0;
+  background:transparent;
+  color:#a9a9a9;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  cursor:pointer;
 }
 
-.action-btn:hover{
-    background:var(--panel2);
+.action-btn:hover,
+.action-btn.active{
+  color:#fff;
+  background:#151515;
+}
+
+.action-btn svg{
+  width:18px;
+  height:18px;
+  stroke-width:1.8;
 }
 
 /* TOOLTIP */
-
-.action-btn::after{
-    content:attr(data-label);
-    position:absolute;
-    bottom:43px;
-    left:50%;
-    transform:translateX(-50%);
-    background:#222;
-    color:#fff;
-    padding:5px 8px;
-    border-radius:6px;
-    font-size:12px;
-    white-space:nowrap;
-    opacity:0;
-    pointer-events:none;
-    transition:.15s;
+.tooltip{
+  position:absolute;
+  bottom:42px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#292929;
+  color:#fff;
+  font-size:12px;
+  padding:5px 8px;
+  border-radius:6px;
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+  transition:.15s;
+  z-index:100;
 }
 
-.action-btn:hover::after,
-.action-btn:focus::after{
-    opacity:1;
+.action-btn.show-tip .tooltip,
+.action-btn:hover .tooltip{
+  opacity:1;
 }
 
-/* TYPING AREA */
-
-.input-area{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    padding:12px 15px 16px;
-    background:linear-gradient(
-        to top,
-        var(--bg) 70%,
-        transparent
-    );
-    z-index:10;
+/* ATTACHMENT */
+.attachment-preview{
+  display:none;
+  max-width:850px;
+  margin:0 auto 8px;
+  padding:8px 10px;
+  border:1px solid #303030;
+  border-radius:10px;
+  background:#111;
+  align-items:center;
+  gap:10px;
 }
 
-.input-inner{
-    max-width:850px;
-    margin:auto;
-    display:flex;
-    align-items:flex-end;
-    gap:7px;
-    padding:7px;
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:17px;
-    box-shadow:0 8px 30px rgba(0,0,0,.25);
+.attachment-preview.show{
+  display:flex;
 }
 
-#prompt{
-    flex:1;
-    min-width:0;
-    max-height:130px;
-    min-height:44px;
-    resize:none;
-    border:0;
-    outline:none;
-    background:transparent;
-    color:var(--text);
-    padding:12px 8px;
-    font-size:15px;
-    font-family:inherit;
+.file-name{
+  flex:1;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  color:#ddd;
+  font-size:13px;
 }
 
-#prompt::placeholder{
-    color:var(--muted);
+.remove-file{
+  background:none;
+  border:0;
+  color:#999;
+  cursor:pointer;
 }
 
-.input-button{
-    flex:0 0 auto;
-    width:43px;
-    height:43px;
-    border:0;
-    border-radius:12px;
-    background:var(--button);
-    border:1px solid var(--border);
-    color:var(--text);
-    cursor:pointer;
-    font-size:19px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+/* COMPOSER */
+.composer-area{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:10px 12px 14px;
+  background:linear-gradient(
+    to top,
+    #000 70%,
+    rgba(0,0,0,.92) 85%,
+    transparent
+  );
+  z-index:20;
 }
 
-.input-button:hover{
-    background:var(--panel2);
+.composer{
+  max-width:850px;
+  margin:auto;
+  border:1px solid #3b3b3b;
+  background:#111;
+  border-radius:22px;
+  padding:8px 9px;
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
 }
 
-#micBtn.recording{
-    background:#292929;
-    animation:pulse 1s infinite;
+textarea{
+  flex:1;
+  min-width:0;
+  max-height:150px;
+  min-height:42px;
+  resize:none;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#fff;
+  font-size:16px;
+  line-height:1.45;
+  padding:10px 5px;
+  font-family:inherit;
 }
 
-@keyframes pulse{
-    0%{transform:scale(1);}
-    50%{transform:scale(1.07);}
-    100%{transform:scale(1);}
+textarea::placeholder{
+  color:#777;
+}
+
+.composer-btn{
+  width:38px;
+  height:38px;
+  flex-shrink:0;
+  border:0;
+  background:transparent;
+  color:#aaa;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+
+.composer-btn:hover{
+  color:#fff;
+  background:#202020;
+}
+
+.composer-btn svg{
+  width:20px;
+  height:20px;
 }
 
 .send-btn{
-    font-size:20px;
+  background:#fff;
+  color:#000;
 }
 
-/* STATUS */
+.send-btn:hover{
+  background:#ddd;
+  color:#000;
+}
 
-.status{
-    text-align:center;
-    color:var(--muted);
-    font-size:11px;
-    padding:7px 0 0;
+/* SIDE MENU */
+.side-menu{
+  position:fixed;
+  top:0;
+  left:-290px;
+  width:280px;
+  height:100vh;
+  background:#111;
+  border-right:1px solid #292929;
+  z-index:80;
+  transition:.25s ease;
+  padding:15px;
+}
+
+.side-menu.open{
+  left:0;
+}
+
+.side-title{
+  font-size:18px;
+  font-weight:600;
+  margin:10px 5px 20px;
+}
+
+.new-chat{
+  width:100%;
+  border:1px solid #333;
+  background:#181818;
+  color:#fff;
+  border-radius:12px;
+  padding:12px;
+  cursor:pointer;
+  text-align:left;
+}
+
+.capability{
+  margin-top:18px;
+}
+
+.capability-title{
+  color:#777;
+  font-size:12px;
+  margin:10px 5px;
+  text-transform:uppercase;
+}
+
+.capability-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:12px 8px;
+  border-radius:10px;
+  cursor:pointer;
+  color:#ddd;
+}
+
+.capability-item:hover{
+  background:#202020;
+}
+
+.capability-item svg{
+  width:19px;
+  height:19px;
+}
+
+/* MORE MENU */
+.more-menu{
+  position:fixed;
+  top:52px;
+  right:10px;
+  width:260px;
+  background:#1d1d1d;
+  border-radius:20px;
+  padding:10px;
+  box-shadow:0 15px 45px rgba(0,0,0,.6);
+  border:1px solid #292929;
+  display:none;
+  z-index:100;
+}
+
+.more-menu.open{
+  display:block;
+}
+
+.more-item{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:13px 12px;
+  border:0;
+  background:transparent;
+  color:#eee;
+  border-radius:10px;
+  font-size:15px;
+  text-align:left;
+  cursor:pointer;
+}
+
+.more-item:hover{
+  background:#292929;
+}
+
+.more-item svg{
+  width:20px;
+  height:20px;
+  stroke-width:1.8;
+}
+
+.more-item.delete{
+  color:#ff7070;
+}
+
+/* OVERLAY */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:70;
+  display:none;
+}
+
+.overlay.show{
+  display:block;
+}
+
+/* EMPTY */
+.empty{
+  height:65vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#777;
+  text-align:center;
+  font-size:15px;
 }
 
 /* MOBILE */
-
 @media(max-width:600px){
 
-    .topbar{
-        height:58px;
-        padding:0 10px;
-    }
+  .topbar{
+    height:55px;
+  }
 
-    .main{
-        height:calc(100vh - 58px);
-    }
+  .logo-title{
+    font-size:15px;
+  }
 
-    #chat{
-        padding:18px 10px 145px;
-    }
+  .chat-area{
+    padding-left:10px;
+    padding-right:10px;
+  }
 
-    .message{
-        max-width:88%;
-        font-size:14px;
-    }
+  .user-content{
+    max-width:86%;
+  }
 
-    .input-area{
-        padding:8px 9px 12px;
-    }
+  .ai-content{
+    font-size:15.5px;
+  }
 
-    .input-inner{
-        border-radius:15px;
-        padding:6px;
-    }
-
-    #prompt{
-        font-size:15px;
-        min-height:42px;
-    }
-
-    .input-button{
-        width:41px;
-        height:41px;
-    }
-
-    .logo{
-        font-size:16px;
-    }
+  .more-menu{
+    right:8px;
+    width:250px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
+<div class="app">
 
-<div id="sidebar" class="sidebar">
+  <!-- SIDE MENU -->
+  <aside class="side-menu" id="sideMenu">
 
-    <div class="sidebar-header">
-        <div class="sidebar-title">RG Creator AI</div>
-
-        <button class="close-menu" onclick="closeSidebar()">×</button>
-    </div>
+    <div class="side-title">RG Creator AI</div>
 
     <button class="new-chat" onclick="newChat()">
-        ＋ New Chat
+      ＋ New chat
     </button>
 
-    <div class="menu-item">
-        ✨ Capabilities
+    <div class="capability">
+
+      <div class="capability-title">Capabilities</div>
+
+      <div class="capability-item" onclick="useCapability('Content Writer')">
+        ✍️
+        <span>Content Writer</span>
+      </div>
+
+      <div class="capability-item" onclick="useCapability('Code Generator')">
+        💻
+        <span>Code Generator</span>
+      </div>
+
+      <div class="capability-item" onclick="useCapability('AI Image Generator')">
+        🖼️
+        <span>AI Image Generator</span>
+      </div>
+
+      <div class="capability-item" onclick="useCapability('YouTube Tools')">
+        ▶️
+        <span>YouTube Tools</span>
+      </div>
+
+      <div class="capability-item" onclick="useCapability('Instagram')">
+        📸
+        <span>Instagram</span>
+      </div>
+
     </div>
 
-    <div class="menu-item">
-        ⚙ Settings
+  </aside>
+
+  <div class="overlay" id="overlay" onclick="closeMenus()"></div>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+
+    <div class="top-left">
+      <button class="menu-btn"
+        onclick="toggleSideMenu()"
+        aria-label="Menu">
+        <i data-lucide="menu"></i>
+      </button>
+
+      <div class="logo-title">RG Creator AI</div>
     </div>
 
-    <div class="recent-title">
-        Recent Chats
+    <!-- ONLY THREE DOTS -->
+    <button class="more-btn"
+      onclick="toggleMoreMenu()"
+      aria-label="More">
+      <i data-lucide="more-horizontal"></i>
+    </button>
+
+  </header>
+
+
+  <!-- MORE MENU -->
+  <div class="more-menu" id="moreMenu">
+
+    <button class="more-item" onclick="shareConversation()">
+      <i data-lucide="share-2"></i>
+      <span>Share conversation</span>
+    </button>
+
+    <button class="more-item" onclick="pinConversation()">
+      <i data-lucide="pin"></i>
+      <span>Pin</span>
+    </button>
+
+    <button class="more-item" onclick="renameConversation()">
+      <i data-lucide="pencil"></i>
+      <span>Rename</span>
+    </button>
+
+    <button class="more-item" onclick="downloadPDF()">
+      <i data-lucide="download"></i>
+      <span>Download PDF</span>
+    </button>
+
+    <button class="more-item" onclick="exportDocs()">
+      <i data-lucide="file-text"></i>
+      <span>Export to Docs</span>
+    </button>
+
+    <button class="more-item delete" onclick="deleteChat()">
+      <i data-lucide="trash-2"></i>
+      <span>Delete</span>
+    </button>
+
+  </div>
+
+
+  <!-- CHAT -->
+  <main class="chat-area" id="chatArea">
+    <div class="chat-container" id="chat">
+
+      <div class="empty" id="emptyMessage">
+        <div>
+          <h2>RG Creator AI</h2>
+          <p>How can I help you today?</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+  <!-- COMPOSER -->
+  <div class="composer-area">
+
+    <div class="attachment-preview" id="attachmentPreview">
+      <i data-lucide="paperclip"></i>
+      <span class="file-name" id="fileName"></span>
+      <button class="remove-file" onclick="removeAttachment()">
+        <i data-lucide="x"></i>
+      </button>
     </div>
 
-    <div id="recentChats"></div>
+    <div class="composer">
+
+      <!-- ATTACH -->
+      <button class="composer-btn"
+        onclick="document.getElementById('fileInput').click()"
+        aria-label="Attach">
+        <i data-lucide="plus"></i>
+      </button>
+
+      <input
+        type="file"
+        id="fileInput"
+        hidden
+        accept="image/*,video/*,.pdf,.txt,.doc,.docx"
+        onchange="handleFile(event)"
+      >
+
+      <!-- TEXT -->
+      <textarea
+        id="prompt"
+        rows="1"
+        placeholder="Message RG Creator AI..."
+        oninput="autoResize(this)"
+        onkeydown="handleEnter(event)"
+      ></textarea>
+
+      <!-- VOICE -->
+      <button class="composer-btn"
+        id="voiceBtn"
+        onclick="startVoice()"
+        aria-label="Voice">
+        <i data-lucide="mic"></i>
+      </button>
+
+      <!-- SEND -->
+      <button class="composer-btn send-btn"
+        onclick="sendMessage()"
+        aria-label="Send">
+        <i data-lucide="arrow-up"></i>
+      </button>
+
+    </div>
+  </div>
 
 </div>
 
 
-<!-- TOP BAR -->
+<!-- ICON LIBRARY -->
+<script src="https://unpkg.com/lucide@latest"></script>
 
-<header class="topbar">
-
-    <button class="menu-btn" onclick="openSidebar()">
-        ☰
-    </button>
-
-    <div class="logo">
-        RG Creator AI
-    </div>
-
-    <div class="top-actions">
-
-        <!-- THEME -->
-        <button
-            class="icon-btn"
-            onclick="toggleTheme()"
-            data-label="Theme"
-            aria-label="Theme">
-            ◐
-        </button>
-
-        <!-- DELETE -->
-        <button
-            class="icon-btn"
-            onclick="deleteChat()"
-            data-label="Delete chat"
-            aria-label="Delete chat">
-            ♢
-        </button>
-
-    </div>
-
-</header>
-
-
-<!-- MAIN -->
-
-<main class="main">
-
-    <div id="chat">
-        <div class="chat-inner" id="chatInner">
-
-            <div class="message-row">
-                <div class="ai-wrapper">
-
-                    <div class="message ai">
-                        Hello! How can I help you today?
-                    </div>
-
-                    <div class="ai-actions">
-
-                        <button
-                            class="action-btn"
-                            data-label="Copy"
-                            onclick="copyMessage(this)">
-                            ⧉
-                        </button>
-
-                        <button
-                            class="action-btn"
-                            data-label="Regenerate"
-                            onclick="regenerateMessage(this)">
-                            ↻
-                        </button>
-
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-
-    <!-- INPUT -->
-
-    <div class="input-area">
-
-        <div class="input-inner">
-
-            <textarea
-                id="prompt"
-                rows="1"
-                placeholder="Message RG Creator AI..."
-                oninput="autoResize(this)"
-                onkeydown="handleKey(event)"
-            ></textarea>
-
-            <!-- MICROPHONE -->
-
-            <button
-                id="micBtn"
-                class="input-button"
-                onclick="toggleVoice()"
-                aria-label="Voice input">
-                🎙
-            </button>
-
-            <!-- SEND -->
-
-            <button
-                class="input-button send-btn"
-                onclick="sendMessage()"
-                aria-label="Send">
-                ↑
-            </button>
-
-        </div>
-
-        <div class="status">
-            RG Creator AI can make mistakes. Check important information.
-        </div>
-
-    </div>
-
-</main>
+<!-- PDF LIBRARY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 
 <script>
 
-/* =========================
-   SIDEBAR
-========================= */
+let selectedFile = null;
+let conversationTitle = "RG Creator AI";
 
-function openSidebar(){
+const chat = document.getElementById("chat");
+const prompt = document.getElementById("prompt");
+const emptyMessage = document.getElementById("emptyMessage");
 
-    document.getElementById("sidebar").classList.add("open");
+lucide.createIcons();
 
+
+/* ---------------- MENU ---------------- */
+
+function toggleSideMenu(){
+
+  document.getElementById("sideMenu").classList.toggle("open");
+
+  document.getElementById("overlay").classList.toggle("show");
+
+  document.getElementById("moreMenu").classList.remove("open");
 }
 
-function closeSidebar(){
+function toggleMoreMenu(){
 
-    document.getElementById("sidebar").classList.remove("open");
+  document.getElementById("moreMenu").classList.toggle("open");
 
+  document.getElementById("sideMenu").classList.remove("open");
+
+  document.getElementById("overlay").classList.toggle(
+    "show",
+    document.getElementById("moreMenu").classList.contains("open")
+  );
+}
+
+function closeMenus(){
+
+  document.getElementById("sideMenu").classList.remove("open");
+  document.getElementById("moreMenu").classList.remove("open");
+  document.getElementById("overlay").classList.remove("show");
 }
 
 
-/* =========================
-   NEW CHAT
-========================= */
+/* ---------------- NEW CHAT ---------------- */
 
 function newChat(){
 
-    document.getElementById("chatInner").innerHTML = "";
+  chat.innerHTML = `
+    <div class="empty" id="emptyMessage">
+      <div>
+        <h2>RG Creator AI</h2>
+        <p>How can I help you today?</p>
+      </div>
+    </div>
+  `;
 
-    closeSidebar();
-
-    addAIMessage(
-        "Hello! How can I help you today?"
-    );
-
-    document.getElementById("prompt").focus();
-
+  prompt.value = "";
+  removeAttachment();
+  closeMenus();
 }
 
 
-/* =========================
-   THEME
-========================= */
+/* ---------------- CAPABILITIES ---------------- */
 
-function toggleTheme(){
+function useCapability(name){
 
-    document.body.classList.toggle("light");
+  const prompts = {
 
-    localStorage.setItem(
-        "rgTheme",
-        document.body.classList.contains("light")
-            ? "light"
-            : "dark"
-    );
+    "Content Writer":
+      "Act as a professional content writer. Help me create high-quality content.",
 
-}
+    "Code Generator":
+      "Act as an expert programmer. Help me write clean and working code.",
 
-if(localStorage.getItem("rgTheme") === "light"){
+    "AI Image Generator":
+      "Help me create a detailed prompt for generating an AI image.",
 
-    document.body.classList.add("light");
+    "YouTube Tools":
+      "Help me optimize my YouTube content with a title, description, keywords and strategy.",
 
-}
+    "Instagram":
+      "Help me optimize my Instagram Reel with a title, caption, keywords and hashtags."
+  };
 
-
-/* =========================
-   DELETE CHAT
-========================= */
-
-function deleteChat(){
-
-    if(!confirm("Delete this chat?")) return;
-
-    document.getElementById("chatInner").innerHTML = "";
-
-    addAIMessage(
-        "Chat cleared. How can I help you?"
-    );
-
+  prompt.value = prompts[name] || "";
+  autoResize(prompt);
+  closeMenus();
+  prompt.focus();
 }
 
 
-/* =========================
-   AUTO TEXTAREA
-========================= */
+/* ---------------- FILE ---------------- */
 
-function autoResize(element){
+function handleFile(event){
 
-    element.style.height = "auto";
+  const file = event.target.files[0];
 
-    element.style.height =
-        Math.min(element.scrollHeight,130) + "px";
+  if(!file) return;
 
+  selectedFile = file;
+
+  document.getElementById("fileName").textContent = file.name;
+
+  document.getElementById("attachmentPreview")
+    .classList.add("show");
+
+  lucide.createIcons();
+}
+
+function removeAttachment(){
+
+  selectedFile = null;
+
+  document.getElementById("fileInput").value = "";
+
+  document.getElementById("attachmentPreview")
+    .classList.remove("show");
+
+  document.getElementById("fileName").textContent = "";
 }
 
 
-/* =========================
-   ENTER TO SEND
-========================= */
+/* ---------------- TEXTAREA ---------------- */
 
-function handleKey(event){
+function autoResize(el){
 
-    if(
-        event.key === "Enter" &&
-        !event.shiftKey
-    ){
+  el.style.height = "auto";
 
-        event.preventDefault();
+  el.style.height =
+    Math.min(el.scrollHeight,150) + "px";
+}
 
-        sendMessage();
+function handleEnter(event){
 
-    }
+  if(event.key === "Enter" && !event.shiftKey){
 
+    event.preventDefault();
+
+    sendMessage();
+  }
 }
 
 
-/* =========================
-   ADD USER MESSAGE
-========================= */
+/* ---------------- VOICE ---------------- */
 
-function addUserMessage(text){
+function startVoice(){
 
-    const row =
-        document.createElement("div");
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
-    row.className =
-        "message-row user";
+  if(!SpeechRecognition) return;
 
-    const msg =
-        document.createElement("div");
+  const recognition = new SpeechRecognition();
 
-    msg.className =
-        "message user";
+  recognition.lang = "hi-IN";
+  recognition.continuous = false;
+  recognition.interimResults = false;
 
-    msg.textContent = text;
+  recognition.onresult = function(event){
 
-    row.appendChild(msg);
+    prompt.value +=
+      (prompt.value ? " " : "") +
+      event.results[0][0].transcript;
 
-    document
-        .getElementById("chatInner")
-        .appendChild(row);
+    autoResize(prompt);
+  };
 
+  recognition.start();
 }
 
 
-/* =========================
-   ADD AI MESSAGE
-========================= */
-
-function addAIMessage(text){
-
-    const row =
-        document.createElement("div");
-
-    row.className =
-        "message-row";
-
-    const wrapper =
-        document.createElement("div");
-
-    wrapper.className =
-        "ai-wrapper";
-
-    const msg =
-        document.createElement("div");
-
-    msg.className =
-        "message ai";
-
-    msg.textContent = text;
-
-    const actions =
-        document.createElement("div");
-
-    actions.className =
-        "ai-actions";
-
-    const copy =
-        document.createElement("button");
-
-    copy.className =
-        "action-btn";
-
-    copy.dataset.label =
-        "Copy";
-
-    copy.textContent =
-        "⧉";
-
-    copy.onclick =
-        function(){
-
-            copySpecificMessage(msg);
-
-        };
-
-
-    const regenerate =
-        document.createElement("button");
-
-    regenerate.className =
-        "action-btn";
-
-    regenerate.dataset.label =
-        "Regenerate";
-
-    regenerate.textContent =
-        "↻";
-
-    regenerate.onclick =
-        function(){
-
-            regenerateSpecificMessage(
-                msg,
-                regenerate
-            );
-
-        };
-
-
-    actions.appendChild(copy);
-
-    actions.appendChild(regenerate);
-
-    wrapper.appendChild(msg);
-
-    wrapper.appendChild(actions);
-
-    row.appendChild(wrapper);
-
-    document
-        .getElementById("chatInner")
-        .appendChild(row);
-
-    scrollBottom();
-
-    return msg;
-
-}
-
-
-/* =========================
-   SEND MESSAGE
-========================= */
+/* ---------------- SEND ---------------- */
 
 async function sendMessage(){
 
-    const input =
-        document.getElementById("prompt");
+  const text = prompt.value.trim();
 
-    const text =
-        input.value.trim();
+  if(!text && !selectedFile) return;
 
-    if(!text) return;
+  if(emptyMessage) emptyMessage.remove();
 
+  const userId = "user-" + Date.now();
+  const aiId = "ai-" + Date.now();
 
-    addUserMessage(text);
+  const userText = text || "Attached file";
 
-    input.value = "";
+  addUserMessage(userText,userId);
 
-    input.style.height = "auto";
+  prompt.value = "";
+  autoResize(prompt);
 
-    scrollBottom();
+  const fileToSend = selectedFile;
 
+  removeAttachment();
 
-    const aiMsg =
-        addAIMessage("Thinking...");
+  addAIMessage("Thinking...",aiId,true);
 
+  scrollToBottom();
 
-    try{
+  try{
 
-        const response =
-            await fetch("/api/chat",{
+    let attachment = null;
 
-                method:"POST",
+    if(fileToSend){
 
-                headers:{
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body:JSON.stringify({
-                    message:text
-                })
-
-            });
-
-
-        const data =
-            await response.json();
-
-
-        if(!response.ok){
-
-            throw new Error(
-                data.error ||
-                data.details ||
-                "API Error"
-            );
-
-        }
-
-
-        aiMsg.textContent =
-            data.reply ||
-            "No response received.";
-
-
-    }catch(error){
-
-        aiMsg.textContent =
-            "❌ API Error: " +
-            error.message;
-
+      attachment = await fileToBase64(fileToSend);
     }
 
+    const response = await fetch("/api/chat",{
 
-    scrollBottom();
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+
+        message:userText,
+
+        file:attachment
+      })
+    });
+
+    const data = await response.json();
+
+    const aiElement =
+      document.getElementById(aiId);
+
+    if(!response.ok){
+
+      aiElement.querySelector(".ai-text").textContent =
+        data.error || "API Error";
+
+      return;
+    }
+
+    aiElement.querySelector(".ai-text").textContent =
+      data.reply || "No response.";
+
+    aiElement.querySelector(".actions").style.display =
+      "flex";
+
+    lucide.createIcons();
+
+    scrollToBottom();
+
+  }catch(error){
+
+    const aiElement =
+      document.getElementById(aiId);
+
+    aiElement.querySelector(".ai-text").textContent =
+      "❌ Connection error. Please try again.";
+
+    aiElement.querySelector(".actions").style.display =
+      "flex";
+
+  }
 
 }
 
 
-/* =========================
-   COPY
-========================= */
+/* ---------------- ADD USER ---------------- */
 
-function copySpecificMessage(message){
+function addUserMessage(text,id){
 
-    navigator.clipboard
-        .writeText(message.textContent)
-        .then(()=>{
+  const row = document.createElement("div");
 
-            showCopied();
+  row.className = "message-row user-row";
 
-        });
+  row.innerHTML = `
 
+    <div class="user-content">
+
+      <div class="user-bubble" id="${id}">
+        ${escapeHTML(text)}
+      </div>
+
+      <div class="actions">
+
+        <button class="action-btn"
+          onclick="copyText(this,'${id}')">
+
+          <i data-lucide="copy"></i>
+
+          <span class="tooltip">Copy</span>
+
+        </button>
+
+        <button class="action-btn"
+          onclick="editMessage('${id}')">
+
+          <i data-lucide="pencil"></i>
+
+          <span class="tooltip">Edit</span>
+
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  chat.appendChild(row);
+
+  lucide.createIcons();
+
+  addLongPress(row);
 }
 
-function copyMessage(button){
 
-    const wrapper =
-        button.closest(".ai-wrapper");
+/* ---------------- ADD AI ---------------- */
 
-    const message =
-        wrapper.querySelector(".message.ai");
+function addAIMessage(text,id,thinking=false){
 
-    copySpecificMessage(message);
+  const row = document.createElement("div");
 
+  row.className = "message-row";
+
+  row.innerHTML = `
+
+    <div class="ai-content" id="${id}">
+
+      <div class="ai-text ${thinking ? "thinking":""}">
+        ${escapeHTML(text)}
+      </div>
+
+      <div class="actions"
+        style="${thinking ? "display:none":"display:flex"}">
+
+        <button class="action-btn"
+          onclick="copyAI(this,'${id}')">
+
+          <i data-lucide="copy"></i>
+          <span class="tooltip">Copy</span>
+
+        </button>
+
+        <button class="action-btn"
+          onclick="likeReply(this)">
+
+          <i data-lucide="thumbs-up"></i>
+          <span class="tooltip">Like</span>
+
+        </button>
+
+        <button class="action-btn"
+          onclick="unlikeReply(this)">
+
+          <i data-lucide="thumbs-down"></i>
+          <span class="tooltip">Unlike</span>
+
+        </button>
+
+        <button class="action-btn"
+          onclick="shareReply('${id}')">
+
+          <i data-lucide="share-2"></i>
+          <span class="tooltip">Share</span>
+
+        </button>
+
+        <button class="action-btn"
+          onclick="regenerate('${id}')">
+
+          <i data-lucide="refresh-cw"></i>
+          <span class="tooltip">Regenerate</span>
+
+        </button>
+
+        <button class="action-btn"
+          onclick="replyMore(this,'${id}')">
+
+          <i data-lucide="more-horizontal"></i>
+          <span class="tooltip">More</span>
+
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  chat.appendChild(row);
+
+  lucide.createIcons();
+
+  addLongPress(row);
 }
 
-function showCopied(){
 
-    const oldTitle =
-        document.title;
+/* ---------------- COPY ---------------- */
 
-    document.title =
-        "Copied ✓";
+async function copyText(button,id){
+
+  const element =
+    document.getElementById(id);
+
+  await navigator.clipboard.writeText(
+    element.textContent
+  );
+
+  showTooltip(button,"Copied");
+}
+
+async function copyAI(button,id){
+
+  const element =
+    document.querySelector(
+      "#" + id + " .ai-text"
+    );
+
+  await navigator.clipboard.writeText(
+    element.textContent
+  );
+
+  showTooltip(button,"Copied");
+}
+
+
+/* ---------------- EDIT ---------------- */
+
+function editMessage(id){
+
+  const text =
+    document.getElementById(id).textContent;
+
+  prompt.value = text;
+
+  autoResize(prompt);
+
+  prompt.focus();
+}
+
+
+/* ---------------- LIKE ---------------- */
+
+function likeReply(button){
+
+  button.classList.add("active");
+
+  const parent =
+    button.parentElement;
+
+  const unlike =
+    parent.children[2];
+
+  unlike.classList.remove("active");
+}
+
+function unlikeReply(button){
+
+  button.classList.add("active");
+
+  const parent =
+    button.parentElement;
+
+  const like =
+    parent.children[1];
+
+  like.classList.remove("active");
+}
+
+
+/* ---------------- SHARE ---------------- */
+
+async function shareReply(id){
+
+  const text =
+    document.querySelector(
+      "#" + id + " .ai-text"
+    ).textContent;
+
+  if(navigator.share){
+
+    await navigator.share({
+      title:"RG Creator AI",
+      text:text
+    });
+
+  }else{
+
+    await navigator.clipboard.writeText(text);
+  }
+}
+
+async function shareConversation(){
+
+  closeMenus();
+
+  const text =
+    document.getElementById("chat").innerText;
+
+  if(navigator.share){
+
+    await navigator.share({
+      title:conversationTitle,
+      text:text
+    });
+
+  }else{
+
+    await navigator.clipboard.writeText(text);
+  }
+}
+
+
+/* ---------------- REGENERATE ---------------- */
+
+async function regenerate(id){
+
+  const aiElement =
+    document.getElementById(id);
+
+  const text =
+    aiElement.querySelector(".ai-text");
+
+  text.textContent = "Regenerating...";
+  text.classList.add("thinking");
+
+  const previousUser =
+    findPreviousUserMessage(aiElement);
+
+  if(!previousUser) return;
+
+  try{
+
+    const response =
+      await fetch("/api/chat",{
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+          message:previousUser
+        })
+      });
+
+    const data = await response.json();
+
+    text.textContent =
+      data.reply || "No response.";
+
+    text.classList.remove("thinking");
+
+  }catch(error){
+
+    text.textContent =
+      "❌ Unable to regenerate.";
+
+    text.classList.remove("thinking");
+  }
+
+  scrollToBottom();
+}
+
+function findPreviousUserMessage(aiElement){
+
+  let row =
+    aiElement.parentElement.previousElementSibling;
+
+  while(row){
+
+    const bubble =
+      row.querySelector(".user-bubble");
+
+    if(bubble) return bubble.textContent;
+
+    row =
+      row.previousElementSibling;
+  }
+
+  return null;
+}
+
+
+/* ---------------- MORE REPLY ---------------- */
+
+function replyMore(button,id){
+
+  const old =
+    document.getElementById("replyPopup");
+
+  if(old) old.remove();
+
+  const menu =
+    document.createElement("div");
+
+  menu.id = "replyPopup";
+
+  menu.style.position = "fixed";
+  menu.style.background = "#1d1d1d";
+  menu.style.border = "1px solid #333";
+  menu.style.borderRadius = "14px";
+  menu.style.padding = "7px";
+  menu.style.zIndex = "200";
+  menu.style.boxShadow = "0 12px 35px rgba(0,0,0,.6)";
+
+  menu.innerHTML = `
+
+    <button class="more-item"
+      onclick="downloadReply('${id}')">
+      <i data-lucide="download"></i>
+      <span>Download</span>
+    </button>
+
+    <button class="more-item"
+      onclick="cutReply('${id}')">
+      <i data-lucide="scissors"></i>
+      <span>Cut</span>
+    </button>
+  `;
+
+  document.body.appendChild(menu);
+
+  const rect =
+    button.getBoundingClientRect();
+
+  menu.style.left =
+    Math.max(8,rect.left - 150) + "px";
+
+  menu.style.top =
+    Math.max(60,rect.top - 100) + "px";
+
+  lucide.createIcons();
+
+  setTimeout(()=>{
+
+    document.addEventListener(
+      "click",
+      closeReplyPopup,
+      {once:true}
+    );
+
+  },0);
+}
+
+function closeReplyPopup(){
+
+  const menu =
+    document.getElementById("replyPopup");
+
+  if(menu) menu.remove();
+}
+
+function downloadReply(id){
+
+  const text =
+    document.querySelector(
+      "#" + id + " .ai-text"
+    ).textContent;
+
+  const blob =
+    new Blob([text],{
+      type:"text/plain"
+    });
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+  a.download = "RG-Creator-AI-Reply.txt";
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function cutReply(id){
+
+  const element =
+    document.getElementById(id);
+
+  element.parentElement.remove();
+}
+
+
+/* ---------------- TOP MENU ---------------- */
+
+function pinConversation(){
+
+  localStorage.setItem(
+    "rgPinnedChat",
+    document.getElementById("chat").innerText
+  );
+
+  closeMenus();
+}
+
+function renameConversation(){
+
+  const name =
+    prompt("Conversation name:",conversationTitle);
+
+  if(name){
+
+    conversationTitle = name.trim();
+
+    document.querySelector(".logo-title").textContent =
+      conversationTitle;
+  }
+
+  closeMenus();
+}
+
+function deleteChat(){
+
+  chat.innerHTML = `
+    <div class="empty" id="emptyMessage">
+      <div>
+        <h2>RG Creator AI</h2>
+        <p>How can I help you today?</p>
+      </div>
+    </div>
+  `;
+
+  closeMenus();
+}
+
+
+/* ---------------- PDF ---------------- */
+
+function downloadPDF(){
+
+  closeMenus();
+
+  const {jsPDF} = window.jspdf;
+
+  const doc =
+    new jsPDF();
+
+  const text =
+    document.getElementById("chat").innerText;
+
+  const lines =
+    doc.splitTextToSize(text,180);
+
+  doc.text(lines,15,20);
+
+  doc.save("RG-Creator-AI-Conversation.pdf");
+}
+
+
+/* ---------------- DOCS ---------------- */
+
+function exportDocs(){
+
+  closeMenus();
+
+  const text =
+    document.getElementById("chat").innerText;
+
+  const blob =
+    new Blob(
+      [
+        `<html>
+        <body>
+        <h1>RG Creator AI</h1>
+        <pre style="font-family:Arial;white-space:pre-wrap">
+        ${escapeHTML(text)}
+        </pre>
+        </body>
+        </html>`
+      ],
+      {type:"application/msword"}
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+  a.download = "RG-Creator-AI-Conversation.doc";
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+
+/* ---------------- FILE BASE64 ---------------- */
+
+function fileToBase64(file){
+
+  return new Promise((resolve,reject)=>{
+
+    const reader =
+      new FileReader();
+
+    reader.onload = ()=>{
+
+      const result =
+        reader.result;
+
+      resolve({
+
+        name:file.name,
+
+        mimeType:file.type,
+
+        data:
+          result.split(",")[1]
+      });
+    };
+
+    reader.onerror = reject;
+
+    reader.readAsDataURL(file);
+  });
+}
+
+
+/* ---------------- TOOLTIP LONG PRESS ---------------- */
+
+function addLongPress(container){
+
+  const buttons =
+    container.querySelectorAll(".action-btn");
+
+  buttons.forEach(button=>{
+
+    let timer;
+
+    button.addEventListener(
+      "pointerdown",
+      ()=>{
+
+        timer =
+          setTimeout(()=>{
+
+            button.classList.add("show-tip");
+
+            setTimeout(()=>{
+
+              button.classList.remove("show-tip");
+
+            },1500);
+
+          },450);
+      }
+    );
+
+    button.addEventListener(
+      "pointerup",
+      ()=>{
+        clearTimeout(timer);
+      }
+    );
+
+    button.addEventListener(
+      "pointerleave",
+      ()=>{
+        clearTimeout(timer);
+      }
+    );
+  });
+}
+
+
+/* ---------------- UTIL ---------------- */
+
+function showTooltip(button,text){
+
+  const old =
+    button.querySelector(".tooltip");
+
+  if(old){
+
+    const original =
+      old.textContent;
+
+    old.textContent = text;
+
+    button.classList.add("show-tip");
 
     setTimeout(()=>{
 
-        document.title =
-            oldTitle;
+      old.textContent = original;
+
+      button.classList.remove("show-tip");
 
     },1000);
-
+  }
 }
 
+function escapeHTML(text){
 
-/* =========================
-   REGENERATE
-========================= */
-
-async function regenerateSpecificMessage(
-    message,
-    button
-){
-
-    const row =
-        message.closest(".message-row");
-
-    const previousRow =
-        row.previousElementSibling;
-
-    if(
-        !previousRow ||
-        !previousRow.classList.contains("user")
-    ){
-
-        return;
-
-    }
-
-
-    const userMessage =
-        previousRow
-            .querySelector(".message")
-            .textContent;
-
-
-    message.textContent =
-        "Thinking...";
-
-
-    button.disabled =
-        true;
-
-
-    try{
-
-        const response =
-            await fetch("/api/chat",{
-
-                method:"POST",
-
-                headers:{
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body:JSON.stringify({
-                    message:userMessage
-                })
-
-            });
-
-
-        const data =
-            await response.json();
-
-
-        if(!response.ok){
-
-            throw new Error(
-                data.error ||
-                "API Error"
-            );
-
-        }
-
-
-        message.textContent =
-            data.reply ||
-            "No response.";
-
-    }catch(error){
-
-        message.textContent =
-            "❌ API Error: " +
-            error.message;
-
-    }
-
-
-    button.disabled =
-        false;
-
-    scrollBottom();
-
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
+function scrollToBottom(){
 
-/* =========================
-   VOICE INPUT
-========================= */
+  const area =
+    document.getElementById("chatArea");
 
-let recognition = null;
-
-let recording = false;
-
-
-function toggleVoice(){
-
-    const mic =
-        document.getElementById("micBtn");
-
-
-    if(!("webkitSpeechRecognition" in window) &&
-       !("SpeechRecognition" in window)){
-
-        alert(
-            "Voice input is not supported in this browser. Please use Chrome."
-        );
-
-        return;
-
-    }
-
-
-    if(recording){
-
-        recognition.stop();
-
-        return;
-
-    }
-
-
-    const SpeechRecognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
-
-
-    recognition =
-        new SpeechRecognition();
-
-
-    recognition.lang =
-        "en-IN";
-
-
-    recognition.continuous =
-        false;
-
-
-    recognition.interimResults =
-        true;
-
-
-    recognition.onstart =
-        function(){
-
-            recording = true;
-
-            mic.classList.add("recording");
-
-            mic.textContent =
-                "●";
-
-        };
-
-
-    recognition.onresult =
-        function(event){
-
-            let transcript = "";
-
-            for(
-                let i = event.resultIndex;
-                i < event.results.length;
-                i++
-            ){
-
-                transcript +=
-                    event.results[i][0].transcript;
-
-            }
-
-
-            document.getElementById("prompt")
-                .value = transcript;
-
-            autoResize(
-                document.getElementById("prompt")
-            );
-
-        };
-
-
-    recognition.onerror =
-        function(event){
-
-            console.log(
-                "Voice error:",
-                event.error
-            );
-
-        };
-
-
-    recognition.onend =
-        function(){
-
-            recording = false;
-
-            mic.classList.remove(
-                "recording"
-            );
-
-            mic.textContent =
-                "🎙";
-
-        };
-
-
-    recognition.start();
-
+  area.scrollTop =
+    area.scrollHeight;
 }
-
-
-/* =========================
-   SCROLL
-========================= */
-
-function scrollBottom(){
-
-    const chat =
-        document.getElementById("chat");
-
-    setTimeout(()=>{
-
-        chat.scrollTop =
-            chat.scrollHeight;
-
-    },50);
-
-}
-
-
-/* =========================
-   CLOSE MENU ON CHAT CLICK
-========================= */
-
-document
-    .getElementById("chat")
-    .addEventListener(
-        "click",
-        function(){
-
-            closeSidebar();
-
-        }
-    );
 
 </script>
 
