@@ -6,57 +6,38 @@ export default async function handler(req, res) {
   }
 
   try {
-    const {
-      message,
-      history = [],
-      image,
-      imageMimeType
-    } = req.body || {};
+    const { message, history = [] } = req.body || {};
 
-    if (!message && !image) {
+    if (!message || !message.trim()) {
       return res.status(400).json({
-        error: "Message or image is required"
+        error: "Message is required"
       });
     }
 
     const contents = [];
 
-    // Previous chat history
-    for (const item of history) {
-      if (!item?.content) continue;
+    if (Array.isArray(history)) {
+      for (const item of history) {
+        if (!item?.text) continue;
 
-      contents.push({
-        role: item.role === "assistant" ? "model" : "user",
-        parts: [
-          {
-            text: String(item.content)
-          }
-        ]
-      });
-    }
-
-    // Current message
-    const currentParts = [];
-
-    if (message) {
-      currentParts.push({
-        text: message
-      });
-    }
-
-    // Current image
-    if (image && imageMimeType) {
-      currentParts.push({
-        inlineData: {
-          mimeType: imageMimeType,
-          data: image
-        }
-      });
+        contents.push({
+          role: item.role === "user" ? "user" : "model",
+          parts: [
+            {
+              text: String(item.text)
+            }
+          ]
+        });
+      }
     }
 
     contents.push({
       role: "user",
-      parts: currentParts
+      parts: [
+        {
+          text: message.trim()
+        }
+      ]
     });
 
     const response = await fetch(
@@ -68,7 +49,10 @@ export default async function handler(req, res) {
           "x-goog-api-key": process.env.GEMINI_API_KEY
         },
         body: JSON.stringify({
-          contents: contents
+          contents,
+          generationConfig: {
+            temperature: 0.7
+          }
         })
       }
     );
@@ -76,18 +60,21 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
+      console.error("Gemini Chat Error:", data);
+
       return res.status(response.status).json({
         error: "Gemini API Error",
         details:
           data?.error?.message ||
-          "Unknown Gemini API error"
+          "Gemini response failed."
       });
     }
 
     const reply =
       data?.candidates?.[0]?.content?.parts
-        ?.map(part => part.text || "")
-        .join("") ||
+        ?.filter(part => part?.text)
+        ?.map(part => part.text)
+        ?.join("\n") ||
       "Sorry, I couldn't generate a response.";
 
     return res.status(200).json({
