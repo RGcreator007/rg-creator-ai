@@ -6,53 +6,52 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt } = req.body || {};
+    const { message, history = [] } = req.body || {};
 
-    if (!prompt || !prompt.trim()) {
+    if (!message || !message.trim()) {
       return res.status(400).json({
-        error: "Prompt is required"
+        error: "Message is required"
       });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const contents = [];
 
-    if (!apiKey) {
-      return res.status(500).json({
-        error: "GEMINI_API_KEY is not configured in Vercel."
-      });
+    if (Array.isArray(history)) {
+      for (const item of history) {
+        if (!item?.text) continue;
+
+        contents.push({
+          role: item.role === "user" ? "user" : "model",
+          parts: [
+            {
+              text: String(item.text)
+            }
+          ]
+        });
+      }
     }
+
+    contents.push({
+      role: "user",
+      parts: [
+        {
+          text: message.trim()
+        }
+      ]
+    });
 
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-flash-image:generateContent",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
       {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
-          "x-goog-api-key": apiKey
+          "x-goog-api-key": process.env.GEMINI_API_KEY
         },
-
         body: JSON.stringify({
-          contents: [
-            {
-              role: "user",
-              parts: [
-                {
-                  text: prompt.trim()
-                }
-              ]
-            }
-          ],
-
+          contents,
           generationConfig: {
-            responseModalities: ["IMAGE"],
-
-            responseFormat: {
-              image: {
-                aspectRatio: "1:1",
-                imageSize: "1K"
-              }
-            }
+            temperature: 0.7
           }
         })
       }
@@ -61,67 +60,33 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error(
-        "Gemini Image API Error:",
-        data
-      );
+      console.error("Gemini Chat Error:", data);
 
       return res.status(response.status).json({
-        error: "Gemini Image API Error",
+        error: "Gemini API Error",
         details:
           data?.error?.message ||
-          "Image generation failed."
+          "Gemini response failed."
       });
     }
 
-    const parts =
-      data?.candidates?.[0]?.content?.parts || [];
-
-    const imagePart =
-      parts.find(
-        part =>
-          part?.inlineData?.data
-      );
-
-    if (!imagePart) {
-      console.error(
-        "No image returned:",
-        JSON.stringify(data)
-      );
-
-      return res.status(500).json({
-        error: "No image was returned.",
-        details:
-          "Gemini did not return an image."
-      });
-    }
-
-    const base64 =
-      imagePart.inlineData.data;
-
-    const mimeType =
-      imagePart.inlineData.mimeType ||
-      "image/png";
+    const reply =
+      data?.candidates?.[0]?.content?.parts
+        ?.filter(part => part?.text)
+        ?.map(part => part.text)
+        ?.join("\n") ||
+      "Sorry, I couldn't generate a response.";
 
     return res.status(200).json({
-      image:
-        `data:${mimeType};base64,${base64}`,
-
-      mimeType
+      reply
     });
 
   } catch (error) {
-
-    console.error(
-      "Image API Error:",
-      error
-    );
+    console.error("Chat API Error:", error);
 
     return res.status(500).json({
       error: "Server Error",
-      details:
-        error?.message ||
-        "Unknown server error."
+      details: error.message
     });
   }
 }
