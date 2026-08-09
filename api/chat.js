@@ -1,4 +1,4 @@
-const MODEL = "gemini-2.5-flash";
+const MODEL = "gemini-3.6-flash";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -31,12 +31,13 @@ export default async function handler(req, res) {
     }
 
     const url =
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
     const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey
       },
       body: JSON.stringify({
         contents: [
@@ -64,14 +65,17 @@ export default async function handler(req, res) {
 
       return res.status(response.status).json({
         ok: false,
-        error: data?.error?.message || "Gemini request failed"
+        error:
+          data?.error?.message ||
+          "Gemini request failed"
       });
     }
 
-    const reply = data?.candidates?.[0]?.content?.parts
-      ?.map(part => part.text || "")
-      .join("")
-      .trim();
+    const reply =
+      data?.candidates?.[0]?.content?.parts
+        ?.map(part => part.text || "")
+        .join("")
+        .trim();
 
     if (!reply) {
       return res.status(502).json({
