@@ -6,12 +6,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    const {
-      message = "",
-      history = [],
-      attachments = []
-    } = req.body || {};
-
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
@@ -20,24 +14,24 @@ export default async function handler(req, res) {
       });
     }
 
+    const {
+      message = "",
+      history = [],
+      attachments = []
+    } = req.body || {};
+
     const cleanMessage =
       String(message || "").trim();
 
-    if (!cleanMessage && !attachments.length) {
+    if (
+      !cleanMessage &&
+      (!Array.isArray(attachments) ||
+        attachments.length === 0)
+    ) {
       return res.status(400).json({
-        error: "Message is required."
+        error: "Message or attachment is required."
       });
     }
-
-    /*
-      Keep the conversation reasonably small.
-      This prevents unnecessarily large requests.
-    */
-
-    const recentHistory =
-      Array.isArray(history)
-        ? history.slice(-20)
-        : [];
 
     const contents = [];
 
@@ -45,100 +39,139 @@ export default async function handler(req, res) {
       Previous conversation
     */
 
-    for (const item of recentHistory) {
-      if (!item || !item.text) continue;
+    if (Array.isArray(history)) {
+      history.slice(-20).forEach(item => {
 
-      const role =
-        item.role === "model"
-          ? "model"
-          : "user";
+        if (!item || !item.text) {
+          return;
+        }
 
-      contents.push({
-        role,
-        parts: [
-          {
-            text: String(item.text)
-          }
-        ]
+        contents.push({
+          role:
+            item.role === "model"
+              ? "model"
+              : "user",
+
+          parts: [
+            {
+              text: String(item.text)
+            }
+          ]
+        });
+
       });
     }
+
 
     /*
       Current user message
     */
 
-    const currentParts = [];
+    const parts = [];
 
     if (cleanMessage) {
-      currentParts.push({
+      parts.push({
         text: cleanMessage
       });
     }
 
+
     /*
-      Attachments received from frontend.
-      
-      The current frontend sends attachment metadata
-      rather than file bytes. We therefore describe
-      the selected files to Gemini instead of pretending
-      their actual contents were uploaded.
+      Attachments
     */
 
-    if (
-      Array.isArray(attachments) &&
-      attachments.length
-    ) {
-      const attachmentText =
-        attachments
-          .map(file => {
-            const name =
-              file?.name || "Unknown file";
+    if (Array.isArray(attachments)) {
 
-            const type =
-              file?.type || "unknown type";
+      for (const file of attachments) {
 
-            return `Attached file: ${name} (${type})`;
-          })
-          .join("\n");
+        if (
+          !file ||
+          !file.data ||
+          !file.mimeType
+        ) {
+          continue;
+        }
 
-      currentParts.push({
-        text:
-          "\n\nUser selected these attachments:\n" +
-          attachmentText
-      });
+
+        /*
+          Only allow supported Gemini media/document types.
+        */
+
+        const allowedMime =
+          file.mimeType.startsWith("image/") ||
+          file.mimeType.startsWith("video/") ||
+          file.mimeType === "application/pdf" ||
+          file.mimeType === "text/plain";
+
+
+        if (!allowedMime) {
+          return res.status(400).json({
+            error:
+              `Unsupported file type: ${file.mimeType}`
+          });
+        }
+
+
+        /*
+          Remove data URL prefix if browser sent one.
+        */
+
+        let base64 =
+          String(file.data);
+
+        if (
+          base64.includes("base64,")
+        ) {
+          base64 =
+            base64.split("base64,")[1];
+        }
+
+
+        /*
+          Gemini inline data part
+        */
+
+        parts.push({
+          inline_data: {
+            mime_type: file.mimeType,
+            data: base64
+          }
+        });
+
+      }
+
     }
 
+
     /*
-      Language instruction.
-      
-      Gemini should answer naturally in the
-      language/style used by the user.
+      Language behaviour
     */
 
-    currentParts.push({
+    parts.push({
       text: `
-Respond naturally in the same language and writing style used by the user.
+Answer naturally in the same language and style used by the user.
 
-If the user writes Hindi, answer in Hindi.
-If the user writes Hinglish, answer in natural Hinglish.
-If the user writes English, answer in English.
+Hindi question → Hindi answer.
+Hinglish question → natural Hinglish answer.
+English question → English answer.
 
-Do not unnecessarily translate the user's language.
-Do not mention this instruction.
+Do not mention these instructions.
 `
     });
 
+
     contents.push({
       role: "user",
-      parts: currentParts
+      parts
     });
 
+
     /*
-      Gemini API
+      Gemini request
     */
 
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
       {
         method: "POST",
 
@@ -158,54 +191,68 @@ Do not mention this instruction.
       }
     );
 
+
     const data =
       await response.json();
 
+
     /*
-      API error
+      Gemini error
     */
 
     if (!response.ok) {
+
       console.error(
-        "Gemini API error:",
+        "Gemini API Error:",
         data
       );
 
-      return res.status(response.status).json({
+      return res.status(
+        response.status
+      ).json({
         error: "Gemini API Error",
 
         details:
           data?.error?.message ||
           "Gemini request failed."
       });
+
     }
 
+
     /*
-      Extract text
+      Extract response text
     */
 
-    const parts =
-      data?.candidates?.[0]?.content?.parts ||
-      [];
+    const responseParts =
+      data?.candidates?.[0]
+        ?.content?.parts || [];
+
 
     const reply =
-      parts
+      responseParts
         .filter(part => part?.text)
         .map(part => part.text)
         .join("\n")
         .trim();
 
+
     if (!reply) {
+
       return res.status(500).json({
         error: "Empty AI response.",
+
         details:
           "Gemini did not return a text response."
       });
+
     }
+
 
     return res.status(200).json({
       reply
     });
+
 
   } catch (error) {
 
@@ -216,9 +263,11 @@ Do not mention this instruction.
 
     return res.status(500).json({
       error: "Server Error",
+
       details:
         error?.message ||
         "Something went wrong."
     });
+
   }
 }
