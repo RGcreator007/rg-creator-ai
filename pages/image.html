@@ -2,10 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>RG Creator AI - Image Generator</title>
 
@@ -17,80 +14,83 @@
     html,
     body {
       margin: 0;
-      padding: 0;
+      min-height: 100%;
       background: #000;
       color: #fff;
       font-family: Arial, Helvetica, sans-serif;
-      min-height: 100%;
     }
 
     body {
-      padding: 20px 16px 40px;
+      padding: 16px;
     }
 
     .page {
       width: 100%;
       max-width: 760px;
-      margin: 0 auto;
+      margin: auto;
     }
+
+    /* TOP BAR */
 
     .topbar {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 28px;
     }
 
     .back-btn {
-      width: 42px;
-      height: 42px;
-      border: none;
+      border: 0;
+      outline: 0;
       background: transparent;
       color: #fff;
-      font-size: 26px;
-      cursor: pointer;
+      font-size: 32px;
+      width: 42px;
+      height: 42px;
       padding: 0;
+      cursor: pointer;
     }
 
-    .title-area h1 {
+    .title-box h1 {
       margin: 0;
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 600;
     }
 
-    .title-area p {
+    .title-box p {
       margin: 4px 0 0;
-      color: #888;
+      color: #777;
       font-size: 13px;
     }
 
-    .generator {
-      width: 100%;
-    }
+    /* PROMPT */
 
-    .prompt-label {
+    .label {
       display: block;
-      margin-bottom: 10px;
-      color: #aaa;
+      color: #999;
       font-size: 14px;
+      margin-bottom: 9px;
     }
 
     #prompt {
+      display: block;
       width: 100%;
       min-height: 130px;
-      resize: vertical;
 
-      background: #111;
-      color: #fff;
+      resize: vertical;
 
       border: 1px solid #292929;
       border-radius: 18px;
 
+      outline: none;
+
+      background: #111;
+      color: #fff;
+
       padding: 16px;
+
       font-size: 16px;
       line-height: 1.5;
-
-      outline: none;
     }
 
     #prompt:focus {
@@ -101,337 +101,403 @@
       color: #666;
     }
 
-    .generate-btn {
-      width: 100%;
-      margin-top: 14px;
+    /* GENERATE BUTTON */
 
-      border: none;
-      border-radius: 16px;
+    #generateBtn {
+      width: 100%;
+      min-height: 52px;
+
+      margin-top: 12px;
+
+      border: 0;
+      border-radius: 15px;
 
       background: #fff;
       color: #000;
-
-      min-height: 52px;
 
       font-size: 16px;
       font-weight: 600;
 
       cursor: pointer;
-      transition: opacity 0.2s;
     }
 
-    .generate-btn:hover {
-      opacity: 0.9;
-    }
-
-    .generate-btn:disabled {
-      opacity: 0.5;
+    #generateBtn:disabled {
+      opacity: .5;
       cursor: not-allowed;
     }
 
-    .status {
+    /* LOADING */
+
+    #loading {
       display: none;
-      margin-top: 18px;
-      color: #999;
-      font-size: 14px;
+
       text-align: center;
+
+      color: #999;
+
+      font-size: 14px;
+
+      margin-top: 18px;
     }
 
-    .status.show {
+    #loading.show {
       display: block;
     }
 
-    .result {
+    /* ERROR */
+
+    #error {
       display: none;
+
+      margin-top: 18px;
+
+      padding: 13px 14px;
+
+      border-radius: 14px;
+
+      background: #160b0b;
+
+      border: 1px solid #3a2020;
+
+      color: #ff8b8b;
+
+      font-size: 14px;
+
+      line-height: 1.5;
+    }
+
+    #error.show {
+      display: block;
+    }
+
+    /* RESULT */
+
+    #result {
+      display: none;
+
       margin-top: 28px;
     }
 
-    .result.show {
+    #result.show {
       display: block;
     }
 
     .result-title {
-      margin-bottom: 12px;
-      color: #aaa;
+      color: #999;
       font-size: 14px;
+      margin-bottom: 10px;
     }
 
-    .image-container {
-      width: 100%;
+    .image-wrapper {
       overflow: hidden;
+
       border-radius: 18px;
-      background: #111;
+
       border: 1px solid #292929;
+
+      background: #111;
     }
 
     #generatedImage {
-      display: block;
       width: 100%;
+      display: block;
       height: auto;
     }
 
-    .image-actions {
+    /* ACTIONS */
+
+    .actions {
       display: flex;
       gap: 10px;
       margin-top: 12px;
     }
 
-    .action-btn {
+    .action {
       flex: 1;
+
       min-height: 48px;
 
       border: 1px solid #292929;
+
       border-radius: 14px;
 
-      background: #111;
+      background: transparent;
+
       color: #fff;
 
       font-size: 15px;
+
       cursor: pointer;
     }
 
-    .action-btn:hover {
-      background: #181818;
-    }
-
-    .error {
-      display: none;
-
-      margin-top: 18px;
-      padding: 14px;
-
-      border-radius: 14px;
-      border: 1px solid #3a2020;
-
-      background: #160d0d;
-      color: #ff8b8b;
-
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .error.show {
-      display: block;
+    .action:hover {
+      background: #111;
     }
 
     @media (max-width: 480px) {
+
       body {
-        padding: 16px 12px 30px;
+        padding: 14px 12px 30px;
       }
 
-      .title-area h1 {
-        font-size: 20px;
+      .title-box h1 {
+        font-size: 19px;
       }
 
       #prompt {
         min-height: 120px;
       }
+
     }
   </style>
 </head>
 
 <body>
 
-  <div class="page">
+  <main class="page">
 
     <!-- TOP BAR -->
+
     <div class="topbar">
 
       <button
         class="back-btn"
+        type="button"
         onclick="goBack()"
         aria-label="Back"
       >
         ‹
       </button>
 
-      <div class="title-area">
+      <div class="title-box">
+
         <h1>AI Image Generator</h1>
+
         <p>Create images with RG Creator AI</p>
-      </div>
-
-    </div>
-
-
-    <!-- GENERATOR -->
-    <div class="generator">
-
-      <label
-        class="prompt-label"
-        for="prompt"
-      >
-        Describe the image you want
-      </label>
-
-      <textarea
-        id="prompt"
-        placeholder="Example: A cinematic night city with neon lights, realistic photography..."
-      ></textarea>
-
-
-      <button
-        id="generateBtn"
-        class="generate-btn"
-        onclick="generateImage()"
-      >
-        Generate Image
-      </button>
-
-
-      <div
-        id="status"
-        class="status"
-      >
-        Creating your image...
-      </div>
-
-
-      <!-- ERROR -->
-      <div
-        id="error"
-        class="error"
-      ></div>
-
-
-      <!-- RESULT -->
-      <div
-        id="result"
-        class="result"
-      >
-
-        <div class="result-title">
-          Generated Image
-        </div>
-
-        <div class="image-container">
-
-          <img
-            id="generatedImage"
-            alt="Generated AI image"
-          >
-
-        </div>
-
-
-        <div class="image-actions">
-
-          <button
-            class="action-btn"
-            onclick="downloadImage()"
-          >
-            ↓ Download
-          </button>
-
-          <button
-            class="action-btn"
-            onclick="generateImage()"
-          >
-            ↻ Regenerate
-          </button>
-
-        </div>
 
       </div>
 
     </div>
 
-  </div>
+
+    <!-- PROMPT -->
+
+    <label
+      class="label"
+      for="prompt"
+    >
+      Describe the image you want
+    </label>
+
+    <textarea
+      id="prompt"
+      placeholder="Example: A cinematic sunset over mountains, realistic photography..."
+    ></textarea>
+
+
+    <!-- GENERATE -->
+
+    <button
+      id="generateBtn"
+      type="button"
+      onclick="generateImage()"
+    >
+      Generate Image
+    </button>
+
+
+    <!-- LOADING -->
+
+    <div
+      id="loading"
+    >
+      Creating your image...
+    </div>
+
+
+    <!-- ERROR -->
+
+    <div
+      id="error"
+    ></div>
+
+
+    <!-- RESULT -->
+
+    <section
+      id="result"
+    >
+
+      <div class="result-title">
+        Generated Image
+      </div>
+
+      <div class="image-wrapper">
+
+        <img
+          id="generatedImage"
+          alt="AI generated image"
+        >
+
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          class="action"
+          type="button"
+          onclick="downloadImage()"
+        >
+          ↓ Download
+        </button>
+
+        <button
+          class="action"
+          type="button"
+          onclick="generateImage()"
+        >
+          ↻ Regenerate
+        </button>
+
+      </div>
+
+    </section>
+
+  </main>
 
 
   <script>
 
-    let generatedImageData = "";
-    let generatedMimeType = "image/png";
+    let imageBase64 = "";
+    let imageMimeType = "image/png";
 
+
+    /* BACK */
 
     function goBack() {
 
       if (window.history.length > 1) {
+
         window.history.back();
+
       } else {
+
         window.location.href = "../index.html";
+
       }
 
     }
 
 
-    async function generateImage() {
+    /* ERROR */
 
-      const promptElement =
-        document.getElementById("prompt");
-
-      const generateBtn =
-        document.getElementById("generateBtn");
-
-      const status =
-        document.getElementById("status");
-
-      const result =
-        document.getElementById("result");
+    function showError(message) {
 
       const error =
         document.getElementById("error");
 
-      const image =
-        document.getElementById("generatedImage");
+      error.textContent = message;
 
+      error.classList.add("show");
+
+    }
+
+
+    function clearError() {
+
+      const error =
+        document.getElementById("error");
+
+      error.textContent = "";
+
+      error.classList.remove("show");
+
+    }
+
+
+    /* GENERATE */
+
+    async function generateImage() {
 
       const prompt =
-        promptElement.value.trim();
+        document
+          .getElementById("prompt")
+          .value
+          .trim();
 
 
-      // Clear old error
-      error.classList.remove("show");
-      error.textContent = "";
+      const button =
+        document.getElementById("generateBtn");
+
+      const loading =
+        document.getElementById("loading");
+
+      const result =
+        document.getElementById("result");
+
+
+      clearError();
 
 
       if (!prompt) {
 
         showError(
-          "Please enter a description for the image."
+          "Please describe the image you want."
         );
 
-        promptElement.focus();
+        document
+          .getElementById("prompt")
+          .focus();
 
         return;
+
       }
 
 
-      // Loading
-      generateBtn.disabled = true;
-      generateBtn.textContent = "Generating...";
+      button.disabled = true;
 
-      status.classList.add("show");
+      button.textContent =
+        "Generating...";
+
+      loading.classList.add("show");
 
       result.classList.remove("show");
 
 
       try {
 
-        const response = await fetch(
-          "/api/image",
-          {
-            method: "POST",
+        const response =
+          await fetch(
+            "/api/image",
+            {
+              method: "POST",
 
-            headers: {
-              "Content-Type": "application/json"
-            },
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
 
-            body: JSON.stringify({
-              prompt: prompt
-            })
-          }
-        );
+              body: JSON.stringify({
+                prompt: prompt
+              })
+            }
+          );
 
 
-        let data = {};
+        let data;
 
         try {
-          data = await response.json();
-        } catch (jsonError) {
+
+          data =
+            await response.json();
+
+        } catch {
+
           throw new Error(
-            "Server returned an invalid response."
+            "The server returned an invalid response."
           );
+
         }
 
 
@@ -446,31 +512,38 @@
         }
 
 
-        if (!data.image) {
+        if (!data?.image) {
 
           throw new Error(
-            "No image was returned by the AI."
+            "No image was returned by Gemini."
           );
 
         }
 
 
-        generatedImageData =
+        imageBase64 =
           data.image;
 
-        generatedMimeType =
+
+        imageMimeType =
           data.mimeType ||
           "image/png";
 
 
+        const image =
+          document
+            .getElementById(
+              "generatedImage"
+            );
+
+
         image.src =
-          `data:${generatedMimeType};base64,${generatedImageData}`;
+          `data:${imageMimeType};base64,${imageBase64}`;
 
 
         result.classList.add("show");
 
 
-        // Scroll to result
         setTimeout(() => {
 
           result.scrollIntoView({
@@ -481,50 +554,45 @@
         }, 100);
 
 
-      } catch (err) {
+      } catch (error) {
 
         console.error(
           "Image generation error:",
-          err
+          error
         );
 
+
         showError(
-          err.message ||
-          "Something went wrong while generating the image."
+          error?.message ||
+          "Unable to generate the image."
         );
 
       } finally {
 
-        generateBtn.disabled = false;
-        generateBtn.textContent = "Generate Image";
+        button.disabled = false;
 
-        status.classList.remove("show");
+        button.textContent =
+          "Generate Image";
+
+        loading.classList.remove("show");
 
       }
 
     }
 
 
-    function showError(message) {
-
-      const error =
-        document.getElementById("error");
-
-      error.textContent = message;
-      error.classList.add("show");
-
-    }
-
+    /* DOWNLOAD */
 
     function downloadImage() {
 
-      if (!generatedImageData) {
+      if (!imageBase64) {
 
         showError(
           "Generate an image first."
         );
 
         return;
+
       }
 
 
@@ -535,15 +603,27 @@
 
 
         link.href =
-          `data:${generatedMimeType};base64,${generatedImageData}`;
+          `data:${imageMimeType};base64,${imageBase64}`;
 
 
-        const extension =
-          generatedMimeType === "image/jpeg"
-            ? "jpg"
-            : generatedMimeType === "image/webp"
-              ? "webp"
-              : "png";
+        let extension = "png";
+
+
+        if (
+          imageMimeType ===
+          "image/jpeg"
+        ) {
+
+          extension = "jpg";
+
+        } else if (
+          imageMimeType ===
+          "image/webp"
+        ) {
+
+          extension = "webp";
+
+        }
 
 
         link.download =
@@ -554,7 +634,8 @@
 
         link.click();
 
-        document.body.removeChild(link);
+        link.remove();
+
 
       } catch (error) {
 
@@ -562,6 +643,7 @@
           "Download error:",
           error
         );
+
 
         showError(
           "Image download failed."
@@ -572,8 +654,8 @@
     }
 
 
-    // Enter = Generate
-    // Shift + Enter = New line
+    /* ENTER TO GENERATE */
+
     document
       .getElementById("prompt")
       .addEventListener(
