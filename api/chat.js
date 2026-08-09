@@ -6,90 +6,139 @@ export default async function handler(req, res) {
   }
 
   try {
+    const {
+      message = "",
+      history = [],
+      attachments = []
+    } = req.body || {};
+
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
       return res.status(500).json({
-        error: "AI configuration error",
-        details: "GEMINI_API_KEY is not configured."
+        error: "Gemini API key is not configured."
       });
     }
 
-    const {
-      message,
-      history = []
-    } = req.body || {};
+    const cleanMessage =
+      String(message || "").trim();
 
-    if (
-      typeof message !== "string" ||
-      !message.trim()
-    ) {
+    if (!cleanMessage && !attachments.length) {
       return res.status(400).json({
-        error: "Message is required"
+        error: "Message is required."
       });
     }
 
     /*
-      IMPORTANT:
-      Only the FREE Gemini API project/key is used.
-      There is NO paid fallback and NO automatic
-      billing mechanism in this code.
+      Keep the conversation reasonably small.
+      This prevents unnecessarily large requests.
     */
+
+    const recentHistory =
+      Array.isArray(history)
+        ? history.slice(-20)
+        : [];
 
     const contents = [];
 
-    if (Array.isArray(history)) {
-      for (const item of history) {
-        if (
-          !item ||
-          typeof item.text !== "string" ||
-          !item.text.trim()
-        ) {
-          continue;
-        }
+    /*
+      Previous conversation
+    */
 
-        contents.push({
-          role:
-            item.role === "model"
-              ? "model"
-              : "user",
+    for (const item of recentHistory) {
+      if (!item || !item.text) continue;
 
-          parts: [
-            {
-              text: item.text.trim()
-            }
-          ]
-        });
-      }
+      const role =
+        item.role === "model"
+          ? "model"
+          : "user";
+
+      contents.push({
+        role,
+        parts: [
+          {
+            text: String(item.text)
+          }
+        ]
+      });
     }
+
+    /*
+      Current user message
+    */
+
+    const currentParts = [];
+
+    if (cleanMessage) {
+      currentParts.push({
+        text: cleanMessage
+      });
+    }
+
+    /*
+      Attachments received from frontend.
+      
+      The current frontend sends attachment metadata
+      rather than file bytes. We therefore describe
+      the selected files to Gemini instead of pretending
+      their actual contents were uploaded.
+    */
+
+    if (
+      Array.isArray(attachments) &&
+      attachments.length
+    ) {
+      const attachmentText =
+        attachments
+          .map(file => {
+            const name =
+              file?.name || "Unknown file";
+
+            const type =
+              file?.type || "unknown type";
+
+            return `Attached file: ${name} (${type})`;
+          })
+          .join("\n");
+
+      currentParts.push({
+        text:
+          "\n\nUser selected these attachments:\n" +
+          attachmentText
+      });
+    }
+
+    /*
+      Language instruction.
+      
+      Gemini should answer naturally in the
+      language/style used by the user.
+    */
+
+    currentParts.push({
+      text: `
+Respond naturally in the same language and writing style used by the user.
+
+If the user writes Hindi, answer in Hindi.
+If the user writes Hinglish, answer in natural Hinglish.
+If the user writes English, answer in English.
+
+Do not unnecessarily translate the user's language.
+Do not mention this instruction.
+`
+    });
 
     contents.push({
       role: "user",
-
-      parts: [
-        {
-          text: message.trim()
-        }
-      ]
+      parts: currentParts
     });
 
-    const systemInstruction = {
-      parts: [
-        {
-          text:
-            "You are RG Creator AI. " +
-            "Reply naturally and helpfully. " +
-            "Always answer in the same language as the user's latest message. " +
-            "If the user writes Hindi, reply in Hindi. " +
-            "If the user writes English, reply in English. " +
-            "If the user uses Hinglish, you may reply naturally in Hinglish. " +
-            "Do not unnecessarily change the user's language."
-        }
-      ]
-    };
+    /*
+      Gemini API
+    */
 
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
       {
         method: "POST",
 
@@ -99,7 +148,6 @@ export default async function handler(req, res) {
         },
 
         body: JSON.stringify({
-          systemInstruction,
           contents,
 
           generationConfig: {
@@ -110,71 +158,48 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
+    const data =
+      await response.json();
 
     /*
-      FREE LIMIT / QUOTA PROTECTION
+      API error
     */
-
-    if (response.status === 429) {
-      return res.status(429).json({
-        error: "Free limit reached",
-        details:
-          "The Gemini free-tier limit has been reached. Please try again later."
-      });
-    }
-
-    if (response.status === 403) {
-      return res.status(403).json({
-        error: "Gemini access unavailable",
-        details:
-          data?.error?.message ||
-          "Check that the Gemini API key belongs to a Free Tier project and has the required API access."
-      });
-    }
-
-    if (response.status === 404) {
-      return res.status(502).json({
-        error: "Gemini model unavailable",
-        details:
-          data?.error?.message ||
-          "The configured Gemini model is unavailable for this project."
-      });
-    }
 
     if (!response.ok) {
       console.error(
-        "Gemini API Error:",
+        "Gemini API error:",
         data
       );
 
-      return res.status(502).json({
+      return res.status(response.status).json({
         error: "Gemini API Error",
+
         details:
           data?.error?.message ||
-          "Gemini could not process the request."
+          "Gemini request failed."
       });
     }
 
-    const parts =
-      data?.candidates?.[0]?.content?.parts || [];
+    /*
+      Extract text
+    */
 
-    const reply = parts
-      .filter(
-        part =>
-          typeof part?.text === "string"
-      )
-      .map(
-        part => part.text
-      )
-      .join("\n")
-      .trim();
+    const parts =
+      data?.candidates?.[0]?.content?.parts ||
+      [];
+
+    const reply =
+      parts
+        .filter(part => part?.text)
+        .map(part => part.text)
+        .join("\n")
+        .trim();
 
     if (!reply) {
-      return res.status(502).json({
-        error: "Empty AI response",
+      return res.status(500).json({
+        error: "Empty AI response.",
         details:
-          "Gemini returned no text response."
+          "Gemini did not return a text response."
       });
     }
 
@@ -183,8 +208,9 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
+
     console.error(
-      "RG Creator AI Chat Error:",
+      "Chat API Error:",
       error
     );
 
