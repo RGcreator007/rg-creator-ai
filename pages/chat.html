@@ -1,27 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
+  />
 
-  <title>RG Creator AI - Chat</title>
+  <title>AI Chat — RG Creator AI</title>
 
   <style>
     * {
       box-sizing: border-box;
-    }
-
-    :root {
-      --bg: #000000;
-      --surface: #0d0d0d;
-      --surface-2: #151515;
-      --border: #292929;
-      --text: #ffffff;
-      --muted: #9b9b9b;
-      --accent: #ff0000;
+      -webkit-tap-highlight-color: transparent;
     }
 
     html,
@@ -29,15 +20,14 @@
       margin: 0;
       width: 100%;
       height: 100%;
-      background: var(--bg);
-      color: var(--text);
+      background: #000;
+      color: #fff;
       font-family:
         Inter,
+        system-ui,
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
-        Roboto,
-        Arial,
         sans-serif;
     }
 
@@ -64,11 +54,11 @@
       height: 100dvh;
       display: flex;
       flex-direction: column;
-      background: var(--bg);
+      background: #000;
     }
 
     /* =========================
-       HEADER
+       TOP BAR
     ========================= */
 
     .topbar {
@@ -77,26 +67,50 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 10px;
-      border-bottom: 1px solid var(--border);
-      background: #000000;
+      padding: 0 12px;
+      border-bottom: 1px solid #1c1c1c;
+      background: #000;
+      position: relative;
+      z-index: 20;
     }
 
     .top-left,
     .top-right {
+      width: 44px;
       display: flex;
       align-items: center;
-      gap: 4px;
     }
 
-    .brand {
+    .top-right {
+      justify-content: flex-end;
+    }
+
+    .top-title {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 16px;
-      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      max-width: 60%;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 16px;
+      font-weight: 600;
     }
+
+    .model-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    /* =========================
+       ICON BUTTON
+    ========================= */
 
     .icon-btn,
     .menu-btn,
@@ -105,12 +119,12 @@
       height: 42px;
       padding: 0;
       border: 0;
-      border-radius: 12px;
       background: transparent;
-      color: #ffffff;
+      color: #d8d8d8;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      border-radius: 12px;
     }
 
     .icon-btn:hover,
@@ -119,11 +133,17 @@
       background: #151515;
     }
 
+    .icon-btn:active,
+    .menu-btn:active,
+    .more-btn:active {
+      transform: scale(0.95);
+    }
+
     .icon-btn svg,
     .menu-btn svg,
     .more-btn svg {
-      width: 22px;
-      height: 22px;
+      width: 21px;
+      height: 21px;
       fill: none;
       stroke: currentColor;
       stroke-width: 1.8;
@@ -131,441 +151,552 @@
       stroke-linejoin: round;
     }
 
-    .menu-symbol {
-      font-size: 24px;
-      line-height: 1;
-    }
-
-    .more-symbol {
-      font-size: 25px;
-      line-height: 1;
-      margin-top: -7px;
-    }
-
     /* =========================
        CHAT AREA
     ========================= */
 
-    .chat {
+    .chat-area {
       flex: 1;
       min-height: 0;
       overflow-y: auto;
-      padding: 20px 14px 150px;
-      scroll-behavior: smooth;
+      overscroll-behavior: contain;
+      padding: 20px 14px 145px;
     }
 
-    .chat-inner {
-      width: 100%;
-      max-width: 850px;
+    .chat-content {
+      width: min(900px, 100%);
       margin: 0 auto;
     }
 
+    /* =========================
+       WELCOME
+    ========================= */
+
     .welcome {
-      min-height: calc(100dvh - 220px);
+      min-height: calc(100dvh - 210px);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 30px 15px;
+      padding: 30px 10px;
     }
 
-    .welcome-content {
-      max-width: 550px;
-    }
-
-    .logo {
-      width: 62px;
-      height: 62px;
+    .welcome-logo {
+      width: 58px;
+      height: 58px;
       border-radius: 18px;
-      margin: 0 auto 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #111111;
-      border: 1px solid var(--border);
+      background: #111;
+      border: 1px solid #292929;
+      margin-bottom: 18px;
+      font-size: 25px;
       font-weight: 800;
-      font-size: 20px;
     }
 
     .welcome h1 {
-      margin: 0 0 10px;
-      font-size: 28px;
-      line-height: 1.2;
+      margin: 0;
+      font-size: clamp(25px, 7vw, 38px);
+      line-height: 1.15;
+      font-weight: 700;
     }
 
     .welcome p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.6;
+      margin: 10px 0 0;
+      color: #929292;
+      font-size: 14px;
     }
 
     /* =========================
-       MESSAGES
+       MESSAGE
     ========================= */
 
-    .message-row {
+    .message {
+      width: 100%;
+      margin: 0 0 22px;
       display: flex;
-      margin: 18px 0;
+      flex-direction: column;
     }
 
-    .message-row.user {
-      justify-content: flex-end;
+    .message.user {
+      align-items: flex-end;
     }
 
-    .user-message {
-      max-width: min(82%, 680px);
-      padding: 11px 14px;
-      border-radius: 17px;
-      background: #1b1b1b;
-      border: 1px solid #252525;
+    .user-bubble {
+      max-width: min(85%, 680px);
+      background: #191919;
+      border: 1px solid #292929;
+      border-radius: 19px;
+      padding: 11px 15px;
+      color: #fff;
+      font-size: 15px;
       line-height: 1.55;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
-    .assistant-message {
+    .message-actions {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-top: 6px;
+      opacity: 0.85;
+    }
+
+    .message-action {
+      min-width: 34px;
+      height: 32px;
+      border: 0;
+      background: transparent;
+      color: #858585;
+      border-radius: 9px;
+      padding: 0 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      font-size: 12px;
+    }
+
+    .message-action:hover {
+      background: #151515;
+      color: #fff;
+    }
+
+    .message-action svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* =========================
+       AI MESSAGE
+    ========================= */
+
+    .message.ai {
+      align-items: flex-start;
+    }
+
+    .ai-content {
       width: 100%;
-      line-height: 1.7;
-      color: #eeeeee;
+      color: #ededed;
+      font-size: 15px;
+      line-height: 1.65;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
-    .assistant-message p {
-      margin: 0 0 10px;
+    .ai-content.error {
+      color: #ff7070;
     }
 
-    .message-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 7px;
+    .ai-content.loading {
+      color: #858585;
     }
-
-    .action-btn {
-      border: 0;
-      background: transparent;
-      color: #8e8e8e;
-      padding: 6px 8px;
-      border-radius: 8px;
-      font-size: 12px;
-    }
-
-    .action-btn:hover {
-      color: #ffffff;
-      background: #151515;
-    }
-
-    /* =========================
-       TYPING
-    ========================= */
 
     .typing {
       display: inline-flex;
       gap: 4px;
-      padding: 8px 0;
+      align-items: center;
     }
 
     .typing span {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
-      background: #999999;
-      animation: blink 1.2s infinite;
+      background: #888;
+      animation: blink 1.1s infinite;
     }
 
     .typing span:nth-child(2) {
-      animation-delay: .15s;
+      animation-delay: 0.15s;
     }
 
     .typing span:nth-child(3) {
-      animation-delay: .3s;
+      animation-delay: 0.3s;
     }
 
     @keyframes blink {
-      0%, 80%, 100% {
-        opacity: .25;
+      0%,
+      70%,
+      100% {
+        opacity: 0.25;
       }
 
-      40% {
+      35% {
         opacity: 1;
       }
     }
 
     /* =========================
-       INPUT AREA
+       FILE PREVIEW
     ========================= */
 
-    .composer-area {
+    .attachments {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 10px;
+    }
+
+    .file-chip {
+      max-width: 220px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: #111;
+      border: 1px solid #292929;
+      color: #ccc;
+      font-size: 12px;
+    }
+
+    .file-chip .file-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* =========================
+       BOTTOM COMPOSER
+    ========================= */
+
+    .composer-wrap {
       position: fixed;
       left: 0;
       right: 0;
       bottom: 0;
-      z-index: 20;
-      padding:
-        8px 10px
-        calc(8px + env(safe-area-inset-bottom));
+      z-index: 30;
+      padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
       background:
         linear-gradient(
           to top,
-          #000000 70%,
-          rgba(0, 0, 0, .92)
+          #000 72%,
+          rgba(0, 0, 0, 0.94) 86%,
+          rgba(0, 0, 0, 0)
         );
     }
 
     .composer {
-      width: 100%;
-      max-width: 850px;
+      width: min(900px, 100%);
       margin: 0 auto;
-      display: flex;
-      align-items: flex-end;
-      gap: 3px;
-      padding: 6px;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: #0d0d0d;
+      border: 1px solid #303030;
+      background: #111;
+      border-radius: 21px;
+      padding: 8px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
     }
 
-    .composer textarea {
+    .selected-files {
+      display: none;
+      padding: 4px 5px 6px;
+    }
+
+    .selected-files.show {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .selected-file {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 180px;
+      padding: 6px 8px;
+      background: #191919;
+      border: 1px solid #292929;
+      border-radius: 9px;
+      font-size: 11px;
+      color: #bbb;
+    }
+
+    .selected-file span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .remove-file {
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #888;
+    }
+
+    .composer-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    #prompt {
       flex: 1;
       min-width: 0;
-      max-height: 150px;
-      min-height: 40px;
+      max-height: 130px;
       resize: none;
       border: 0;
       outline: 0;
       background: transparent;
-      color: #ffffff;
-      padding: 10px 7px;
+      color: #fff;
+      padding: 11px 7px;
+      font-size: 15px;
       line-height: 1.45;
     }
 
-    .composer textarea::placeholder {
-      color: #777777;
+    #prompt::placeholder {
+      color: #777;
     }
 
     .send-btn {
-      background: #ffffff;
-      color: #000000;
-      border-radius: 12px;
+      color: #fff;
     }
 
-    .send-btn:hover {
-      background: #dddddd;
-    }
-
-    .send-btn:disabled {
-      opacity: .35;
-      cursor: not-allowed;
-    }
-
-    .composer-note {
-      max-width: 850px;
-      margin: 5px auto 0;
-      text-align: center;
-      color: #666666;
-      font-size: 10px;
+    .send-btn.disabled {
+      color: #555;
+      pointer-events: none;
     }
 
     /* =========================
-       FILE INPUT
+       DRAWER
     ========================= */
 
-    #fileInput {
-      display: none;
-    }
-
-    .attachment-preview {
-      max-width: 850px;
-      margin: 0 auto 6px;
-      display: none;
-      gap: 7px;
-      overflow-x: auto;
-    }
-
-    .file-chip {
-      flex: 0 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 10px;
-      border-radius: 10px;
-      background: #151515;
-      border: 1px solid #282828;
-      color: #dddddd;
-      font-size: 12px;
-    }
-
-    .file-chip button {
-      border: 0;
-      background: transparent;
-      color: #888888;
-      font-size: 15px;
-    }
-
-    /* =========================
-       OVERLAYS / MENUS
-    ========================= */
-
-    .overlay {
+    .drawer-backdrop {
       position: fixed;
       inset: 0;
-      z-index: 40;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: 80;
       display: none;
-      background: rgba(0, 0, 0, .65);
     }
 
-    .overlay.show {
+    .drawer-backdrop.show {
       display: block;
     }
 
     .drawer {
-      position: absolute;
+      position: fixed;
       top: 0;
       bottom: 0;
       left: 0;
       width: min(320px, 88vw);
-      background: #080808;
-      border-right: 1px solid var(--border);
-      padding: 12px;
-      overflow-y: auto;
+      background: #0b0b0b;
+      border-right: 1px solid #222;
+      z-index: 90;
+      transform: translateX(-105%);
+      transition: transform 0.22s ease;
+      display: flex;
+      flex-direction: column;
     }
 
-    .drawer-header {
+    .drawer.show {
+      transform: translateX(0);
+    }
+
+    .drawer-head {
+      height: 60px;
+      min-height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      padding: 0 10px 0 16px;
+      border-bottom: 1px solid #202020;
     }
 
     .drawer-title {
       font-weight: 700;
     }
 
-    .new-chat {
-      width: 100%;
-      border: 1px solid var(--border);
-      background: #111111;
-      color: #ffffff;
+    .new-chat-btn {
+      margin: 14px;
+      border: 1px solid #303030;
+      background: #161616;
+      color: #fff;
       border-radius: 12px;
-      padding: 12px;
-      text-align: left;
-      margin-bottom: 12px;
+      min-height: 44px;
+      font-weight: 600;
+    }
+
+    .new-chat-btn:hover {
+      background: #202020;
     }
 
     .search-box {
-      width: 100%;
-      border: 1px solid var(--border);
-      background: #0f0f0f;
-      color: #ffffff;
-      border-radius: 10px;
-      padding: 10px 12px;
-      outline: 0;
-      margin-bottom: 14px;
+      margin: 0 14px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 11px;
+      border: 1px solid #282828;
+      background: #111;
+      border-radius: 11px;
     }
 
-    .history-title {
-      color: #777777;
+    .search-box input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #fff;
+    }
+
+    .history {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 8px 20px;
+    }
+
+    .history-section {
+      padding: 10px 9px 5px;
+      color: #666;
       font-size: 11px;
-      margin: 12px 5px 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
 
     .history-item {
-      width: 100%;
-      border: 0;
-      background: transparent;
-      color: #dddddd;
-      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 10px;
       border-radius: 10px;
-      padding: 10px;
-      margin-bottom: 3px;
+      color: #ccc;
+      font-size: 13px;
+      margin-bottom: 2px;
     }
 
     .history-item:hover {
       background: #151515;
     }
 
-    .menu-panel {
-      position: fixed;
-      z-index: 50;
-      top: 54px;
-      right: 9px;
-      width: 210px;
-      display: none;
-      padding: 6px;
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      background: #0d0d0d;
-      box-shadow: 0 18px 50px rgba(0, 0, 0, .5);
+    .history-text {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
-    .menu-panel.show {
+    .history-more {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      background: transparent;
+      color: #777;
+    }
+
+    .empty-history {
+      padding: 25px 12px;
+      color: #666;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    /* =========================
+       MORE MENU
+    ========================= */
+
+    .popup {
+      position: fixed;
+      right: 10px;
+      top: 55px;
+      width: 190px;
+      padding: 6px;
+      border: 1px solid #292929;
+      background: #111;
+      border-radius: 14px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.55);
+      z-index: 100;
+      display: none;
+    }
+
+    .popup.show {
       display: block;
     }
 
-    .menu-item {
+    .popup-item {
       width: 100%;
+      min-height: 40px;
       border: 0;
       background: transparent;
-      color: #dddddd;
+      color: #ddd;
       text-align: left;
-      padding: 11px 12px;
+      padding: 0 11px;
       border-radius: 9px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
     }
 
-    .menu-item:hover {
-      background: #181818;
-      color: #ffffff;
+    .popup-item:hover {
+      background: #1b1b1b;
     }
 
     /* =========================
        CAPABILITIES
     ========================= */
 
-    .capability-panel {
+    .capabilities {
       position: fixed;
-      z-index: 50;
       left: 10px;
-      right: 10px;
-      bottom: 82px;
-      max-width: 500px;
-      margin: auto;
+      bottom: 78px;
+      width: min(330px, calc(100vw - 20px));
+      padding: 12px;
+      border: 1px solid #292929;
+      background: #111;
+      border-radius: 16px;
+      z-index: 70;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.55);
       display: none;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      background: #0d0d0d;
-      box-shadow: 0 18px 50px rgba(0, 0, 0, .55);
     }
 
-    .capability-panel.show {
+    .capabilities.show {
       display: block;
     }
 
-    .capability-grid {
+    .cap-title {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 9px;
+    }
+
+    .cap-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap: 7px;
     }
 
-    .capability {
-      border: 1px solid #242424;
-      background: #111111;
-      color: #eeeeee;
+    .cap-item {
+      border: 1px solid #292929;
+      background: #171717;
+      color: #ddd;
       border-radius: 11px;
-      padding: 12px;
+      padding: 11px 9px;
       text-align: left;
+      font-size: 12px;
     }
 
-    .capability strong {
-      display: block;
-      font-size: 13px;
-      margin-bottom: 4px;
+    .cap-item:hover {
+      background: #202020;
     }
 
-    .capability small {
-      color: #777777;
-      line-height: 1.4;
+    /* =========================
+       LIMIT
+    ========================= */
+
+    .limit-text {
+      text-align: center;
+      color: #555;
+      font-size: 10px;
+      margin-top: 5px;
     }
 
     /* =========================
@@ -575,1547 +706,2002 @@
     .toast {
       position: fixed;
       left: 50%;
-      bottom: 90px;
-      transform: translateX(-50%) translateY(15px);
-      z-index: 100;
-      padding: 9px 13px;
-      border-radius: 10px;
-      background: #181818;
+      bottom: 92px;
+      transform: translate(-50%, 20px);
+      background: #1a1a1a;
       border: 1px solid #303030;
-      color: #ffffff;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 12px;
       font-size: 12px;
+      z-index: 200;
       opacity: 0;
       pointer-events: none;
-      transition: .2s ease;
+      transition: 0.2s ease;
+      white-space: nowrap;
     }
 
     .toast.show {
       opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      transform: translate(-50%, 0);
     }
 
     /* =========================
-       MOBILE
+       DESKTOP
     ========================= */
 
-    @media (max-width: 600px) {
-      .brand {
-        font-size: 15px;
+    @media (min-width: 700px) {
+      .chat-area {
+        padding-left: 24px;
+        padding-right: 24px;
       }
 
-      .chat {
-        padding-left: 10px;
-        padding-right: 10px;
+      .composer-wrap {
+        padding-left: 24px;
+        padding-right: 24px;
       }
 
-      .user-message {
-        max-width: 88%;
-      }
-
-      .welcome h1 {
-        font-size: 25px;
-      }
-
-      .capability-grid {
-        grid-template-columns: 1fr 1fr;
+      .user-bubble {
+        max-width: 70%;
       }
     }
   </style>
 </head>
 
 <body>
+  <div class="app">
 
-<div class="app">
+    <!-- =========================
+         TOP BAR
+    ========================= -->
 
-  <!-- HEADER -->
-  <header class="topbar">
+    <header class="topbar">
 
-    <div class="top-left">
+      <div class="top-left">
+        <button
+          id="menuButton"
+          class="menu-btn"
+          aria-label="Menu"
+          title="Chat history"
+        >
+          <svg viewBox="0 0 24 24">
+            <path d="M4 6h16"></path>
+            <path d="M4 12h16"></path>
+            <path d="M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
 
-      <button
-        id="menuButton"
-        class="menu-btn"
-        aria-label="Menu"
-        type="button"
-      >
-        <span class="menu-symbol">☰</span>
-      </button>
+      <div class="top-title">
+        <span class="model-dot"></span>
+        <span>RG Creator AI</span>
+      </div>
 
-    </div>
+      <div class="top-right">
+        <button
+          id="moreButton"
+          class="more-btn"
+          aria-label="More"
+          title="More"
+        >
+          <svg viewBox="0 0 24 24">
+            <circle cx="5" cy="12" r="1.2"></circle>
+            <circle cx="12" cy="12" r="1.2"></circle>
+            <circle cx="19" cy="12" r="1.2"></circle>
+          </svg>
+        </button>
+      </div>
 
-    <div class="brand">
-      RG Creator AI
-    </div>
-
-    <div class="top-right">
-
-      <button
-        id="moreButton"
-        class="more-btn"
-        aria-label="More"
-        type="button"
-      >
-        <span class="more-symbol">⋯</span>
-      </button>
-
-    </div>
-
-  </header>
+    </header>
 
 
-  <!-- CHAT -->
-  <main id="chat" class="chat">
+    <!-- =========================
+         CHAT
+    ========================= -->
 
-    <div class="chat-inner">
+    <main id="chatArea" class="chat-area">
 
-      <section id="welcome" class="welcome">
+      <div id="chatContent" class="chat-content">
 
-        <div class="welcome-content">
+        <section id="welcome" class="welcome">
 
-          <div class="logo">
+          <div class="welcome-logo">
             RG
           </div>
 
-          <h1>
-            What can I help you create?
-          </h1>
+          <h1>How can I help you?</h1>
 
           <p>
-            Chat, create content, write code and build ideas with RG Creator AI.
+            Chat, create, write, code and explore with RG Creator AI.
           </p>
+
+        </section>
+
+      </div>
+
+    </main>
+
+
+    <!-- =========================
+         COMPOSER
+    ========================= -->
+
+    <div class="composer-wrap">
+
+      <div class="composer">
+
+        <div
+          id="selectedFiles"
+          class="selected-files"
+        ></div>
+
+        <div class="composer-row">
+
+          <!-- ATTACH -->
+
+          <button
+            id="attachButton"
+            class="icon-btn"
+            aria-label="Add file"
+            data-label="Add file"
+            title="Attach files"
+          >
+            <svg viewBox="0 0 24 24">
+              <path d="M21.4 11.6l-8.9 8.9a6 6 0 01-8.5-8.5l9.2-9.2a4 4 0 015.7 5.7l-9.2 9.2a2 2 0 01-2.8-2.8l8.6-8.6"></path>
+            </svg>
+          </button>
+
+          <input
+            type="file"
+            id="fileInput"
+            multiple
+            hidden
+            accept="
+              image/*,
+              video/*,
+              application/pdf,
+              text/plain,
+              application/msword,
+              application/vnd.openxmlformats-officedocument.wordprocessingml.document
+            "
+          />
+
+
+          <!-- CAPABILITIES -->
+
+          <button
+            id="capabilityButton"
+            class="icon-btn"
+            aria-label="Capabilities"
+            data-label="Capabilities"
+            title="Capabilities"
+          >
+            <svg viewBox="0 0 24 24">
+              <rect x="4" y="4" width="6" height="6"></rect>
+              <rect x="14" y="4" width="6" height="6"></rect>
+              <rect x="4" y="14" width="6" height="6"></rect>
+              <rect x="14" y="14" width="6" height="6"></rect>
+            </svg>
+          </button>
+
+
+          <!-- TEXT -->
+
+          <textarea
+            id="prompt"
+            rows="1"
+            placeholder="Message RG Creator AI..."
+            autocomplete="off"
+          ></textarea>
+
+
+          <!-- VOICE -->
+
+          <button
+            id="voiceButton"
+            class="icon-btn"
+            aria-label="Voice"
+            data-label="Voice"
+            title="Voice input"
+          >
+            <svg viewBox="0 0 24 24">
+              <rect
+                x="9"
+                y="3"
+                width="6"
+                height="12"
+                rx="3"
+              ></rect>
+
+              <path d="M5 11a7 7 0 0 0 14 0"></path>
+              <path d="M12 18v3"></path>
+              <path d="M8 21h8"></path>
+            </svg>
+          </button>
+
+
+          <!-- SEND -->
+
+          <button
+            id="sendButton"
+            class="icon-btn send-btn disabled"
+            aria-label="Send"
+            data-label="Send"
+            title="Send"
+          >
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12h13"></path>
+              <path d="M13 6l6 6-6 6"></path>
+            </svg>
+          </button>
 
         </div>
 
-      </section>
+      </div>
 
-      <div id="messages"></div>
-
-    </div>
-
-  </main>
-
-
-  <!-- FILE PREVIEW -->
-  <div
-    id="attachmentPreview"
-    class="attachment-preview"
-  ></div>
-
-
-  <!-- COMPOSER -->
-  <div class="composer-area">
-
-    <div class="composer">
-
-      <!-- ATTACH -->
-      <button
-        id="attachButton"
-        class="icon-btn"
-        aria-label="Add file"
-        type="button"
-      >
-        <svg viewBox="0 0 24 24">
-          <path d="M21.4 11.6l-8.9 8.9a6 6 0 01-8.5-8.5l9.2-9.2a4 4 0 015.7 5.7l-9.2 9.2a2 2 0 01-2.8-2.8l8.6-8.6"></path>
-        </svg>
-      </button>
-
-      <input
-        type="file"
-        id="fileInput"
-        multiple
-        accept="
-          image/*,
-          video/*,
-          application/pdf,
-          text/plain,
-          application/msword,
-          application/vnd.openxmlformats-officedocument.wordprocessingml.document,
-          text/csv
-        "
-      >
-
-
-      <!-- CAPABILITIES -->
-      <button
-        id="capabilityButton"
-        class="icon-btn"
-        aria-label="Capabilities"
-        type="button"
-      >
-        <svg viewBox="0 0 24 24">
-          <rect x="4" y="4" width="6" height="6"></rect>
-          <rect x="14" y="4" width="6" height="6"></rect>
-          <rect x="4" y="14" width="6" height="6"></rect>
-          <rect x="14" y="14" width="6" height="6"></rect>
-        </svg>
-      </button>
-
-
-      <!-- TEXT -->
-      <textarea
-        id="prompt"
-        rows="1"
-        placeholder="Message RG Creator AI..."
-        autocomplete="off"
-      ></textarea>
-
-
-      <!-- VOICE -->
-      <button
-        id="voiceButton"
-        class="icon-btn"
-        aria-label="Voice"
-        type="button"
-      >
-        <svg viewBox="0 0 24 24">
-
-          <rect
-            x="9"
-            y="3"
-            width="6"
-            height="12"
-            rx="3"
-          ></rect>
-
-          <path d="M5 11a7 7 0 0 0 14 0"></path>
-          <path d="M12 18v3"></path>
-          <path d="M8 21h8"></path>
-
-        </svg>
-      </button>
-
-
-      <!-- SEND -->
-      <button
-        id="sendButton"
-        class="icon-btn send-btn"
-        aria-label="Send"
-        type="button"
-      >
-        <svg viewBox="0 0 24 24">
-          <path d="M5 12h13"></path>
-          <path d="M13 6l6 6-6 6"></path>
-        </svg>
-      </button>
+      <div class="limit-text">
+        Free usage • 20 chat messages per day
+      </div>
 
     </div>
 
-    <div class="composer-note">
-      RG Creator AI can make mistakes. Check important information.
-    </div>
 
-  </div>
+    <!-- =========================
+         SIDEBAR / HISTORY
+    ========================= -->
 
+    <div
+      id="drawerBackdrop"
+      class="drawer-backdrop"
+    ></div>
 
-  <!-- SIDEBAR -->
-  <div id="sidebarOverlay" class="overlay">
+    <aside
+      id="drawer"
+      class="drawer"
+    >
 
-    <aside class="drawer">
-
-      <div class="drawer-header">
+      <div class="drawer-head">
 
         <div class="drawer-title">
-          Chat History
+          Chats
         </div>
 
         <button
-          id="closeSidebar"
+          id="closeDrawer"
           class="icon-btn"
-          type="button"
+          aria-label="Close"
         >
-          ×
+          <svg viewBox="0 0 24 24">
+            <path d="M6 6l12 12"></path>
+            <path d="M18 6L6 18"></path>
+          </svg>
         </button>
 
       </div>
 
+
       <button
         id="newChatButton"
-        class="new-chat"
-        type="button"
+        class="new-chat-btn"
       >
         ＋ New Chat
       </button>
 
-      <input
-        id="historySearch"
-        class="search-box"
-        type="search"
-        placeholder="Search chats..."
-      >
 
-      <div class="history-title">
-        Today
+      <div class="search-box">
+
+        <svg
+          viewBox="0 0 24 24"
+          width="17"
+          height="17"
+          fill="none"
+          stroke="#777"
+          stroke-width="1.8"
+        >
+          <circle cx="11" cy="11" r="6"></circle>
+          <path d="M16 16l5 5"></path>
+        </svg>
+
+        <input
+          id="historySearch"
+          type="text"
+          placeholder="Search chats"
+        />
+
       </div>
 
-      <div id="historyList"></div>
+
+      <div id="history" class="history">
+        <div class="empty-history">
+          No previous chats yet.
+        </div>
+      </div>
 
     </aside>
 
-  </div>
 
+    <!-- =========================
+         MORE POPUP
+    ========================= -->
 
-  <!-- MORE MENU -->
-  <div
-    id="morePanel"
-    class="menu-panel"
-  >
+    <div
+      id="morePopup"
+      class="popup"
+    >
 
-    <button class="menu-item" id="clearChatButton" type="button">
-      Clear chat
-    </button>
-
-    <button class="menu-item" id="copyAllButton" type="button">
-      Copy chat
-    </button>
-
-    <button class="menu-item" id="shareChatButton" type="button">
-      Share
-    </button>
-
-  </div>
-
-
-  <!-- CAPABILITIES PANEL -->
-  <div
-    id="capabilityPanel"
-    class="capability-panel"
-  >
-
-    <div class="capability-grid">
-
-      <button class="capability" type="button">
-        <strong>✍️ Content Writer</strong>
-        <small>Captions, scripts, ideas and writing.</small>
+      <button
+        class="popup-item"
+        data-action="new"
+      >
+        ＋ New Chat
       </button>
 
-      <button class="capability" type="button">
-        <strong>💻 Code Generator</strong>
-        <small>Generate, explain and fix code.</small>
+      <button
+        class="popup-item"
+        data-action="clear"
+      >
+        Clear current chat
       </button>
 
-      <button class="capability" type="button">
-        <strong>🖼️ AI Image</strong>
-        <small>Create images from prompts.</small>
-      </button>
-
-      <button class="capability" type="button">
-        <strong>▶️ YouTube</strong>
-        <small>Titles, scripts, SEO and ideas.</small>
-      </button>
-
-      <button class="capability" type="button">
-        <strong>📸 Instagram</strong>
-        <small>Captions, hooks and keywords.</small>
-      </button>
-
-      <button class="capability" type="button">
-        <strong>📄 Documents</strong>
-        <small>PDF and document analysis.</small>
+      <button
+        class="popup-item"
+        data-action="export"
+      >
+        Export chat
       </button>
 
     </div>
 
+
+    <!-- =========================
+         CAPABILITIES POPUP
+    ========================= -->
+
+    <div
+      id="capabilities"
+      class="capabilities"
+    >
+
+      <div class="cap-title">
+        What can I help you create?
+      </div>
+
+      <div class="cap-grid">
+
+        <button class="cap-item">
+          ✍️ Content Writer
+        </button>
+
+        <button class="cap-item">
+          💻 Code Generator
+        </button>
+
+        <button class="cap-item">
+          🖼️ AI Image
+        </button>
+
+        <button class="cap-item">
+          ▶️ YouTube Tools
+        </button>
+
+        <button class="cap-item">
+          📸 Instagram Tools
+        </button>
+
+        <button class="cap-item">
+          💬 AI Chat
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         TOAST
+    ========================= -->
+
+    <div
+      id="toast"
+      class="toast"
+    ></div>
+
   </div>
 
 
-  <div id="toast" class="toast"></div>
+  <script>
+    /* =========================================================
+       RG CREATOR AI — CHAT
+       Gemini endpoint: /api/chat
+    ========================================================= */
 
-</div>
+    const API_URL = "/api/chat";
 
+    /*
+      Locked daily chat limit.
+      This frontend counter is for the current no-login version.
+      Real secure server-side limits can be added later.
+    */
+    const DAILY_CHAT_LIMIT = 20;
 
-<script>
-  /* =========================================================
-     RG CREATOR AI - CHAT FRONTEND
-     Backend endpoint:
-     POST /api/chat
-  ========================================================= */
 
-  const promptInput =
-    document.getElementById("prompt");
+    /* =========================
+       ELEMENTS
+    ========================= */
 
-  const sendButton =
-    document.getElementById("sendButton");
+    const chatArea = document.getElementById("chatArea");
+    const chatContent = document.getElementById("chatContent");
+    const welcome = document.getElementById("welcome");
 
-  const attachButton =
-    document.getElementById("attachButton");
+    const prompt = document.getElementById("prompt");
+    const sendButton = document.getElementById("sendButton");
 
-  const fileInput =
-    document.getElementById("fileInput");
+    const attachButton = document.getElementById("attachButton");
+    const fileInput = document.getElementById("fileInput");
+    const selectedFiles = document.getElementById("selectedFiles");
 
-  const voiceButton =
-    document.getElementById("voiceButton");
+    const voiceButton = document.getElementById("voiceButton");
 
-  const capabilityButton =
-    document.getElementById("capabilityButton");
+    const menuButton = document.getElementById("menuButton");
+    const drawer = document.getElementById("drawer");
+    const drawerBackdrop = document.getElementById("drawerBackdrop");
+    const closeDrawer = document.getElementById("closeDrawer");
 
-  const capabilityPanel =
-    document.getElementById("capabilityPanel");
+    const newChatButton = document.getElementById("newChatButton");
 
-  const menuButton =
-    document.getElementById("menuButton");
+    const moreButton = document.getElementById("moreButton");
+    const morePopup = document.getElementById("morePopup");
 
-  const moreButton =
-    document.getElementById("moreButton");
+    const capabilityButton =
+      document.getElementById("capabilityButton");
 
-  const morePanel =
-    document.getElementById("morePanel");
+    const capabilities =
+      document.getElementById("capabilities");
 
-  const sidebarOverlay =
-    document.getElementById("sidebarOverlay");
+    const history =
+      document.getElementById("history");
 
-  const closeSidebar =
-    document.getElementById("closeSidebar");
+    const historySearch =
+      document.getElementById("historySearch");
 
-  const newChatButton =
-    document.getElementById("newChatButton");
+    const toast =
+      document.getElementById("toast");
 
-  const clearChatButton =
-    document.getElementById("clearChatButton");
 
-  const copyAllButton =
-    document.getElementById("copyAllButton");
+    /* =========================
+       STATE
+    ========================= */
 
-  const shareChatButton =
-    document.getElementById("shareChatButton");
+    let selectedFileList = [];
 
-  const historySearch =
-    document.getElementById("historySearch");
+    let currentChat = [];
 
-  const historyList =
-    document.getElementById("historyList");
+    let sending = false;
 
-  const attachmentPreview =
-    document.getElementById("attachmentPreview");
+    let recognition = null;
 
-  const messages =
-    document.getElementById("messages");
 
-  const welcome =
-    document.getElementById("welcome");
+    /* =========================
+       DAILY LIMIT
+    ========================= */
 
-  const chat =
-    document.getElementById("chat");
+    function getTodayKey() {
+      const now = new Date();
 
-  const toast =
-    document.getElementById("toast");
-
-
-  let selectedFiles = [];
-
-  let chatMessages = [];
-
-  let sending = false;
-
-
-  /* =========================================================
-     DAILY CHAT LIMIT
-     Version 1 local protection.
-     Backend enforcement will be added separately.
-  ========================================================= */
-
-  const DAILY_CHAT_LIMIT = 20;
-
-  function getTodayKey() {
-    const date = new Date();
-
-    return (
-      "rg_chat_count_" +
-      date.getFullYear() +
-      "_" +
-      (date.getMonth() + 1) +
-      "_" +
-      date.getDate()
-    );
-  }
-
-  function getChatCount() {
-    return Number(
-      localStorage.getItem(getTodayKey()) || 0
-    );
-  }
-
-  function increaseChatCount() {
-    const count = getChatCount() + 1;
-
-    localStorage.setItem(
-      getTodayKey(),
-      String(count)
-    );
-
-    return count;
-  }
-
-  function canSendChat() {
-    return getChatCount() < DAILY_CHAT_LIMIT;
-  }
-
-
-  /* =========================================================
-     TOAST
-  ========================================================= */
-
-  function showToast(text) {
-    toast.textContent = text;
-
-    toast.classList.add("show");
-
-    clearTimeout(showToast.timer);
-
-    showToast.timer =
-      setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2200);
-  }
-
-
-  /* =========================================================
-     AUTO RESIZE
-  ========================================================= */
-
-  function resizeTextarea() {
-    promptInput.style.height = "auto";
-
-    promptInput.style.height =
-      Math.min(
-        promptInput.scrollHeight,
-        150
-      ) + "px";
-  }
-
-  promptInput.addEventListener(
-    "input",
-    resizeTextarea
-  );
-
-
-  /* =========================================================
-     ESCAPE HTML
-  ========================================================= */
-
-  function escapeHtml(value) {
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-
-  /* =========================================================
-     SCROLL
-  ========================================================= */
-
-  function scrollToBottom() {
-    setTimeout(() => {
-      chat.scrollTop = chat.scrollHeight;
-    }, 30);
-  }
-
-
-  /* =========================================================
-     ADD USER MESSAGE
-  ========================================================= */
-
-  function addUserMessage(text) {
-    welcome.style.display = "none";
-
-    const row =
-      document.createElement("div");
-
-    row.className =
-      "message-row user";
-
-    const bubble =
-      document.createElement("div");
-
-    bubble.className =
-      "user-message";
-
-    bubble.textContent = text;
-
-    row.appendChild(bubble);
-
-    messages.appendChild(row);
-
-    chatMessages.push({
-      role: "user",
-      content: text
-    });
-
-    scrollToBottom();
-
-    return row;
-  }
-
-
-  /* =========================================================
-     ADD ASSISTANT MESSAGE
-  ========================================================= */
-
-  function addAssistantMessage(text) {
-    const row =
-      document.createElement("div");
-
-    row.className =
-      "message-row";
-
-    const wrapper =
-      document.createElement("div");
-
-    wrapper.style.width = "100%";
-
-    const answer =
-      document.createElement("div");
-
-    answer.className =
-      "assistant-message";
-
-    answer.textContent = text;
-
-    const actions =
-      document.createElement("div");
-
-    actions.className =
-      "message-actions";
-
-    const copy =
-      createAction(
-        "Copy",
-        () => copyText(text)
-      );
-
-    const like =
-      createAction(
-        "👍",
-        () => showToast("Thanks!")
-      );
-
-    const dislike =
-      createAction(
-        "👎",
-        () => showToast("Feedback recorded")
-      );
-
-    const share =
-      createAction(
-        "Share",
-        () => shareText(text)
-      );
-
-    const regenerate =
-      createAction(
-        "Regenerate",
-        () => regenerateLast()
-      );
-
-    actions.append(
-      copy,
-      like,
-      dislike,
-      share,
-      regenerate
-    );
-
-    wrapper.append(
-      answer,
-      actions
-    );
-
-    row.appendChild(wrapper);
-
-    messages.appendChild(row);
-
-    chatMessages.push({
-      role: "assistant",
-      content: text
-    });
-
-    scrollToBottom();
-
-    return row;
-  }
-
-
-  function createAction(label, callback) {
-    const button =
-      document.createElement("button");
-
-    button.className =
-      "action-btn";
-
-    button.type = "button";
-
-    button.textContent = label;
-
-    button.addEventListener(
-      "click",
-      callback
-    );
-
-    return button;
-  }
-
-
-  /* =========================================================
-     TYPING
-  ========================================================= */
-
-  function showTyping() {
-    const row =
-      document.createElement("div");
-
-    row.id = "typingRow";
-
-    row.className =
-      "message-row";
-
-    row.innerHTML = `
-      <div class="assistant-message">
-        <div class="typing">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-    `;
-
-    messages.appendChild(row);
-
-    scrollToBottom();
-  }
-
-
-  function removeTyping() {
-    const typing =
-      document.getElementById(
-        "typingRow"
-      );
-
-    if (typing) {
-      typing.remove();
-    }
-  }
-
-
-  /* =========================================================
-     API CALL
-  ========================================================= */
-
-  async function sendMessage() {
-
-    if (sending) {
-      return;
+      return [
+        now.getFullYear(),
+        now.getMonth() + 1,
+        now.getDate()
+      ].join("-");
     }
 
-    const text =
-      promptInput.value.trim();
 
-    if (!text && selectedFiles.length === 0) {
-      return;
-    }
-
-    if (!canSendChat()) {
-      showToast(
-        "Daily 20 chat limit reached. Try again tomorrow."
-      );
-      return;
-    }
-
-    sending = true;
-
-    sendButton.disabled = true;
-
-    const userText =
-      text ||
-      "Please analyze the attached file.";
-
-    addUserMessage(userText);
-
-    promptInput.value = "";
-
-    resizeTextarea();
-
-    showTyping();
-
-    try {
-
-      /*
-        Current backend supports text.
-
-        Files are displayed in the UI now.
-        File-to-Gemini multimodal processing
-        will be connected in the next backend step.
-      */
-
-      const response =
-        await fetch("/api/chat", {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            message: userText
-          })
-        });
-
-      let data;
+    function getUsage() {
+      const key = "rg_creator_ai_chat_usage";
 
       try {
-        data =
-          await response.json();
+        const saved =
+          JSON.parse(localStorage.getItem(key) || "{}");
+
+        if (saved.date !== getTodayKey()) {
+          return {
+            date: getTodayKey(),
+            count: 0
+          };
+        }
+
+        return saved;
+
       } catch {
-        data = {
-          ok: false,
-          error:
-            "Invalid server response"
+        return {
+          date: getTodayKey(),
+          count: 0
         };
       }
-
-      removeTyping();
-
-      if (!response.ok || !data.ok) {
-
-        const errorMessage =
-          data?.error ||
-          "Something went wrong.";
-
-        addAssistantMessage(
-          errorMessage
-        );
-
-        return;
-      }
-
-      increaseChatCount();
-
-      addAssistantMessage(
-        data.reply
-      );
-
-      saveCurrentChat();
-
-    } catch (error) {
-
-      removeTyping();
-
-      addAssistantMessage(
-        "Unable to connect to RG Creator AI. Please try again."
-      );
-
-      console.error(
-        "Chat request failed:",
-        error
-      );
-
-    } finally {
-
-      sending = false;
-
-      sendButton.disabled = false;
-
-      promptInput.focus();
     }
-  }
 
 
-  /* =========================================================
-     SEND BUTTON
-  ========================================================= */
+    function saveUsage(count) {
+      localStorage.setItem(
+        "rg_creator_ai_chat_usage",
+        JSON.stringify({
+          date: getTodayKey(),
+          count
+        })
+      );
+    }
 
-  sendButton.addEventListener(
-    "click",
-    sendMessage
-  );
+
+    function remainingChats() {
+      const usage = getUsage();
+
+      return Math.max(
+        0,
+        DAILY_CHAT_LIMIT - usage.count
+      );
+    }
 
 
-  /* =========================================================
-     ENTER TO SEND
-  ========================================================= */
+    /* =========================
+       TOAST
+    ========================= */
 
-  promptInput.addEventListener(
-    "keydown",
-    event => {
+    let toastTimer;
 
+    function showToast(message) {
+      clearTimeout(toastTimer);
+
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+    }
+
+
+    /* =========================
+       TEXTAREA
+    ========================= */
+
+    function resizePrompt() {
+      prompt.style.height = "auto";
+
+      prompt.style.height =
+        Math.min(prompt.scrollHeight, 130) + "px";
+    }
+
+
+    function updateSendButton() {
+      const hasText =
+        prompt.value.trim().length > 0;
+
+      if (hasText && !sending) {
+        sendButton.classList.remove("disabled");
+      } else {
+        sendButton.classList.add("disabled");
+      }
+    }
+
+
+    prompt.addEventListener("input", () => {
+      resizePrompt();
+      updateSendButton();
+    });
+
+
+    prompt.addEventListener("keydown", (event) => {
       if (
         event.key === "Enter" &&
         !event.shiftKey
       ) {
-
         event.preventDefault();
 
         sendMessage();
       }
-
-    }
-  );
+    });
 
 
-  /* =========================================================
-     ATTACHMENT
-  ========================================================= */
+    /* =========================
+       FILE ATTACHMENT
+    ========================= */
 
-  attachButton.addEventListener(
-    "click",
-    () => {
+    attachButton.addEventListener("click", () => {
       fileInput.click();
-    }
-  );
+    });
 
 
-  fileInput.addEventListener(
-    "change",
-    () => {
+    fileInput.addEventListener("change", () => {
 
-      selectedFiles =
-        Array.from(
-          fileInput.files || []
-        );
+      selectedFileList =
+        Array.from(fileInput.files || []);
 
-      renderFilePreview();
+      renderSelectedFiles();
 
-    }
-  );
+    });
 
 
-  function renderFilePreview() {
+    function renderSelectedFiles() {
 
-    attachmentPreview.innerHTML = "";
+      selectedFiles.innerHTML = "";
 
-    if (!selectedFiles.length) {
+      if (!selectedFileList.length) {
+        selectedFiles.classList.remove("show");
+        return;
+      }
 
-      attachmentPreview.style.display =
-        "none";
+      selectedFiles.classList.add("show");
 
-      return;
-    }
+      selectedFileList.forEach((file, index) => {
 
-    attachmentPreview.style.display =
-      "flex";
-
-    selectedFiles.forEach(
-      (file, index) => {
-
-        const chip =
+        const item =
           document.createElement("div");
 
-        chip.className =
-          "file-chip";
+        item.className = "selected-file";
 
         const name =
           document.createElement("span");
 
-        name.textContent =
-          file.name;
+        name.textContent = file.name;
 
         const remove =
           document.createElement("button");
 
-        remove.type = "button";
-
+        remove.className = "remove-file";
         remove.textContent = "×";
+        remove.setAttribute(
+          "aria-label",
+          "Remove file"
+        );
 
-        remove.addEventListener(
-          "click",
+        remove.addEventListener("click", () => {
+
+          selectedFileList.splice(index, 1);
+
+          renderSelectedFiles();
+
+        });
+
+        item.appendChild(name);
+        item.appendChild(remove);
+
+        selectedFiles.appendChild(item);
+
+      });
+    }
+
+
+    /* =========================
+       ADD MESSAGE
+    ========================= */
+
+    function addUserMessage(text, files = []) {
+
+      if (welcome) {
+        welcome.remove();
+      }
+
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.className =
+        "message user";
+
+      if (files.length) {
+
+        const attachments =
+          document.createElement("div");
+
+        attachments.className =
+          "attachments";
+
+        files.forEach(file => {
+
+          const chip =
+            document.createElement("div");
+
+          chip.className =
+            "file-chip";
+
+          chip.innerHTML =
+            `
+              <span>📎</span>
+              <span class="file-name"></span>
+            `;
+
+          chip.querySelector(".file-name")
+            .textContent = file.name;
+
+          attachments.appendChild(chip);
+
+        });
+
+        wrapper.appendChild(attachments);
+      }
+
+
+      const bubble =
+        document.createElement("div");
+
+      bubble.className =
+        "user-bubble";
+
+      bubble.textContent = text;
+
+      wrapper.appendChild(bubble);
+
+
+      const actions =
+        document.createElement("div");
+
+      actions.className =
+        "message-actions";
+
+      const copy =
+        createActionButton(
+          "Copy",
+          "copy",
+          () => copyText(text)
+        );
+
+      const edit =
+        createActionButton(
+          "Edit",
+          "edit",
           () => {
-
-            selectedFiles.splice(
-              index,
-              1
-            );
-
-            renderFilePreview();
-
+            prompt.value = text;
+            resizePrompt();
+            updateSendButton();
+            prompt.focus();
           }
         );
 
-        chip.append(
-          name,
-          remove
+      actions.appendChild(copy);
+      actions.appendChild(edit);
+
+      wrapper.appendChild(actions);
+
+      chatContent.appendChild(wrapper);
+
+      scrollToBottom();
+    }
+
+
+    /* =========================
+       ADD AI MESSAGE
+    ========================= */
+
+    function addAIMessage(text, isError = false) {
+
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.className =
+        "message ai";
+
+      const content =
+        document.createElement("div");
+
+      content.className =
+        "ai-content" +
+        (isError ? " error" : "");
+
+      content.textContent = text;
+
+      wrapper.appendChild(content);
+
+
+      const actions =
+        document.createElement("div");
+
+      actions.className =
+        "message-actions";
+
+
+      actions.appendChild(
+        createActionButton(
+          "Copy",
+          "copy",
+          () => copyText(text)
+        )
+      );
+
+
+      actions.appendChild(
+        createActionButton(
+          "Like",
+          "like",
+          () => showToast("Thanks for the feedback!")
+        )
+      );
+
+
+      actions.appendChild(
+        createActionButton(
+          "Unlike",
+          "unlike",
+          () => showToast("Thanks for the feedback!")
+        )
+      );
+
+
+      actions.appendChild(
+        createActionButton(
+          "Share",
+          "share",
+          () => shareText(text)
+        )
+      );
+
+
+      actions.appendChild(
+        createActionButton(
+          "Regenerate",
+          "regenerate",
+          () => regenerateLast()
+        )
+      );
+
+
+      actions.appendChild(
+        createActionButton(
+          "More",
+          "more",
+          () => showAIOptions(text)
+        )
+      );
+
+
+      wrapper.appendChild(actions);
+
+      chatContent.appendChild(wrapper);
+
+      scrollToBottom();
+
+      return wrapper;
+    }
+
+
+    function addLoadingMessage() {
+
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.className =
+        "message ai";
+
+      wrapper.id =
+        "loadingMessage";
+
+      const content =
+        document.createElement("div");
+
+      content.className =
+        "ai-content loading";
+
+      content.innerHTML =
+        `
+          <span class="typing">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        `;
+
+      wrapper.appendChild(content);
+
+      chatContent.appendChild(wrapper);
+
+      scrollToBottom();
+
+      return wrapper;
+    }
+
+
+    /* =========================
+       ACTION BUTTON
+    ========================= */
+
+    function createActionButton(
+      label,
+      type,
+      callback
+    ) {
+
+      const button =
+        document.createElement("button");
+
+      button.className =
+        "message-action";
+
+      button.title = label;
+
+      button.setAttribute(
+        "aria-label",
+        label
+      );
+
+      const icons = {
+        copy:
+          "M9 9h10v10H9z M5 15H4a1 1 0 01-1-1V4a1 1 0 011-1h10a1 1 0 011 1v1",
+
+        edit:
+          "M4 20h4L19 9l-4-4L4 16v4z",
+
+        like:
+          "M7 10v10 M4 10h3 M10 10l2-6c.2-.6.8-1 1.4-1h.1c.8 0 1.5.7 1.5 1.5V7h4c1.2 0 2 1.1 1.7 2.2l-1.4 7A2.3 2.3 0 0117 18h-7z",
+
+        unlike:
+          "M7 14V4 M4 14h3 M10 14l2 6c.2.6.8 1 1.4 1h.1c.8 0 1.5-.7 1.5-1.5V17h4c1.2 0 2-1.1 1.7-2.2l-1.4-7A2.3 2.3 0 0017 6h-7z",
+
+        share:
+          "M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7 M12 16V3 M7 8l5-5 5 5",
+
+        regenerate:
+          "M20 11a8 8 0 10-2.3 5.6 M20 5v6h-6",
+
+        more:
+          "M5 12h.01 M12 12h.01 M19 12h.01"
+      };
+
+
+      const svg =
+        document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "svg"
         );
 
-        attachmentPreview.appendChild(
-          chip
+      svg.setAttribute(
+        "viewBox",
+        "0 0 24 24"
+      );
+
+      const path =
+        document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "path"
         );
 
-      }
-    );
-  }
-
-
-  /* =========================================================
-     CAPABILITIES
-  ========================================================= */
-
-  capabilityButton.addEventListener(
-    "click",
-    event => {
-
-      event.stopPropagation();
-
-      capabilityPanel.classList.toggle(
-        "show"
+      path.setAttribute(
+        "d",
+        icons[type] || icons.more
       );
 
-      morePanel.classList.remove(
-        "show"
+      svg.appendChild(path);
+
+      button.appendChild(svg);
+
+      button.addEventListener(
+        "click",
+        callback
       );
 
+      return button;
     }
-  );
 
 
-  /* =========================================================
-     MORE
-  ========================================================= */
+    /* =========================
+       SEND MESSAGE
+    ========================= */
 
-  moreButton.addEventListener(
-    "click",
-    event => {
+    async function sendMessage() {
 
-      event.stopPropagation();
+      if (sending) return;
 
-      morePanel.classList.toggle(
-        "show"
-      );
+      const message =
+        prompt.value.trim();
 
-      capabilityPanel.classList.remove(
-        "show"
-      );
-
-    }
-  );
+      if (!message) return;
 
 
-  /* =========================================================
-     SIDEBAR
-  ========================================================= */
+      /* Daily limit */
 
-  menuButton.addEventListener(
-    "click",
-    () => {
-
-      sidebarOverlay.classList.add(
-        "show"
-      );
-
-      morePanel.classList.remove(
-        "show"
-      );
-
-      capabilityPanel.classList.remove(
-        "show"
-      );
-
-    }
-  );
-
-
-  closeSidebar.addEventListener(
-    "click",
-    () => {
-      sidebarOverlay.classList.remove(
-        "show"
-      );
-    }
-  );
-
-
-  sidebarOverlay.addEventListener(
-    "click",
-    event => {
-
-      if (
-        event.target ===
-        sidebarOverlay
-      ) {
-        sidebarOverlay.classList.remove(
-          "show"
-        );
-      }
-
-    }
-  );
-
-
-  /* =========================================================
-     NEW CHAT
-  ========================================================= */
-
-  newChatButton.addEventListener(
-    "click",
-    () => {
-
-      messages.innerHTML = "";
-
-      chatMessages = [];
-
-      selectedFiles = [];
-
-      fileInput.value = "";
-
-      renderFilePreview();
-
-      welcome.style.display = "";
-
-      sidebarOverlay.classList.remove(
-        "show"
-      );
-
-      showToast("New chat started");
-
-      promptInput.focus();
-
-    }
-  );
-
-
-  /* =========================================================
-     CLEAR CHAT
-  ========================================================= */
-
-  clearChatButton.addEventListener(
-    "click",
-    () => {
-
-      messages.innerHTML = "";
-
-      chatMessages = [];
-
-      welcome.style.display = "";
-
-      morePanel.classList.remove(
-        "show"
-      );
-
-      showToast("Chat cleared");
-
-    }
-  );
-
-
-  /* =========================================================
-     COPY ALL
-  ========================================================= */
-
-  copyAllButton.addEventListener(
-    "click",
-    async () => {
-
-      const text =
-        chatMessages
-          .map(
-            item =>
-              `${item.role.toUpperCase()}:\n${item.content}`
-          )
-          .join("\n\n");
-
-      if (!text) {
+      if (remainingChats() <= 0) {
 
         showToast(
-          "Nothing to copy"
+          "Today's 20 free chat limit is reached."
         );
 
         return;
       }
 
-      await copyText(text);
 
-      morePanel.classList.remove(
-        "show"
+      sending = true;
+
+      updateSendButton();
+
+
+      const filesForMessage =
+        [...selectedFileList];
+
+
+      addUserMessage(
+        message,
+        filesForMessage
       );
 
+
+      currentChat.push({
+        role: "user",
+        text: message
+      });
+
+
+      prompt.value = "";
+
+      resizePrompt();
+
+      renderSelectedFiles();
+
+
+      const loading =
+        addLoadingMessage();
+
+
+      try {
+
+        /*
+          Current backend accepts:
+          POST /api/chat
+          {
+            "message": "..."
+          }
+
+          File/video analysis will be connected
+          to a dedicated multimodal backend next.
+        */
+
+        const response =
+          await fetch(
+            API_URL,
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                message
+              })
+            }
+          );
+
+
+        let data = null;
+
+        try {
+          data = await response.json();
+        } catch {
+          data = null;
+        }
+
+
+        loading.remove();
+
+
+        if (!response.ok || !data?.ok) {
+
+          const error =
+            data?.error ||
+            "Something went wrong.";
+
+          addAIMessage(
+            error,
+            true
+          );
+
+          return;
+        }
+
+
+        const reply =
+          typeof data.reply === "string"
+            ? data.reply.trim()
+            : "";
+
+
+        if (!reply) {
+
+          addAIMessage(
+            "Gemini returned an empty response.",
+            true
+          );
+
+          return;
+        }
+
+
+        addAIMessage(reply);
+
+
+        currentChat.push({
+          role: "assistant",
+          text: reply
+        });
+
+
+        /* Count successful chat */
+
+        const usage =
+          getUsage();
+
+        saveUsage(
+          usage.count + 1
+        );
+
+
+        saveCurrentChat();
+
+      } catch (error) {
+
+        loading.remove();
+
+        console.error(error);
+
+        addAIMessage(
+          "Unable to connect to RG Creator AI. Please try again.",
+          true
+        );
+
+      } finally {
+
+        sending = false;
+
+        updateSendButton();
+
+      }
     }
-  );
 
 
-  /* =========================================================
-     SHARE
-  ========================================================= */
+    sendButton.addEventListener(
+      "click",
+      sendMessage
+    );
 
-  shareChatButton.addEventListener(
-    "click",
-    async () => {
 
-      const text =
-        chatMessages
-          .map(
-            item =>
-              item.content
-          )
-          .join("\n\n");
+    /* =========================
+       COPY
+    ========================= */
 
-      await shareText(
-        text ||
-        "RG Creator AI"
-      );
+    async function copyText(text) {
 
-      morePanel.classList.remove(
-        "show"
-      );
+      try {
 
+        await navigator.clipboard.writeText(
+          text
+        );
+
+        showToast("Copied");
+
+      } catch {
+
+        showToast(
+          "Copy is not available."
+        );
+      }
     }
-  );
 
 
-  async function copyText(text) {
+    /* =========================
+       SHARE
+    ========================= */
 
-    try {
-
-      await navigator.clipboard.writeText(
-        text
-      );
-
-      showToast("Copied");
-
-    } catch {
-
-      showToast(
-        "Copy failed"
-      );
-
-    }
-  }
-
-
-  async function shareText(text) {
-
-    try {
+    async function shareText(text) {
 
       if (
         navigator.share
       ) {
 
-        await navigator.share({
-          title:
-            "RG Creator AI",
-          text
-        });
+        try {
+
+          await navigator.share({
+            title: "RG Creator AI",
+            text
+          });
+
+        } catch {}
 
       } else {
 
         await copyText(text);
 
       }
-
-    } catch {
-      // User cancelled share.
-    }
-  }
-
-
-  /* =========================================================
-     REGENERATE
-  ========================================================= */
-
-  async function regenerateLast() {
-
-    const lastUser =
-      [...chatMessages]
-        .reverse()
-        .find(
-          item =>
-            item.role === "user"
-        );
-
-    if (!lastUser) {
-
-      showToast(
-        "No message to regenerate"
-      );
-
-      return;
     }
 
-    promptInput.value =
-      lastUser.content;
 
-    await sendMessage();
-  }
+    /* =========================
+       AI MORE OPTIONS
+    ========================= */
 
+    function showAIOptions(text) {
 
-  /* =========================================================
-     VOICE INPUT
-  ========================================================= */
-
-  let recognition = null;
-
-  if (
-    "webkitSpeechRecognition" in window
-  ) {
-
-    recognition =
-      new webkitSpeechRecognition();
-
-    recognition.lang =
-      "en-IN";
-
-    recognition.continuous =
-      false;
-
-    recognition.interimResults =
-      false;
-
-    recognition.onresult =
-      event => {
-
-        const text =
-          event.results[0][0].transcript;
-
-        promptInput.value =
-          text;
-
-        resizeTextarea();
-
-      };
-
-    recognition.onerror =
-      () => {
-
-        showToast(
-          "Voice input unavailable"
+      const action =
+        window.prompt(
+          "Enter option:\n\n" +
+          "1 = Copy\n" +
+          "2 = Read aloud\n" +
+          "3 = Share\n" +
+          "4 = Delete"
         );
 
-      };
 
-  }
+      if (action === "1") {
+        copyText(text);
+      }
+
+      if (action === "2") {
+        speakText(text);
+      }
+
+      if (action === "3") {
+        shareText(text);
+      }
+
+      if (action === "4") {
+        const messages =
+          document.querySelectorAll(
+            ".message.ai"
+          );
+
+        const last =
+          messages[messages.length - 1];
+
+        if (last) {
+          last.remove();
+        }
+      }
+    }
 
 
-  voiceButton.addEventListener(
-    "click",
-    () => {
+    /* =========================
+       READ ALOUD
+    ========================= */
 
-      if (!recognition) {
+    function speakText(text) {
+
+      if (
+        !("speechSynthesis" in window)
+      ) {
 
         showToast(
-          "Voice input is not supported in this browser"
+          "Read aloud is not supported."
         );
 
         return;
       }
 
-      try {
+      window.speechSynthesis.cancel();
 
-        recognition.start();
+      const utterance =
+        new SpeechSynthesisUtterance(
+          text
+        );
+
+      utterance.rate = 1;
+
+      window.speechSynthesis.speak(
+        utterance
+      );
+    }
+
+
+    /* =========================
+       REGENERATE
+    ========================= */
+
+    async function regenerateLast() {
+
+      const lastUser =
+        [...currentChat]
+          .reverse()
+          .find(
+            item =>
+              item.role === "user"
+          );
+
+      if (!lastUser) {
 
         showToast(
-          "Listening..."
+          "Nothing to regenerate."
         );
 
-      } catch {
-        // Already listening.
+        return;
       }
 
-    }
-  );
 
+      if (remainingChats() <= 0) {
 
-  /* =========================================================
-     LOCAL CHAT HISTORY
-  ========================================================= */
-
-  function saveCurrentChat() {
-
-    if (!chatMessages.length) {
-      return;
-    }
-
-    const history =
-      JSON.parse(
-        localStorage.getItem(
-          "rg_chat_history"
-        ) || "[]"
-      );
-
-    const firstUser =
-      chatMessages.find(
-        item =>
-          item.role === "user"
-      );
-
-    if (!firstUser) {
-      return;
-    }
-
-    const item = {
-      id:
-        Date.now(),
-      title:
-        firstUser.content
-          .slice(0, 50),
-      messages:
-        chatMessages,
-      createdAt:
-        new Date().toISOString()
-    };
-
-    history.unshift(item);
-
-    localStorage.setItem(
-      "rg_chat_history",
-      JSON.stringify(
-        history.slice(0, 50)
-      )
-    );
-
-    renderHistory();
-  }
-
-
-  function renderHistory() {
-
-    const history =
-      JSON.parse(
-        localStorage.getItem(
-          "rg_chat_history"
-        ) || "[]"
-      );
-
-    const search =
-      historySearch.value
-        .trim()
-        .toLowerCase();
-
-    historyList.innerHTML = "";
-
-    const filtered =
-      history.filter(
-        item =>
-          !search ||
-          item.title
-            .toLowerCase()
-            .includes(search)
-      );
-
-    filtered.forEach(
-      item => {
-
-        const button =
-          document.createElement(
-            "button"
-          );
-
-        button.type = "button";
-
-        button.className =
-          "history-item";
-
-        button.textContent =
-          item.title;
-
-        button.addEventListener(
-          "click",
-          () => loadHistory(item)
+        showToast(
+          "Today's free chat limit is reached."
         );
 
-        historyList.appendChild(
-          button
+        return;
+      }
+
+
+      prompt.value =
+        lastUser.text;
+
+      await sendMessage();
+
+    }
+
+
+    /* =========================
+       VOICE
+    ========================= */
+
+    voiceButton.addEventListener(
+      "click",
+      startVoice
+    );
+
+
+    function startVoice() {
+
+      const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+      if (!SpeechRecognition) {
+
+        showToast(
+          "Voice input is not supported in this browser."
+        );
+
+        return;
+      }
+
+
+      if (recognition) {
+
+        recognition.stop();
+
+        recognition = null;
+
+        return;
+      }
+
+
+      recognition =
+        new SpeechRecognition();
+
+      recognition.lang =
+        "en-IN";
+
+      recognition.interimResults =
+        true;
+
+      recognition.continuous =
+        false;
+
+
+      voiceButton.style.color =
+        "#ff3b30";
+
+
+      recognition.onresult =
+        event => {
+
+          let result = "";
+
+          for (
+            let i = event.resultIndex;
+            i < event.results.length;
+            i++
+          ) {
+
+            result +=
+              event.results[i][0].transcript;
+
+          }
+
+          prompt.value = result;
+
+          resizePrompt();
+
+          updateSendButton();
+
+        };
+
+
+      recognition.onerror =
+        () => {
+
+          showToast(
+            "Voice input failed."
+          );
+
+        };
+
+
+      recognition.onend =
+        () => {
+
+          recognition = null;
+
+          voiceButton.style.color =
+            "";
+
+        };
+
+
+      recognition.start();
+
+    }
+
+
+    /* =========================
+       DRAWER
+    ========================= */
+
+    function openDrawer() {
+
+      drawer.classList.add("show");
+
+      drawerBackdrop.classList.add(
+        "show"
+      );
+
+      renderHistory();
+
+    }
+
+
+    function closeHistoryDrawer() {
+
+      drawer.classList.remove(
+        "show"
+      );
+
+      drawerBackdrop.classList.remove(
+        "show"
+      );
+
+    }
+
+
+    menuButton.addEventListener(
+      "click",
+      openDrawer
+    );
+
+
+    closeDrawer.addEventListener(
+      "click",
+      closeHistoryDrawer
+    );
+
+
+    drawerBackdrop.addEventListener(
+      "click",
+      closeHistoryDrawer
+    );
+
+
+    /* =========================
+       NEW CHAT
+    ========================= */
+
+    newChatButton.addEventListener(
+      "click",
+      newChat
+    );
+
+
+    function newChat() {
+
+      currentChat = [];
+
+      chatContent.innerHTML = "";
+
+      const section =
+        document.createElement("section");
+
+      section.id = "welcome";
+
+      section.className = "welcome";
+
+      section.innerHTML =
+        `
+          <div class="welcome-logo">
+            RG
+          </div>
+
+          <h1>How can I help you?</h1>
+
+          <p>
+            Chat, create, write, code and explore with RG Creator AI.
+          </p>
+        `;
+
+      chatContent.appendChild(
+        section
+      );
+
+      prompt.value = "";
+
+      selectedFileList = [];
+
+      renderSelectedFiles();
+
+      resizePrompt();
+
+      updateSendButton();
+
+      closeHistoryDrawer();
+
+      showToast("New chat started");
+
+    }
+
+
+    /* =========================
+       MORE BUTTON
+    ========================= */
+
+    moreButton.addEventListener(
+      "click",
+      event => {
+
+        event.stopPropagation();
+
+        capabilities.classList.remove(
+          "show"
+        );
+
+        morePopup.classList.toggle(
+          "show"
         );
 
       }
     );
 
-  }
+
+    document.querySelectorAll(
+      ".popup-item"
+    ).forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const action =
+            button.dataset.action;
 
 
-  function loadHistory(item) {
+          if (action === "new") {
+            newChat();
+          }
 
-    messages.innerHTML = "";
 
-    chatMessages = [];
+          if (action === "clear") {
+            clearCurrentChat();
+          }
 
-    welcome.style.display =
-      "none";
 
-    item.messages.forEach(
-      message => {
+          if (action === "export") {
+            exportChat();
+          }
 
-        if (
-          message.role === "user"
-        ) {
 
-          addUserMessage(
-            message.content
-          );
-
-        } else {
-
-          addAssistantMessage(
-            message.content
+          morePopup.classList.remove(
+            "show"
           );
 
         }
+      );
 
-      }
-    );
-
-    sidebarOverlay.classList.remove(
-      "show"
-    );
-
-  }
+    });
 
 
-  historySearch.addEventListener(
-    "input",
-    renderHistory
-  );
+    /* =========================
+       CAPABILITIES
+    ========================= */
 
+    capabilityButton.addEventListener(
+      "click",
+      event => {
 
-  /* =========================================================
-     CLOSE FLOATING MENUS
-  ========================================================= */
+        event.stopPropagation();
 
-  document.addEventListener(
-    "click",
-    event => {
+        morePopup.classList.remove(
+          "show"
+        );
 
-      if (
-        !event.target.closest(
-          "#moreButton"
-        ) &&
-        !event.target.closest(
-          "#morePanel"
-        )
-      ) {
-
-        morePanel.classList.remove(
+        capabilities.classList.toggle(
           "show"
         );
 
       }
+    );
 
-      if (
-        !event.target.closest(
-          "#capabilityButton"
-        ) &&
-        !event.target.closest(
-          "#capabilityPanel"
-        )
-      ) {
 
-        capabilityPanel.classList.remove(
+    document.querySelectorAll(
+      ".cap-item"
+    ).forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const text =
+            button.textContent
+              .replace(/[^\w\s]/g, "")
+              .trim();
+
+          prompt.value =
+            "Help me with " + text;
+
+          resizePrompt();
+
+          updateSendButton();
+
+          capabilities.classList.remove(
+            "show"
+          );
+
+          prompt.focus();
+
+        }
+      );
+
+    });
+
+
+    document.addEventListener(
+      "click",
+      () => {
+
+        morePopup.classList.remove(
+          "show"
+        );
+
+        capabilities.classList.remove(
           "show"
         );
 
       }
+    );
+
+
+    /* =========================
+       CHAT STORAGE
+    ========================= */
+
+    function saveCurrentChat() {
+
+      if (!currentChat.length) return;
+
+      try {
+
+        localStorage.setItem(
+          "rg_creator_ai_current_chat",
+          JSON.stringify(
+            currentChat
+          )
+        );
+
+      } catch {}
 
     }
-  );
 
 
-  /* =========================================================
-     INITIALIZE
-  ========================================================= */
+    function loadCurrentChat() {
 
-  renderHistory();
+      try {
 
-  promptInput.focus();
+        const saved =
+          JSON.parse(
+            localStorage.getItem(
+              "rg_creator_ai_current_chat"
+            ) || "[]"
+          );
 
-</script>
+
+        if (
+          !Array.isArray(saved) ||
+          !saved.length
+        ) {
+          return;
+        }
+
+
+        if (welcome) {
+          welcome.remove();
+        }
+
+
+        currentChat = saved;
+
+
+        saved.forEach(item => {
+
+          if (item.role === "user") {
+
+            addUserMessage(
+              item.text
+            );
+
+          } else {
+
+            addAIMessage(
+              item.text
+            );
+
+          }
+
+        });
+
+      } catch {}
+
+    }
+
+
+    /* =========================
+       HISTORY
+    ========================= */
+
+    function renderHistory() {
+
+      history.innerHTML = "";
+
+
+      const saved =
+        localStorage.getItem(
+          "rg_creator_ai_current_chat"
+        );
+
+
+      if (!saved) {
+
+        history.innerHTML =
+          `
+            <div class="empty-history">
+              No previous chats yet.
+            </div>
+          `;
+
+        return;
+      }
+
+
+      let data = [];
+
+      try {
+        data = JSON.parse(saved);
+      } catch {}
+
+
+      const firstUser =
+        data.find(
+          item =>
+            item.role === "user"
+        );
+
+
+      if (!firstUser) {
+
+        history.innerHTML =
+          `
+            <div class="empty-history">
+              No previous chats yet.
+            </div>
+          `;
+
+        return;
+      }
+
+
+      const section =
+        document.createElement("div");
+
+      section.className =
+        "history-section";
+
+      section.textContent =
+        "Recent";
+
+      history.appendChild(section);
+
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "history-item";
+
+
+      const text =
+        document.createElement("div");
+
+      text.className =
+        "history-text";
+
+      text.textContent =
+        firstUser.text;
+
+
+      const more =
+        document.createElement("button");
+
+      more.className =
+        "history-more";
+
+      more.textContent =
+        "⋯";
+
+
+      item.appendChild(text);
+
+      item.appendChild(more);
+
+      history.appendChild(item);
+
+
+      item.addEventListener(
+        "click",
+        () => {
+
+          closeHistoryDrawer();
+
+        }
+      );
+
+    }
+
+
+    historySearch.addEventListener(
+      "input",
+      () => {
+
+        const query =
+          historySearch.value
+            .trim()
+            .toLowerCase();
+
+
+        const items =
+          document.querySelectorAll(
+            ".history-item"
+          );
+
+
+        items.forEach(item => {
+
+          item.style.display =
+            item.textContent
+              .toLowerCase()
+              .includes(query)
+              ? "flex"
+              : "none";
+
+        });
+
+      }
+    );
+
+
+    /* =========================
+       CLEAR CHAT
+    ========================= */
+
+    function clearCurrentChat() {
+
+      localStorage.removeItem(
+        "rg_creator_ai_current_chat"
+      );
+
+      newChat();
+
+      showToast(
+        "Chat cleared"
+      );
+
+    }
+
+
+    /* =========================
+       EXPORT CHAT
+    ========================= */
+
+    function exportChat() {
+
+      if (!currentChat.length) {
+
+        showToast(
+          "No chat to export."
+        );
+
+        return;
+      }
+
+
+      const text =
+        currentChat
+          .map(item => {
+
+            const role =
+              item.role === "user"
+                ? "You"
+                : "RG Creator AI";
+
+            return (
+              role +
+              ":\n" +
+              item.text
+            );
+
+          })
+          .join("\n\n");
+
+
+      const blob =
+        new Blob(
+          [text],
+          {
+            type:
+              "text/plain;charset=utf-8"
+          }
+        );
+
+
+      const url =
+        URL.createObjectURL(blob);
+
+
+      const a =
+        document.createElement("a");
+
+      a.href = url;
+
+      a.download =
+        "RG-Creator-AI-Chat.txt";
+
+      a.click();
+
+
+      URL.revokeObjectURL(url);
+
+      showToast(
+        "Chat exported"
+      );
+
+    }
+
+
+    /* =========================
+       SCROLL
+    ========================= */
+
+    function scrollToBottom() {
+
+      requestAnimationFrame(() => {
+
+        chatArea.scrollTo({
+          top: chatArea.scrollHeight,
+          behavior: "smooth"
+        });
+
+      });
+
+    }
+
+
+    /* =========================
+       INIT
+    ========================= */
+
+    resizePrompt();
+
+    updateSendButton();
+
+    loadCurrentChat();
+
+  </script>
 
 </body>
 </html>
