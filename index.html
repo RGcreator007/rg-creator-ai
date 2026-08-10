@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="RG Creator AI — AI tools for chat, content, code, images, YouTube and Instagram."
+  />
+  <title>RG Creator AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #000;
+      color: #fff;
+      font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+    }
+
+    button,
+    a,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+
+    .header {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid #1c1c1c;
+      background: #000;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: #151515;
+      border: 1px solid #292929;
+      font-size: 15px;
+    }
+
+    .menu-btn,
+    .more-btn {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      background: transparent;
+      color: #ccc;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 25px;
+    }
+
+    .menu-btn:hover,
+    .more-btn:hover {
+      background: #151515;
+      color: #fff;
+    }
+
+    /* MAIN */
+
+    .main {
+      width: 100%;
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 55px 20px 100px;
+      flex: 1;
+    }
+
+    .hero {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 7vw, 62px);
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 18px;
+    }
+
+    .hero p {
+      color: #999;
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 34px;
+    }
+
+    /* CHAT INPUT */
+
+    .chat-box {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto 48px;
+      border: 1px solid #303030;
+      background: #101010;
+      border-radius: 22px;
+      padding: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    .chat-input {
+      width: 100%;
+      min-height: 70px;
+      max-height: 180px;
+      resize: vertical;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: #fff;
+      padding: 10px 12px;
+      font-size: 16px;
+    }
+
+    .chat-input::placeholder {
+      color: #777;
+    }
+
+    .chat-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 8px;
+    }
+
+    .left-actions,
+    .right-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 11px;
+      background: transparent;
+      color: #aaa;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .icon-btn:hover {
+      background: #1c1c1c;
+      color: #fff;
+    }
+
+    .send-btn {
+      background: #fff;
+      color: #000;
+    }
+
+    .send-btn:hover {
+      background: #ddd;
+      color: #000;
+    }
+
+    .icon-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* SECTION */
+
+    .section {
+      margin-top: 45px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    /* CARDS */
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .card {
+      display: block;
+      text-decoration: none;
+      color: #fff;
+      background: #0d0d0d;
+      border: 1px solid #222;
+      border-radius: 16px;
+      padding: 20px;
+      min-height: 125px;
+      transition: 0.18s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: #444;
+      background: #121212;
+    }
+
+    .card-icon {
+      font-size: 25px;
+      margin-bottom: 14px;
+    }
+
+    .card h3 {
+      font-size: 16px;
+      margin-bottom: 7px;
+    }
+
+    .card p {
+      color: #888;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    /* FOOTER */
+
+    .footer {
+      text-align: center;
+      color: #666;
+      font-size: 12px;
+      padding: 25px 15px;
+      border-top: 1px solid #171717;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 700px) {
+      .header {
+        height: 58px;
+      }
+
+      .main {
+        padding: 42px 14px 80px;
+      }
+
+      .hero h1 {
+        letter-spacing: -1.2px;
+      }
+
+      .hero p {
+        font-size: 14px;
+      }
+
+      .chat-box {
+        border-radius: 18px;
+      }
+
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .card {
+        padding: 16px;
+        min-height: 120px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .cards {
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+      }
+
+      .card {
+        min-height: 112px;
+        padding: 14px;
+      }
+
+      .card-icon {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+
+      <button
+        id="menuButton"
+        class="menu-btn"
+        aria-label="Menu"
+        type="button"
+      >
+        ☰
+      </button>
+
+      <a href="/" class="brand">
+        <span class="brand-icon">RG</span>
+        <span>RG Creator AI</span>
+      </a>
+
+      <button
+        id="moreButton"
+        class="more-btn"
+        aria-label="More"
+        type="button"
+      >
+        ⋯
+      </button>
+
+    </header>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <section class="hero">
+
+        <h1>Create with AI.</h1>
+
+        <p>
+          Chat, create images, write content, generate code and grow
+          your YouTube & Instagram content with RG Creator AI.
+        </p>
+
+        <!-- MAIN AI INPUT -->
+        <div class="chat-box">
+
+          <textarea
+            id="prompt"
+            class="chat-input"
+            rows="1"
+            placeholder="What do you want to create?"
+            aria-label="Message RG Creator AI"
+          ></textarea>
+
+          <div class="chat-actions">
+
+            <div class="left-actions">
+
+              <button
+                id="attachButton"
+                class="icon-btn"
+                aria-label="Add file"
+                type="button"
+              >
+                <svg viewBox="0 0 24 24">
+                  <path d="M21.4 11.6l-8.9 8.9a6 6 0 01-8.5-8.5l9.2-9.2a4 4 0 015.7 5.7l-9.2 9.2a2 2 0 01-2.8-2.8l8.6-8.6"></path>
+                </svg>
+              </button>
+
+              <button
+                id="capabilityButton"
+                class="icon-btn"
+                aria-label="Capabilities"
+                type="button"
+              >
+                <svg viewBox="0 0 24 24">
+                  <rect x="4" y="4" width="6" height="6"></rect>
+                  <rect x="14" y="4" width="6" height="6"></rect>
+                  <rect x="4" y="14" width="6" height="6"></rect>
+                  <rect x="14" y="14" width="6" height="6"></rect>
+                </svg>
+              </button>
+
+            </div>
+
+            <div class="right-actions">
+
+              <button
+                id="voiceButton"
+                class="icon-btn"
+                aria-label="Voice"
+                type="button"
+              >
+                <svg viewBox="0 0 24 24">
+                  <rect
+                    x="9"
+                    y="3"
+                    width="6"
+                    height="12"
+                    rx="3"
+                  ></rect>
+                  <path d="M5 11a7 7 0 0 0 14 0"></path>
+                  <path d="M12 18v3"></path>
+                  <path d="M8 21h8"></path>
+                </svg>
+              </button>
+
+              <button
+                id="sendButton"
+                class="icon-btn send-btn"
+                aria-label="Send"
+                type="button"
+              >
+                <svg viewBox="0 0 24 24">
+                  <path d="M5 12h13"></path>
+                  <path d="M13 6l6 6-6 6"></path>
+                </svg>
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- QUICK ACTIONS -->
+      <section class="section">
+
+        <h2 class="section-title">Quick actions</h2>
+
+        <div class="cards">
+
+          <a href="/pages/chat.html" class="card">
+            <div class="card-icon">💬</div>
+            <h3>AI Chat</h3>
+            <p>Chat with RG Creator AI.</p>
+          </a>
+
+          <a href="/pages/image.html" class="card">
+            <div class="card-icon">🖼️</div>
+            <h3>AI Image</h3>
+            <p>Create images from your ideas.</p>
+          </a>
+
+          <a href="/pages/writer.html" class="card">
+            <div class="card-icon">✍️</div>
+            <h3>Content Writer</h3>
+            <p>Create captions, scripts and content.</p>
+          </a>
+
+          <a href="/pages/code.html" class="card">
+            <div class="card-icon">💻</div>
+            <h3>Code Generator</h3>
+            <p>Generate, explain and fix code.</p>
+          </a>
+
+          <a href="/pages/youtube.html" class="card">
+            <div class="card-icon">▶️</div>
+            <h3>YouTube Tools</h3>
+            <p>Titles, scripts, keywords and more.</p>
+          </a>
+
+          <a href="/pages/instagram.html" class="card">
+            <div class="card-icon">📸</div>
+            <h3>Instagram Tools</h3>
+            <p>Captions, hooks, keywords and ideas.</p>
+          </a>
+
+        </div>
+
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      RG Creator AI • AI tools for creators
+    </footer>
+
+  </div>
+
+  <script>
+    const prompt = document.getElementById("prompt");
+    const sendButton = document.getElementById("sendButton");
+
+    sendButton.addEventListener("click", function () {
+      const message = prompt.value.trim();
+
+      if (!message) {
+        prompt.focus();
+        return;
+      }
+
+      window.location.href =
+        "/pages/chat.html?message=" +
+        encodeURIComponent(message);
+    });
+
+    prompt.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendButton.click();
+      }
+    });
+
+    document
+      .getElementById("menuButton")
+      .addEventListener("click", function () {
+        window.location.href = "/pages/chat.html";
+      });
+
+    document
+      .getElementById("moreButton")
+      .addEventListener("click", function () {
+        alert("Settings and more options will be available here.");
+      });
+
+    document
+      .getElementById("capabilityButton")
+      .addEventListener("click", function () {
+        document
+          .querySelector(".section")
+          .scrollIntoView({ behavior: "smooth" });
+      });
+
+    document
+      .getElementById("attachButton")
+      .addEventListener("click", function () {
+        alert("File upload will be connected in the AI Chat.");
+      });
+
+    document
+      .getElementById("voiceButton")
+      .addEventListener("click", function () {
+        alert("Voice input will be connected in the AI Chat.");
+      });
+  </script>
+
+</body>
+</html>
