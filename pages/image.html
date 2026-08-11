@@ -3,371 +3,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Image Generator — RG Creator AI</title>
+  <title>RG Creator AI — Image Generator</title>
 
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
+      margin: 0;
       background: #000;
       color: #fff;
-      font-family: Inter, Arial, sans-serif;
-      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
-    button,
-    input,
-    textarea,
-    select {
-      font: inherit;
+    .page {
+      max-width: 900px;
+      margin: auto;
+      padding: 24px 16px 50px;
     }
 
-    button {
-      cursor: pointer;
-    }
-
-    .header {
-      height: 64px;
-      padding: 0 16px;
+    .top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid #222;
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: rgba(0,0,0,.96);
-      backdrop-filter: blur(12px);
+      margin-bottom: 30px;
     }
 
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-    }
-
-    .back-btn,
-    .more-btn {
-      width: 40px;
-      height: 40px;
-      border: 0;
-      border-radius: 11px;
-      background: transparent;
-      color: #fff;
-    }
-
-    .back-btn {
-      background: #151515;
-      font-size: 20px;
-    }
-
-    .more-btn {
-      font-size: 23px;
-    }
-
-    .brand {
-      font-size: 16px;
+    .title {
+      font-size: 26px;
       font-weight: 700;
     }
 
-    .page-name {
-      color: #888;
-      font-size: 11px;
-      margin-top: 2px;
+    .back {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 14px;
     }
 
-    .container {
-      width: min(900px, 100%);
-      margin: auto;
-      padding: 28px 16px 90px;
-    }
-
-    .hero {
+    .subtitle {
+      color: #aaa;
+      margin-top: -20px;
       margin-bottom: 25px;
     }
 
-    .hero h1 {
-      font-size: 30px;
-      margin-bottom: 8px;
-    }
-
-    .hero p {
-      color: #999;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .section {
-      margin-bottom: 21px;
-    }
-
-    .section-title {
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 9px;
-    }
-
-    .prompt-box {
-      background: #101010;
+    .box {
+      background: #111;
       border: 1px solid #292929;
-      border-radius: 16px;
-      padding: 13px;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 18px;
     }
 
     textarea {
       width: 100%;
-      min-height: 130px;
+      min-height: 150px;
       resize: vertical;
-      border: 0;
-      outline: none;
-      background: transparent;
+      background: #080808;
       color: #fff;
-      font-size: 15px;
-      line-height: 1.55;
+      border: 1px solid #333;
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 16px;
+      outline: none;
     }
 
-    textarea::placeholder {
-      color: #666;
-    }
-
-    .control-box {
-      background: #101010;
-      border: 1px solid #292929;
-      border-radius: 15px;
-      padding: 14px;
+    textarea:focus {
+      border-color: #777;
     }
 
     label {
       display: block;
-      color: #999;
-      font-size: 11px;
-      margin-bottom: 7px;
+      margin-bottom: 10px;
+      color: #ddd;
+      font-weight: 600;
     }
 
     select {
       width: 100%;
-      height: 45px;
-      border-radius: 10px;
-      border: 1px solid #333;
-      background: #171717;
-      color: #fff;
-      padding: 0 11px;
-      outline: none;
-    }
-
-    .option-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-
-    .option-btn {
-      min-height: 45px;
-      border: 1px solid #292929;
-      border-radius: 11px;
-      background: #101010;
-      color: #aaa;
-      font-size: 12px;
-    }
-
-    .option-btn.active {
-      border-color: #e52b2b;
-      background: #190909;
-      color: #fff;
-    }
-
-    .quality-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    .reference-box {
-      border: 1px dashed #383838;
-      border-radius: 15px;
-      padding: 18px;
-      text-align: center;
-      background: #0d0d0d;
-    }
-
-    .reference-box input {
-      display: none;
-    }
-
-    .reference-label {
-      display: block;
-      cursor: pointer;
-    }
-
-    .reference-icon {
-      font-size: 28px;
-      margin-bottom: 7px;
-    }
-
-    .reference-text {
-      font-size: 13px;
-      color: #ddd;
-    }
-
-    .reference-sub {
-      color: #777;
-      font-size: 11px;
-      margin-top: 4px;
-    }
-
-    .preview {
-      display: none;
-      margin-top: 12px;
-    }
-
-    .preview img {
-      width: 100%;
-      max-height: 350px;
-      object-fit: contain;
-      border-radius: 14px;
-      border: 1px solid #292929;
       background: #080808;
-    }
-
-    .generate-btn {
-      width: 100%;
-      height: 52px;
-      border: 0;
-      border-radius: 14px;
-      background: #fff;
-      color: #000;
-      font-weight: 700;
+      color: #fff;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px;
       font-size: 15px;
     }
 
-    .generate-btn:disabled {
-      opacity: .55;
-      cursor: not-allowed;
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 15px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .generate {
+      background: #fff;
+      color: #000;
+    }
+
+    .generate:disabled {
+      opacity: .5;
+    }
+
+    .status {
+      color: #aaa;
+      margin-top: 15px;
+      white-space: pre-wrap;
     }
 
     .result {
       display: none;
-      margin-top: 27px;
     }
 
-    .result-card {
-      background: #0d0d0d;
-      border: 1px solid #292929;
-      border-radius: 17px;
-      overflow: hidden;
-    }
-
-    .result-header {
-      padding: 13px 15px;
-      border-bottom: 1px solid #292929;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .result-title {
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .result-status {
-      color: #888;
-      font-size: 11px;
-    }
-
-    .image-area {
-      min-height: 280px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #070707;
-      padding: 14px;
-    }
-
-    .image-area img {
-      display: none;
+    .result img {
       width: 100%;
-      max-height: 650px;
-      object-fit: contain;
-      border-radius: 11px;
-    }
-
-    .loading {
-      color: #888;
-      font-size: 13px;
-      text-align: center;
+      border-radius: 16px;
+      display: block;
     }
 
     .actions {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      padding: 12px;
-      border-top: 1px solid #292929;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
     }
 
-    .action-btn {
-      min-height: 40px;
-      border-radius: 10px;
+    .secondary {
+      background: #181818;
+      color: #fff;
       border: 1px solid #303030;
-      background: #161616;
-      color: #ddd;
-      font-size: 12px;
     }
 
-    .bottom-nav {
-      display: none;
-    }
-
-    @media (max-width: 700px) {
-      .container {
-        padding-bottom: 95px;
-      }
-
-      .option-grid {
-        grid-template-columns: repeat(2, 1fr);
+    @media (max-width: 600px) {
+      .row {
+        grid-template-columns: 1fr;
       }
 
       .actions {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .bottom-nav {
-        position: fixed;
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 68px;
-        background: rgba(10,10,10,.97);
-        border-top: 1px solid #292929;
-        z-index: 50;
-        backdrop-filter: blur(12px);
-      }
-
-      .nav-item {
-        border: 0;
-        background: transparent;
-        color: #777;
-        font-size: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-      }
-
-      .nav-item.active {
-        color: #fff;
-      }
-
-      .nav-icon {
-        font-size: 19px;
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -375,681 +157,227 @@
 
 <body>
 
-<header class="header">
+<div class="page">
 
-  <div class="header-left">
+  <div class="top">
+    <div class="title">🖼️ AI Image</div>
+    <a class="back" href="../index.html">Home</a>
+  </div>
 
-    <button class="back-btn" onclick="history.back()">
-      ←
-    </button>
+  <div class="subtitle">
+    Create images from your ideas with RG Creator AI.
+  </div>
 
-    <div>
-      <div class="brand">RG Creator AI</div>
-      <div class="page-name">AI Image Generator</div>
+  <div class="box">
+
+    <label>What do you want to create?</label>
+
+    <textarea id="prompt"
+      placeholder="Describe the image you want to create..."></textarea>
+
+  </div>
+
+  <div class="box">
+
+    <div class="row">
+
+      <div>
+        <label>Style</label>
+
+        <select id="style">
+          <option>Realistic</option>
+          <option>Cinematic</option>
+          <option>Anime</option>
+          <option>3D</option>
+          <option>Illustration</option>
+          <option>Digital Art</option>
+          <option>Photography</option>
+          <option>Minimal</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Aspect Ratio</label>
+
+        <select id="ratio">
+          <option>1:1</option>
+          <option>16:9</option>
+          <option>9:16</option>
+          <option>4:5</option>
+        </select>
+      </div>
+
     </div>
 
   </div>
 
-  <button class="more-btn" onclick="moreOptions()">
-    ⋯
-  </button>
+  <div class="box">
 
-</header>
-
-
-<main class="container">
-
-  <section class="hero">
-
-    <h1>Create an Image</h1>
-
-    <p>
-      Describe what you want to create and turn your idea into an image.
-    </p>
-
-  </section>
-
-
-  <!-- PROMPT -->
-
-  <section class="section">
-
-    <div class="section-title">
-      Describe your image
-    </div>
-
-    <div class="prompt-box">
-
-      <textarea
-        id="prompt"
-        placeholder="Example: A cinematic portrait in a futuristic city at night..."
-      ></textarea>
-
-    </div>
-
-  </section>
-
-
-  <!-- STYLE -->
-
-  <section class="section">
-
-    <div class="section-title">
-      Style
-    </div>
-
-    <div class="option-grid">
-
-      <button class="option-btn active" onclick="selectOption(this,'style')">
-        Realistic
-      </button>
-
-      <button class="option-btn" onclick="selectOption(this,'style')">
-        Cinematic
-      </button>
-
-      <button class="option-btn" onclick="selectOption(this,'style')">
-        Anime
-      </button>
-
-      <button class="option-btn" onclick="selectOption(this,'style')">
-        3D
-      </button>
-
-      <button class="option-btn" onclick="selectOption(this,'style')">
-        Illustration
-      </button>
-
-      <button class="option-btn" onclick="selectOption(this,'style')">
-        Digital Art
-      </button>
-
-      <button class="option-btn" onclick="selectOption(this,'style')">
-        Minimal
-      </button>
-
-      <button class="option-btn" onclick="selectOption(this,'style')">
-        Photography
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- ASPECT RATIO -->
-
-  <section class="section">
-
-    <div class="section-title">
-      Aspect Ratio
-    </div>
-
-    <div class="option-grid">
-
-      <button
-        class="option-btn active"
-        onclick="selectOption(this,'ratio')"
-      >
-        1:1
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'ratio')"
-      >
-        16:9
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'ratio')"
-      >
-        9:16
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'ratio')"
-      >
-        4:5
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- QUALITY -->
-
-  <section class="section">
-
-    <div class="section-title">
-      Image Quality
-    </div>
-
-    <div class="quality-grid">
-
-      <button
-        class="option-btn active"
-        onclick="selectOption(this,'quality')"
-      >
-        Standard
-      </button>
-
-      <button
-        class="option-btn"
-        onclick="selectOption(this,'quality')"
-      >
-        High Quality
-      </button>
-
-    </div>
-
-  </section>
-
-
-  <!-- REFERENCE -->
-
-  <section class="section">
-
-    <div class="section-title">
-      Reference Image
-    </div>
-
-    <div class="reference-box">
-
-      <label
-        class="reference-label"
-        for="referenceImage"
-      >
-
-        <div class="reference-icon">
-          📷
-        </div>
-
-        <div class="reference-text">
-          Add reference image
-        </div>
-
-        <div class="reference-sub">
-          Upload an image to guide the generation
-        </div>
-
-      </label>
-
-      <input
-        id="referenceImage"
-        type="file"
-        accept="image/*"
-        onchange="previewReference(event)"
-      >
-
-    </div>
-
-    <div
-      class="preview"
-      id="referencePreview"
-    >
-      <img id="referencePreviewImage" alt="Reference preview">
-    </div>
-
-  </section>
-
-
-  <!-- GENERATE -->
-
-  <section class="section">
-
-    <button
-      class="generate-btn"
-      id="generateBtn"
-      onclick="generateImage()"
-    >
+    <button class="generate" id="generateBtn">
       ✦ Generate Image
     </button>
 
-  </section>
+    <div class="status" id="status">
+      Ready.
+    </div>
 
+  </div>
 
-  <!-- RESULT -->
+  <div class="box result" id="result">
 
-  <section
-    class="result"
-    id="result"
-  >
+    <img id="generatedImage" alt="Generated image">
 
-    <div class="result-card">
+    <div class="actions">
 
-      <div class="result-header">
+      <button class="secondary" id="downloadBtn">
+        ⬇️ Download
+      </button>
 
-        <div class="result-title">
-          Generated Image
-        </div>
+      <button class="secondary" id="regenerateBtn">
+        ↻ Regenerate
+      </button>
 
-        <div
-          class="result-status"
-          id="resultStatus"
-        >
-          Ready
-        </div>
-
-      </div>
-
-
-      <div class="image-area">
-
-        <div
-          class="loading"
-          id="loadingText"
-        >
-          Your generated image will appear here.
-        </div>
-
-        <img
-          id="generatedImage"
-          alt="Generated image"
-        >
-
-      </div>
-
-
-      <div class="actions">
-
-        <button class="action-btn" onclick="downloadImage()">
-          ⬇ Download
-        </button>
-
-        <button class="action-btn" onclick="regenerateImage()">
-          ↻ Regenerate
-        </button>
-
-        <button class="action-btn" onclick="editImage()">
-          ✨ Edit
-        </button>
-
-        <button class="action-btn" onclick="shareImage()">
-          🔗 Share
-        </button>
-
-      </div>
+      <button class="secondary" id="shareBtn">
+        🔗 Share
+      </button>
 
     </div>
 
-  </section>
+  </div>
 
-</main>
-
-
-<!-- MOBILE NAV -->
-
-<nav class="bottom-nav">
-
-  <button class="nav-item" onclick="goHome()">
-    <span class="nav-icon">⌂</span>
-    <span>Home</span>
-  </button>
-
-  <button class="nav-item" onclick="goChat()">
-    <span class="nav-icon">💬</span>
-    <span>AI Chat</span>
-  </button>
-
-  <button class="nav-item active">
-    <span class="nav-icon">✦</span>
-    <span>Tools</span>
-  </button>
-
-  <button class="nav-item" onclick="goProfile()">
-    <span class="nav-icon">◉</span>
-    <span>Profile</span>
-  </button>
-
-</nav>
-
+</div>
 
 <script>
 
-  let selectedStyle = "Realistic";
-  let selectedRatio = "1:1";
-  let selectedQuality = "Standard";
-  let lastPrompt = "";
+const promptInput = document.getElementById("prompt");
+const styleInput = document.getElementById("style");
+const ratioInput = document.getElementById("ratio");
 
+const generateBtn = document.getElementById("generateBtn");
+const regenerateBtn = document.getElementById("regenerateBtn");
 
-  function selectOption(button, type) {
+const statusBox = document.getElementById("status");
+const resultBox = document.getElementById("result");
+const generatedImage = document.getElementById("generatedImage");
 
-    const parent = button.parentElement;
+let lastPrompt = "";
 
-    parent
-      .querySelectorAll(".option-btn")
-      .forEach(btn => btn.classList.remove("active"));
+async function generateImage() {
 
-    button.classList.add("active");
+  const prompt = promptInput.value.trim();
 
-    if (type === "style") {
-      selectedStyle = button.textContent.trim();
-    }
-
-    if (type === "ratio") {
-      selectedRatio = button.textContent.trim();
-    }
-
-    if (type === "quality") {
-      selectedQuality = button.textContent.trim();
-    }
-
+  if (!prompt) {
+    statusBox.textContent = "Please enter an image description.";
+    return;
   }
 
+  lastPrompt = prompt;
 
-  function previewReference(event) {
+  generateBtn.disabled = true;
+  regenerateBtn.disabled = true;
 
-    const file = event.target.files[0];
+  resultBox.style.display = "none";
 
-    if (!file) return;
+  statusBox.textContent = "Creating your image...";
 
-    const url = URL.createObjectURL(file);
+  try {
 
-    const preview =
-      document.getElementById("referencePreview");
+    /*
+      IMPORTANT:
+      This endpoint will be connected to the RG Creator AI
+      image-generation backend.
+    */
 
-    const image =
-      document.getElementById("referencePreviewImage");
+    const response = await fetch("/api/image", {
+      method: "POST",
 
-    image.src = url;
+      headers: {
+        "Content-Type": "application/json"
+      },
 
-    preview.style.display = "block";
+      body: JSON.stringify({
+        prompt: prompt,
+        style: styleInput.value,
+        ratio: ratioInput.value
+      })
+    });
 
-  }
+    const data = await response.json();
 
-
-  async function generateImage() {
-
-    const prompt =
-      document.getElementById("prompt")
-        .value
-        .trim();
-
-    const button =
-      document.getElementById("generateBtn");
-
-    const result =
-      document.getElementById("result");
-
-    const loading =
-      document.getElementById("loadingText");
-
-    const image =
-      document.getElementById("generatedImage");
-
-    const status =
-      document.getElementById("resultStatus");
-
-
-    if (!prompt) {
-
-      alert("Please describe the image you want.");
-
-      return;
-
+    if (!response.ok || !data.ok) {
+      throw new Error(
+        data.error || "Image generation failed."
+      );
     }
 
+    if (!data.image) {
+      throw new Error(
+        "No image was returned by the server."
+      );
+    }
 
-    lastPrompt = prompt;
+    generatedImage.src = data.image;
 
-    button.disabled = true;
-    button.textContent = "Generating...";
+    resultBox.style.display = "block";
 
-    result.style.display = "block";
+    statusBox.textContent = "Image generated successfully.";
 
-    image.style.display = "none";
+  } catch (error) {
 
-    loading.style.display = "block";
+    console.error(error);
 
-    loading.textContent =
-      "RG Creator AI is generating your image...";
+    statusBox.textContent =
+      "Error: " + error.message;
 
-    status.textContent = "Generating";
+  } finally {
 
+    generateBtn.disabled = false;
+    regenerateBtn.disabled = false;
+  }
+}
+
+generateBtn.addEventListener(
+  "click",
+  generateImage
+);
+
+regenerateBtn.addEventListener(
+  "click",
+  generateImage
+);
+
+document.getElementById("downloadBtn")
+  .addEventListener("click", () => {
+
+    if (!generatedImage.src) return;
+
+    const link = document.createElement("a");
+
+    link.href = generatedImage.src;
+    link.download = "rg-creator-ai-image.png";
+
+    link.click();
+  });
+
+document.getElementById("shareBtn")
+  .addEventListener("click", async () => {
+
+    if (!generatedImage.src) return;
 
     try {
 
-      /*
-        IMPORTANT:
-
-        This frontend is ready for a dedicated image
-        generation backend endpoint.
-
-        The endpoint should be:
-
-        /api/image
-
-        It should receive:
-        {
-          prompt,
-          style,
-          ratio,
-          quality
-        }
-
-        and return:
-        {
-          ok: true,
-          imageUrl: "..."
-        }
-      */
-
-
-      const response =
-        await fetch("/api/image", {
-
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json"
-          },
-
-          body: JSON.stringify({
-
-            prompt,
-            style: selectedStyle,
-            ratio: selectedRatio,
-            quality: selectedQuality
-
-          })
-
-        });
-
-
-      const data =
-        await response.json();
-
-
-      if (!response.ok || !data.ok) {
-
-        throw new Error(
-          data?.error ||
-          "Image generation failed."
-        );
-
-      }
-
-
-      if (!data.imageUrl) {
-
-        throw new Error(
-          "Image API did not return an image."
-        );
-
-      }
-
-
-      image.src = data.imageUrl;
-
-      image.style.display = "block";
-
-      loading.style.display = "none";
-
-      status.textContent = "Ready";
-
+      await navigator.share({
+        title: "RG Creator AI",
+        text: "Created with RG Creator AI",
+        url: generatedImage.src
+      });
 
     } catch (error) {
 
-      loading.textContent =
-        error.message ||
-        "Image generation failed.";
-
-      status.textContent = "Error";
-
-    } finally {
-
-      button.disabled = false;
-
-      button.textContent =
-        "✦ Generate Image";
+      console.log("Share cancelled.");
 
     }
-
-  }
-
-
-  function regenerateImage() {
-
-    if (!lastPrompt) {
-
-      alert("Generate an image first.");
-
-      return;
-
-    }
-
-    generateImage();
-
-  }
-
-
-  function editImage() {
-
-    const prompt =
-      document.getElementById("prompt");
-
-    prompt.value =
-      prompt.value +
-      "\n\nEdit the generated image: ";
-
-    prompt.focus();
-
-  }
-
-
-  async function shareImage() {
-
-    const image =
-      document.getElementById("generatedImage");
-
-    if (!image.src) {
-
-      alert("Generate an image first.");
-
-      return;
-
-    }
-
-    if (
-      navigator.share
-    ) {
-
-      try {
-
-        await navigator.share({
-          title: "RG Creator AI Image",
-          text: "Created with RG Creator AI",
-          url: image.src
-        });
-
-      } catch {}
-
-    } else {
-
-      try {
-
-        await navigator.clipboard.writeText(
-          image.src
-        );
-
-        alert("Image link copied.");
-
-      } catch {
-
-        alert("Sharing is not supported on this device.");
-
-      }
-
-    }
-
-  }
-
-
-  function downloadImage() {
-
-    const image =
-      document.getElementById("generatedImage");
-
-    if (!image.src) {
-
-      alert("Generate an image first.");
-
-      return;
-
-    }
-
-    const link =
-      document.createElement("a");
-
-    link.href = image.src;
-
-    link.download =
-      "rg-creator-ai-image.png";
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    link.remove();
-
-  }
-
-
-  function moreOptions() {
-
-    alert(
-      "More image options will be added here."
-    );
-
-  }
-
-
-  function goHome() {
-
-    window.location.href = "/";
-
-  }
-
-
-  function goChat() {
-
-    window.location.href =
-      "/pages/chat.html";
-
-  }
-
-
-  function goProfile() {
-
-    alert(
-      "Profile & Settings will be added later."
-    );
-
-  }
+  });
 
 </script>
 
