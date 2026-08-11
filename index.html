@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RG Creator AI</title>
 
-  <!-- Premium modern font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,22 +27,42 @@
     }
 
     body {
-      font-family: "Inter", Arial, sans-serif;
+      font-family:
+        "Söhne",
+        "Inter",
+        "Segoe UI",
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       letter-spacing: -0.2px;
     }
 
+    button,
+    input,
+    textarea,
+    select {
+      font-family: inherit;
+    }
+
+    code,
+    pre,
+    .code,
+    .code-block,
+    .code-output,
+    .technical-text {
+      font-family:
+        "Söhne Mono",
+        "Consolas",
+        "Monaco",
+        monospace;
+    }
+
     a {
       color: inherit;
       text-decoration: none;
-    }
-
-    button,
-    input,
-    textarea {
-      font-family: inherit;
     }
 
     .app {
@@ -342,44 +361,6 @@
       line-height: 1.4;
     }
 
-    /* CAPABILITIES */
-
-    .capability {
-      display: grid;
-      gap: 10px;
-    }
-
-    .cap-card {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-    }
-
-    .cap-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 13px;
-      background: #1c1c1c;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 21px;
-    }
-
-    .cap-card strong {
-      font-size: 14px;
-    }
-
-    .cap-card p {
-      color: #777;
-      font-size: 12px;
-      margin-top: 4px;
-    }
-
     /* STATUS */
 
     .status {
@@ -467,19 +448,187 @@
       color: var(--accent);
     }
 
-    /* HIDDEN FILE INPUTS */
+    /* MORE MENU */
 
-    .hidden-input {
+    .more-menu {
+      position: fixed;
+      top: 64px;
+      right: 14px;
+      width: min(285px, calc(100vw - 28px));
+      max-height: calc(100vh - 90px);
+      overflow-y: auto;
+      background: #151515;
+      border: 1px solid #333;
+      border-radius: 18px;
+      padding: 8px;
       display: none;
+      box-shadow: 0 18px 50px rgba(0,0,0,.7);
+      z-index: 200;
     }
 
-    @media (min-width: 700px) {
-      .quick-grid {
-        grid-template-columns: repeat(3, 1fr);
+    .more-menu.open {
+      display: block;
+      animation: pop .15s ease;
+    }
+
+    .more-item {
+      width: 100%;
+      min-height: 46px;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .more-item:hover {
+      background: #222;
+    }
+
+    .more-item-icon {
+      width: 24px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    .more-divider {
+      height: 1px;
+      background: #292929;
+      margin: 7px 5px;
+    }
+
+    /* MODAL */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 500;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal {
+      width: min(430px,100%);
+      max-height: 85vh;
+      overflow-y: auto;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 25px 80px rgba(0,0,0,.8);
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .modal-head h2 {
+      font-size: 20px;
+    }
+
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      background: #1d1d1d;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .modal-subtitle {
+      color: #888;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    .modal-note {
+      color: #666;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 14px;
+    }
+
+    .primary-action,
+    .secondary-action {
+      width: 100%;
+      min-height: 46px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-bottom: 9px;
+    }
+
+    .primary-action {
+      background: #fff;
+      color: #000;
+      border: 0;
+    }
+
+    .secondary-action {
+      background: #181818;
+      color: #fff;
+      border: 1px solid #303030;
+    }
+
+    .auth-input {
+      width: 100%;
+      height: 46px;
+      background: #181818;
+      border: 1px solid #303030;
+      color: #fff;
+      border-radius: 12px;
+      padding: 0 13px;
+      outline: none;
+      margin-bottom: 9px;
+      font-size: 14px;
+    }
+
+    .auth-input:focus {
+      border-color: #555;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 600px) {
+
+      header {
+        height: 64px;
+        padding: 0 14px;
       }
 
-      .capability {
-        grid-template-columns: repeat(2, 1fr);
+      .hero {
+        padding-top: 42px;
+      }
+
+      .quick-grid {
+        grid-template-columns: repeat(2,1fr);
+      }
+
+      .quick-card {
+        min-height: 94px;
+      }
+
+      .more-menu {
+        top: 58px;
       }
     }
   </style>
@@ -490,46 +639,118 @@
 <div class="app">
 
   <!-- HEADER -->
+
   <header>
-    <a href="/" class="brand">
-      <div class="logo">RG</div>
+
+    <div class="brand">
+
+      <div class="logo">
+        RG
+      </div>
+
       <div class="brand-text">
         RG Creator <span>AI</span>
       </div>
-    </a>
 
-    <button class="menu-btn" onclick="openMenu()" aria-label="Menu">
+    </div>
+
+    <button
+      class="menu-btn"
+      onclick="openMenu(event)"
+      aria-label="More options"
+    >
       ⋯
     </button>
+
   </header>
 
 
+  <!-- MORE MENU -->
+
+  <div
+    id="moreMenu"
+    class="more-menu"
+  >
+
+    <button class="more-item" onclick="showProfile()">
+      <span class="more-item-icon">👤</span>
+      <span>Profile</span>
+    </button>
+
+    <button class="more-item" onclick="showHistory()">
+      <span class="more-item-icon">💬</span>
+      <span>Chat History</span>
+    </button>
+
+    <button class="more-item" onclick="showPrivacy()">
+      <span class="more-item-icon">🔒</span>
+      <span>Privacy</span>
+    </button>
+
+    <button class="more-item" onclick="showAbout()">
+      <span class="more-item-icon">ⓘ</span>
+      <span>About</span>
+    </button>
+
+    <div class="more-divider"></div>
+
+    <!-- SETTINGS AT BOTTOM -->
+
+    <button class="more-item" onclick="openSettings()">
+      <span class="more-item-icon">⚙️</span>
+      <span>Settings</span>
+    </button>
+
+    <!-- LOGIN / SIGNUP AT VERY BOTTOM -->
+
+    <button class="more-item" onclick="openAuth()">
+      <span class="more-item-icon">👤</span>
+      <span>Log in / Sign up</span>
+    </button>
+
+  </div>
+
+
   <!-- HERO -->
+
   <section class="hero">
-    <h1>Create with <span>RG Creator AI</span></h1>
-    <p>Your AI-powered creative workspace</p>
+
+    <h1>
+      What can I help <span>you create?</span>
+    </h1>
+
+    <p>
+      Your AI-powered creative workspace
+    </p>
+
   </section>
 
 
-  <!-- AI PROMPT -->
-  <div class="ai-box">
+  <!-- AI BOX -->
 
-    <div id="selectedFile" class="selected-file">
+  <section class="ai-box">
+
+    <div
+      id="selectedFile"
+      class="selected-file"
+    >
       <span>📎</span>
-      <span id="fileName">File selected</span>
+      <span id="fileName"></span>
     </div>
+
 
     <textarea
       id="prompt"
       placeholder="What do you want to create?"
-      autocomplete="off"
     ></textarea>
+
 
     <div class="input-bottom">
 
       <div class="left-actions">
 
         <!-- PLUS -->
+
         <div class="plus-wrapper">
 
           <button
@@ -537,41 +758,61 @@
             onclick="togglePlusMenu()"
             aria-label="Attach"
           >
-            ＋
+            +
           </button>
 
-          <div id="plusMenu" class="plus-menu">
+          <div
+            id="plusMenu"
+            class="plus-menu"
+          >
 
-            <button class="upload-option" onclick="selectImage()">
+            <button
+              class="upload-option"
+              onclick="selectImage()"
+            >
               <span class="upload-icon">🖼️</span>
-              <span>Image</span>
+              Image
             </button>
 
-            <button class="upload-option" onclick="openCamera()">
+            <button
+              class="upload-option"
+              onclick="openCamera()"
+            >
               <span class="upload-icon">📷</span>
-              <span>Camera</span>
+              Camera
             </button>
 
-            <button class="upload-option" onclick="selectVideo()">
+            <button
+              class="upload-option"
+              onclick="selectVideo()"
+            >
               <span class="upload-icon">🎥</span>
-              <span>Video</span>
+              Video
             </button>
 
-            <button class="upload-option" onclick="selectFile()">
+            <button
+              class="upload-option"
+              onclick="selectFile()"
+            >
               <span class="upload-icon">📄</span>
-              <span>File</span>
+              File
             </button>
 
-            <button class="upload-option" onclick="selectPDF()">
+            <button
+              class="upload-option"
+              onclick="selectPDF()"
+            >
               <span class="upload-icon">📕</span>
-              <span>PDF</span>
+              PDF
             </button>
 
           </div>
+
         </div>
 
 
         <!-- VOICE -->
+
         <button
           class="icon-btn"
           onclick="startVoice()"
@@ -590,68 +831,76 @@
           onclick="sendPrompt()"
           aria-label="Send"
         >
-          ➤
+          ↑
         </button>
 
       </div>
 
     </div>
 
-  </div>
+  </section>
 
 
-  <!-- HIDDEN UPLOAD INPUTS -->
+  <!-- FILE INPUTS -->
 
   <input
-    id="imageInput"
-    class="hidden-input"
     type="file"
+    id="imageInput"
     accept="image/*"
+    hidden
     onchange="handleFile(this)"
   >
 
   <input
-    id="cameraInput"
-    class="hidden-input"
     type="file"
+    id="cameraInput"
     accept="image/*"
     capture="environment"
+    hidden
     onchange="handleFile(this)"
   >
 
   <input
+    type="file"
     id="videoInput"
-    class="hidden-input"
-    type="file"
     accept="video/*"
+    hidden
     onchange="handleFile(this)"
   >
 
   <input
+    type="file"
     id="fileInput"
-    class="hidden-input"
-    type="file"
     accept=".txt,.doc,.docx,.csv,.json,.html,.css,.js,.py,.java,.php"
+    hidden
     onchange="handleFile(this)"
   >
 
   <input
-    id="pdfInput"
-    class="hidden-input"
     type="file"
+    id="pdfInput"
     accept="application/pdf"
+    hidden
     onchange="handleFile(this)"
   >
 
 
   <!-- STATUS -->
-  <div id="status" class="status">
+
+  <div
+    id="status"
+    class="status"
+  >
     Ready
   </div>
 
 
-  <!-- AI RESULT -->
-  <div id="result" class="result">
+  <!-- RESULT -->
+
+  <section
+    id="result"
+    class="result"
+  >
 
     <div class="result-card">
 
@@ -659,14 +908,18 @@
         RG Creator AI
       </div>
 
-      <div id="resultText" class="result-text"></div>
+      <div
+        id="resultText"
+        class="result-text"
+      ></div>
 
     </div>
 
-  </div>
+  </section>
 
 
   <!-- QUICK ACTIONS -->
+
   <section class="section">
 
     <div class="section-title">
@@ -675,103 +928,112 @@
 
     <div class="quick-grid">
 
-      <a href="/pages/chat.html" class="quick-card">
-        <div class="quick-icon">💬</div>
-        <strong>AI Chat</strong>
-        <small>Ask anything</small>
+      <a
+        href="/pages/chat.html"
+        class="quick-card"
+      >
+        <div class="quick-icon">
+          💬
+        </div>
+
+        <strong>
+          AI Chat
+        </strong>
+
+        <small>
+          Ask anything
+        </small>
       </a>
 
-      <a href="/pages/image.html" class="quick-card">
-        <div class="quick-icon">🖼️</div>
-        <strong>Create Image</strong>
-        <small>Generate visuals</small>
+
+      <a
+        href="/pages/image.html"
+        class="quick-card"
+      >
+        <div class="quick-icon">
+          🖼️
+        </div>
+
+        <strong>
+          Create Image
+        </strong>
+
+        <small>
+          Generate visuals
+        </small>
       </a>
 
-      <a href="/pages/writer.html" class="quick-card">
-        <div class="quick-icon">✍️</div>
-        <strong>Content Writer</strong>
-        <small>Create content</small>
+
+      <a
+        href="/pages/writer.html"
+        class="quick-card"
+      >
+        <div class="quick-icon">
+          ✍️
+        </div>
+
+        <strong>
+          Content Writer
+        </strong>
+
+        <small>
+          Create content
+        </small>
       </a>
 
-      <a href="/pages/code.html" class="quick-card">
-        <div class="quick-icon">💻</div>
-        <strong>Code Generator</strong>
-        <small>Generate & fix code</small>
+
+      <a
+        href="/pages/code.html"
+        class="quick-card"
+      >
+        <div class="quick-icon">
+          💻
+        </div>
+
+        <strong>
+          Code Generator
+        </strong>
+
+        <small>
+          Generate & fix code
+        </small>
       </a>
 
-      <a href="/pages/youtube.html" class="quick-card">
-        <div class="quick-icon">▶️</div>
-        <strong>YouTube Tools</strong>
-        <small>Titles, scripts & SEO</small>
+
+      <a
+        href="/pages/youtube.html"
+        class="quick-card"
+      >
+        <div class="quick-icon">
+          ▶️
+        </div>
+
+        <strong>
+          YouTube Tools
+        </strong>
+
+        <small>
+          Titles, scripts & SEO
+        </small>
       </a>
 
-      <a href="/pages/instagram.html" class="quick-card">
-        <div class="quick-icon">📸</div>
-        <strong>Instagram Tools</strong>
-        <small>Captions & ideas</small>
+
+      <a
+        href="/pages/instagram.html"
+        class="quick-card"
+      >
+        <div class="quick-icon">
+          📸
+        </div>
+
+        <strong>
+          Instagram Tools
+        </strong>
+
+        <small>
+          Captions & ideas
+        </small>
       </a>
-
-    </div>
-
-  </section>
-
-
-  <!-- CAPABILITIES -->
-  <section class="section">
-
-    <div class="section-title">
-      What can I help you create?
-    </div>
-
-    <div class="capability">
-
-      <div class="cap-card">
-        <div class="cap-icon">💬</div>
-        <div>
-          <strong>AI Chat</strong>
-          <p>Ask questions, brainstorm and solve problems.</p>
-        </div>
-      </div>
-
-      <div class="cap-card">
-        <div class="cap-icon">✍️</div>
-        <div>
-          <strong>Content Writer</strong>
-          <p>Captions, scripts, blogs and creative writing.</p>
-        </div>
-      </div>
-
-      <div class="cap-card">
-        <div class="cap-icon">💻</div>
-        <div>
-          <strong>Code Generator</strong>
-          <p>Generate, explain, fix and improve code.</p>
-        </div>
-      </div>
-
-      <div class="cap-card">
-        <div class="cap-icon">🖼️</div>
-        <div>
-          <strong>AI Image Generator</strong>
-          <p>Create images from simple text prompts.</p>
-        </div>
-      </div>
-
-      <div class="cap-card">
-        <div class="cap-icon">▶️</div>
-        <div>
-          <strong>YouTube Tools</strong>
-          <p>Titles, descriptions, scripts, keywords and ideas.</p>
-        </div>
-      </div>
-
-      <div class="cap-card">
-        <div class="cap-icon">📸</div>
-        <div>
-          <strong>Instagram Tools</strong>
-          <p>Captions, hooks, hashtags, bios and reel ideas.</p>
-        </div>
-      </div>
 
     </div>
 
@@ -780,26 +1042,77 @@
 </div>
 
 
+<!-- SETTINGS / LOGIN MODAL -->
+
+<div
+  id="modalBackdrop"
+  class="modal-backdrop"
+  onclick="closeModal(event)"
+>
+
+  <div
+    class="modal"
+    onclick="event.stopPropagation()"
+  >
+
+    <div class="modal-head">
+
+      <h2 id="modalTitle">
+        RG Creator AI
+      </h2>
+
+      <button
+        class="modal-close"
+        onclick="hideModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div id="modalBody"></div>
+
+  </div>
+
+</div>
+
+
 <!-- BOTTOM NAV -->
 
 <nav class="bottom-nav">
 
-  <a href="/" class="nav-item active">
+  <a
+    href="/"
+    class="nav-item active"
+  >
     <span>⌂</span>
     Home
   </a>
 
-  <a href="/pages/chat.html" class="nav-item">
+
+  <a
+    href="/pages/chat.html"
+    class="nav-item"
+  >
     <span>💬</span>
     AI Chat
   </a>
 
-  <a href="/pages/writer.html" class="nav-item">
+
+  <a
+    href="/pages/writer.html"
+    class="nav-item"
+  >
     <span>🛠</span>
     Tools
   </a>
 
-  <a href="#" class="nav-item" onclick="openMenu()">
+
+  <a
+    href="#"
+    class="nav-item"
+    onclick="openMenu(event)"
+  >
     <span>⋯</span>
     More
   </a>
@@ -809,203 +1122,625 @@
 
 <script>
 
-  /* PLUS MENU */
+/* =========================
+   PLUS MENU
+========================= */
 
-  function togglePlusMenu() {
-    const menu = document.getElementById("plusMenu");
-    menu.classList.toggle("open");
-  }
+function togglePlusMenu() {
 
+  const menu =
+    document.getElementById("plusMenu");
 
-  /* UPLOAD */
+  menu.classList.toggle("open");
 
-  function selectImage() {
-    closePlus();
-    document.getElementById("imageInput").click();
-  }
+}
 
-  function openCamera() {
-    closePlus();
-    document.getElementById("cameraInput").click();
-  }
 
-  function selectVideo() {
-    closePlus();
-    document.getElementById("videoInput").click();
-  }
+/* =========================
+   UPLOAD
+========================= */
 
-  function selectFile() {
-    closePlus();
-    document.getElementById("fileInput").click();
-  }
+function selectImage() {
 
-  function selectPDF() {
-    closePlus();
-    document.getElementById("pdfInput").click();
-  }
-
-  function closePlus() {
-    document.getElementById("plusMenu").classList.remove("open");
-  }
-
-
-  function handleFile(input) {
-
-    if (!input.files || !input.files.length) return;
-
-    const file = input.files[0];
-
-    document.getElementById("fileName").textContent = file.name;
-
-    document
-      .getElementById("selectedFile")
-      .classList.add("show");
-
-    document.getElementById("status").textContent =
-      "Attached: " + file.name;
-  }
-
-
-  /* VOICE */
-
-  function startVoice() {
-
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      document.getElementById("status").textContent =
-        "Voice input is not supported in this browser.";
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-
-    recognition.lang = "en-IN";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    document.getElementById("status").textContent =
-      "Listening... 🎤";
-
-    recognition.start();
-
-    recognition.onresult = function(event) {
-
-      const text =
-        event.results[0][0].transcript;
-
-      document.getElementById("prompt").value = text;
-
-      document.getElementById("status").textContent =
-        "Voice added";
-    };
-
-    recognition.onerror = function() {
-
-      document.getElementById("status").textContent =
-        "Voice input failed.";
-    };
-  }
-
-
-  /* AI CHAT */
-
-  async function sendPrompt() {
-
-    const prompt =
-      document.getElementById("prompt").value.trim();
-
-    if (!prompt) {
-
-      document.getElementById("status").textContent =
-        "Please type something first.";
-
-      return;
-    }
-
-    const status =
-      document.getElementById("status");
-
-    const result =
-      document.getElementById("result");
-
-    const resultText =
-      document.getElementById("resultText");
-
-    status.classList.remove("error");
-
-    status.textContent =
-      "RG Creator AI is thinking...";
-
-    result.classList.add("show");
-
-    resultText.textContent =
-      "Generating response...";
-
-    try {
-
-      const response = await fetch("/api/chat", {
-
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-          message: prompt
-        })
-
-      });
-
-      const data =
-        await response.json();
-
-      if (!response.ok || !data.ok) {
-
-        throw new Error(
-          data.error || "AI request failed"
-        );
-      }
-
-      resultText.textContent =
-        data.reply;
-
-      status.textContent =
-        "Ready";
-
-    } catch (error) {
-
-      console.error(error);
-
-      resultText.textContent =
-        "Sorry, something went wrong.";
-
-      status.textContent =
-        error.message || "AI request failed";
-
-      status.classList.add("error");
-    }
-  }
-
-
-  /* MENU */
-
-  function openMenu() {
-
-    alert(
-      "More options will be added here: Profile, Settings, History, Privacy and About."
-    );
-  }
-
-
-  /* ENTER TO SEND */
+  closePlus();
 
   document
-    .getElementById("prompt")
-    .addEventListener("keydown", function(event) {
+    .getElementById("imageInput")
+    .click();
+
+}
+
+
+function openCamera() {
+
+  closePlus();
+
+  document
+    .getElementById("cameraInput")
+    .click();
+
+}
+
+
+function selectVideo() {
+
+  closePlus();
+
+  document
+    .getElementById("videoInput")
+    .click();
+
+}
+
+
+function selectFile() {
+
+  closePlus();
+
+  document
+    .getElementById("fileInput")
+    .click();
+
+}
+
+
+function selectPDF() {
+
+  closePlus();
+
+  document
+    .getElementById("pdfInput")
+    .click();
+
+}
+
+
+function closePlus() {
+
+  document
+    .getElementById("plusMenu")
+    .classList.remove("open");
+
+}
+
+
+function handleFile(input) {
+
+  if (
+    !input.files ||
+    !input.files.length
+  ) {
+    return;
+  }
+
+  const file =
+    input.files[0];
+
+  document
+    .getElementById("fileName")
+    .textContent =
+    file.name;
+
+  document
+    .getElementById("selectedFile")
+    .classList.add("show");
+
+  document
+    .getElementById("status")
+    .textContent =
+    "Attached: " + file.name;
+
+}
+
+
+/* =========================
+   VOICE
+========================= */
+
+function startVoice() {
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+
+    document
+      .getElementById("status")
+      .textContent =
+      "Voice input is not supported in this browser.";
+
+    return;
+
+  }
+
+  const recognition =
+    new SpeechRecognition();
+
+  recognition.lang =
+    "en-IN";
+
+  recognition.interimResults =
+    false;
+
+  recognition.maxAlternatives =
+    1;
+
+  document
+    .getElementById("status")
+    .textContent =
+    "Listening... 🎤";
+
+  recognition.start();
+
+
+  recognition.onresult =
+    function(event) {
+
+      const text =
+        event.results[0][0]
+          .transcript;
+
+      document
+        .getElementById("prompt")
+        .value =
+        text;
+
+      document
+        .getElementById("status")
+        .textContent =
+        "Voice added";
+
+    };
+
+
+  recognition.onerror =
+    function() {
+
+      document
+        .getElementById("status")
+        .textContent =
+        "Voice input failed.";
+
+    };
+
+}
+
+
+/* =========================
+   AI CHAT
+========================= */
+
+async function sendPrompt() {
+
+  const prompt =
+    document
+      .getElementById("prompt")
+      .value
+      .trim();
+
+  if (!prompt) {
+
+    document
+      .getElementById("status")
+      .textContent =
+      "Please type something first.";
+
+    return;
+
+  }
+
+
+  const status =
+    document.getElementById("status");
+
+  const result =
+    document.getElementById("result");
+
+  const resultText =
+    document.getElementById("resultText");
+
+
+  status.classList.remove("error");
+
+  status.textContent =
+    "RG Creator AI is thinking...";
+
+
+  result.classList.add("show");
+
+  resultText.textContent =
+    "Generating response...";
+
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/chat",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              message: prompt
+            })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !response.ok ||
+      !data.ok
+    ) {
+
+      throw new Error(
+        data.error ||
+        "AI request failed"
+      );
+
+    }
+
+
+    resultText.textContent =
+      data.reply;
+
+    status.textContent =
+      "Ready";
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    resultText.textContent =
+      "Sorry, something went wrong.";
+
+    status.textContent =
+      error.message ||
+      "AI request failed";
+
+    status.classList.add("error");
+
+  }
+
+}
+
+
+/* =========================
+   MORE MENU
+========================= */
+
+function openMenu(event) {
+
+  if (event) {
+    event.preventDefault();
+  }
+
+  const menu =
+    document.getElementById("moreMenu");
+
+  menu.classList.toggle("open");
+
+}
+
+
+function hideMoreMenu() {
+
+  document
+    .getElementById("moreMenu")
+    .classList.remove("open");
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function showModal(
+  title,
+  body
+) {
+
+  hideMoreMenu();
+
+  document
+    .getElementById("modalTitle")
+    .textContent =
+    title;
+
+  document
+    .getElementById("modalBody")
+    .innerHTML =
+    body;
+
+  document
+    .getElementById("modalBackdrop")
+    .classList.add("show");
+
+}
+
+
+function hideModal() {
+
+  document
+    .getElementById("modalBackdrop")
+    .classList.remove("show");
+
+}
+
+
+function closeModal(event) {
+
+  if (
+    event.target.id ===
+    "modalBackdrop"
+  ) {
+
+    hideModal();
+
+  }
+
+}
+
+
+/* =========================
+   SETTINGS
+========================= */
+
+function openSettings() {
+
+  showModal(
+    "Settings",
+
+    `
+      <div class="modal-subtitle">
+        Manage your RG Creator AI preferences.
+      </div>
+
+      <button
+        class="more-item"
+        style="background:#181818;margin-bottom:8px;"
+        onclick="toastMessage('Appearance settings are ready to connect.')"
+      >
+        <span class="more-item-icon">🌙</span>
+        <span>Appearance</span>
+      </button>
+
+      <button
+        class="more-item"
+        style="background:#181818;margin-bottom:8px;"
+        onclick="toastMessage('Chat settings are ready to connect.')"
+      >
+        <span class="more-item-icon">💬</span>
+        <span>Chat settings</span>
+      </button>
+
+      <button
+        class="more-item"
+        style="background:#181818;"
+        onclick="toastMessage('Privacy settings are ready to connect.')"
+      >
+        <span class="more-item-icon">🔒</span>
+        <span>Privacy & data</span>
+      </button>
+
+      <div class="modal-note">
+        Settings remain inside the More menu.
+      </div>
+    `
+  );
+
+}
+
+
+/* =========================
+   LOGIN / SIGNUP
+========================= */
+
+function openAuth() {
+
+  showModal(
+    "Log in / Sign up",
+
+    `
+      <div class="modal-subtitle">
+        Sign in to sync chats and your creator tools.
+      </div>
+
+      <button
+        class="primary-action"
+        onclick="toastMessage('Google login will be connected next.')"
+      >
+        Continue with Google
+      </button>
+
+      <input
+        class="auth-input"
+        type="email"
+        placeholder="Email address"
+        autocomplete="email"
+      >
+
+      <input
+        class="auth-input"
+        type="password"
+        placeholder="Password"
+        autocomplete="current-password"
+      >
+
+      <button
+        class="secondary-action"
+        onclick="toastMessage('Login backend will be connected next.')"
+      >
+        Log in
+      </button>
+
+      <button
+        class="secondary-action"
+        onclick="toastMessage('Signup backend will be connected next.')"
+      >
+        Create account
+      </button>
+
+      <div class="modal-note">
+        Login/signup UI is ready. Real authentication
+        will be connected to the backend separately.
+      </div>
+    `
+  );
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function showHistory() {
+
+  showModal(
+    "Chat History",
+
+    `
+      <div class="modal-subtitle">
+        Your recent chats will appear here after
+        chat history is connected.
+      </div>
+
+      <button
+        class="secondary-action"
+        onclick="hideModal()"
+      >
+        Close
+      </button>
+    `
+  );
+
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+function showProfile() {
+
+  showModal(
+    "Profile",
+
+    `
+      <div class="modal-subtitle">
+        Log in to manage your profile and synced
+        creator workspace.
+      </div>
+
+      <button
+        class="primary-action"
+        onclick="openAuth()"
+      >
+        Log in / Sign up
+      </button>
+    `
+  );
+
+}
+
+
+/* =========================
+   PRIVACY
+========================= */
+
+function showPrivacy() {
+
+  showModal(
+    "Privacy",
+
+    `
+      <div class="modal-subtitle">
+        Your privacy controls will be available here.
+      </div>
+
+      <button
+        class="secondary-action"
+        onclick="hideModal()"
+      >
+        Close
+      </button>
+    `
+  );
+
+}
+
+
+/* =========================
+   ABOUT
+========================= */
+
+function showAbout() {
+
+  showModal(
+    "About RG Creator AI",
+
+    `
+      <div class="modal-subtitle">
+        RG Creator AI — your AI-powered creative workspace.
+      </div>
+
+      <button
+        class="secondary-action"
+        onclick="hideModal()"
+      >
+        Close
+      </button>
+    `
+  );
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function toastMessage(text) {
+
+  const status =
+    document.getElementById("status");
+
+  status.textContent =
+    text;
+
+  setTimeout(
+    () => {
+      status.textContent =
+        "Ready";
+    },
+    2500
+  );
+
+}
+
+
+/* =========================
+   ENTER TO SEND
+========================= */
+
+document
+  .getElementById("prompt")
+  .addEventListener(
+    "keydown",
+    function(event) {
 
       if (
         event.key === "Enter" &&
@@ -1015,14 +1750,49 @@
         event.preventDefault();
 
         sendPrompt();
+
       }
 
-    });
+    }
+  );
 
 
-  /* CLOSE PLUS WHEN CLICKING OUTSIDE */
+/* =========================
+   CLOSE MORE MENU OUTSIDE
+========================= */
 
-  document.addEventListener("click", function(event) {
+document.addEventListener(
+  "click",
+  function(event) {
+
+    const menu =
+      document.getElementById("moreMenu");
+
+    const menuButton =
+      document.querySelector(".menu-btn");
+
+
+    if (
+      menu.classList.contains("open") &&
+      !menu.contains(event.target) &&
+      !menuButton.contains(event.target)
+    ) {
+
+      menu.classList.remove("open");
+
+    }
+
+  }
+);
+
+
+/* =========================
+   CLOSE PLUS OUTSIDE
+========================= */
+
+document.addEventListener(
+  "click",
+  function(event) {
 
     const wrapper =
       document.querySelector(".plus-wrapper");
@@ -1030,15 +1800,18 @@
     const menu =
       document.getElementById("plusMenu");
 
+
     if (
       !wrapper.contains(event.target) &&
       menu.classList.contains("open")
     ) {
 
       menu.classList.remove("open");
+
     }
 
-  });
+  }
+);
 
 </script>
 
