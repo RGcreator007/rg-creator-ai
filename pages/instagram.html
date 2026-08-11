@@ -1,1 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>RG Creator AI — Instagram Tools</title>
 
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:#000;
+  color:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+.app{
+  max-width:900px;
+  margin:auto;
+  padding-bottom:40px;
+}
+
+.topbar{
+  height:64px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:0 18px;
+  border-bottom:1px solid #222;
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:rgba(0,0,0,.96);
+}
+
+.back{
+  width:40px;
+  height:40px;
+  border:1px solid #333;
+  background:#111;
+  color:#fff;
+  border-radius:12px;
+  font-size:21px;
+  cursor:pointer;
+}
+
+.brand{
+  font-size:18px;
+  font-weight:700;
+}
+
+.page{
+  padding:28px 18px;
+}
+
+.hero h1{
+  font-size:32px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  color:#999;
+  line-height:1.5;
+  margin-bottom:24px;
+}
+
+.tools-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-bottom:28px;
+}
+
+.tool{
+  background:#101010;
+  border:1px solid #292929;
+  color:#fff;
+  border-radius:16px;
+  padding:17px;
+  text-align:left;
+  cursor:pointer;
+}
+
+.tool.active,
+.tool:hover{
+  background:#151515;
+  border-color:#fff;
+}
+
+.icon{
+  font-size:24px;
+  margin-bottom:9px;
+}
+
+.tool-title{
+  font-weight:700;
+  font-size:15px;
+}
+
+.tool-desc{
+  color:#888;
+  font-size:12px;
+  margin-top:5px;
+  line-height:1.4;
+}
+
+.panel{
+  background:#0d0d0d;
+  border:1px solid #292929;
+  border-radius:18px;
+  padding:20px;
+}
+
+.panel h2{
+  font-size:20px;
+  margin-bottom:6px;
+}
+
+.subtitle{
+  color:#888;
+  font-size:13px;
+  margin-bottom:20px;
+}
+
+label{
+  display:block;
+  color:#ccc;
+  font-size:13px;
+  margin:15px 0 8px;
+}
+
+textarea,
+select{
+  width:100%;
+  background:#111;
+  color:#fff;
+  border:1px solid #333;
+  border-radius:12px;
+  padding:14px;
+  outline:none;
+}
+
+textarea{
+  min-height:135px;
+  resize:vertical;
+}
+
+textarea:focus,
+select:focus{
+  border-color:#777;
+}
+
+.options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.generate{
+  width:100%;
+  margin-top:20px;
+  padding:15px;
+  border:0;
+  border-radius:13px;
+  background:#fff;
+  color:#000;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.generate:disabled{
+  opacity:.5;
+  cursor:wait;
+}
+
+.status{
+  color:#888;
+  font-size:13px;
+  margin-top:10px;
+  min-height:20px;
+}
+
+.result{
+  margin-top:20px;
+  display:none;
+}
+
+.result-box{
+  background:#090909;
+  border:1px solid #292929;
+  border-radius:14px;
+  padding:16px;
+  white-space:pre-wrap;
+  line-height:1.6;
+  color:#eee;
+  max-height:650px;
+  overflow:auto;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+
+.action{
+  background:#111;
+  color:#fff;
+  border:1px solid #333;
+  border-radius:10px;
+  padding:9px 13px;
+  cursor:pointer;
+  font-size:13px;
+}
+
+@media(max-width:600px){
+  .page{padding:22px 14px}
+  .hero h1{font-size:27px}
+  .panel{padding:16px}
+  .options{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="topbar">
+  <button class="back" onclick="goBack()">‹</button>
+  <div class="brand">📸 RG Creator AI — Instagram</div>
+</header>
+
+<main class="page">
+
+<section class="hero">
+  <h1>Instagram Tools</h1>
+  <p>
+    Create captions, hooks, keywords, hashtags, ideas,
+    bios and complete Instagram content with AI.
+  </p>
+</section>
+
+<section class="tools-grid">
+
+<button class="tool active" data-tool="caption">
+<div class="icon">✍️</div>
+<div class="tool-title">Caption Generator</div>
+<div class="tool-desc">Create engaging captions</div>
+</button>
+
+<button class="tool" data-tool="reel">
+<div class="icon">🎬</div>
+<div class="tool-title">Reel Caption</div>
+<div class="tool-desc">Captions for Reels</div>
+</button>
+
+<button class="tool" data-tool="hashtags">
+<div class="icon">#️⃣</div>
+<div class="tool-title">Hashtag Generator</div>
+<div class="tool-desc">Relevant hashtags</div>
+</button>
+
+<button class="tool" data-tool="keywords">
+<div class="icon">🔎</div>
+<div class="tool-title">Keyword Generator</div>
+<div class="tool-desc">Instagram keywords</div>
+</button>
+
+<button class="tool" data-tool="ideas">
+<div class="icon">💡</div>
+<div class="tool-title">Reel Ideas</div>
+<div class="tool-desc">Fresh Reel concepts</div>
+</button>
+
+<button class="tool" data-tool="hook">
+<div class="icon">🪝</div>
+<div class="tool-title">Viral Hook</div>
+<div class="tool-desc">Strong opening hooks</div>
+</button>
+
+<button class="tool" data-tool="bio">
+<div class="icon">👤</div>
+<div class="tool-title">Bio Generator</div>
+<div class="tool-desc">Create Instagram bios</div>
+</button>
+
+<button class="tool" data-tool="carousel">
+<div class="icon">📚</div>
+<div class="tool-title">Carousel Ideas</div>
+<div class="tool-desc">Carousel content ideas</div>
+</button>
+
+<button class="tool" data-tool="story">
+<div class="icon">📖</div>
+<div class="tool-title">Story Ideas</div>
+<div class="tool-desc">Instagram Story ideas</div>
+</button>
+
+<button class="tool" data-tool="calendar">
+<div class="icon">📅</div>
+<div class="tool-title">Content Calendar</div>
+<div class="tool-desc">Plan your content</div>
+</button>
+
+<button class="tool" data-tool="post">
+<div class="icon">📝</div>
+<div class="tool-title">Post Ideas</div>
+<div class="tool-desc">Create post concepts</div>
+</button>
+
+</section>
+
+<section class="panel">
+
+<h2 id="heading">Instagram Caption Generator</h2>
+
+<p class="subtitle" id="subtitle">
+Create engaging Instagram captions for your content.
+</p>
+
+<label for="topic">What is your content about?</label>
+
+<textarea
+id="topic"
+placeholder="Example: Dance Reel, travel, fitness, food..."
+></textarea>
+
+<div class="options">
+
+<div>
+<label for="tone">Tone</label>
+
+<select id="tone">
+<option>Viral</option>
+<option>Professional</option>
+<option>Funny</option>
+<option>Emotional</option>
+<option>Casual</option>
+<option>Aesthetic</option>
+</select>
+</div>
+
+<div>
+<label for="length">Length</label>
+
+<select id="length">
+<option>Short</option>
+<option>Medium</option>
+<option>Long</option>
+</select>
+</div>
+
+</div>
+
+<button class="generate" id="generate">
+✦ Generate with AI
+</button>
+
+<div class="status" id="status"></div>
+
+<div class="result" id="result">
+
+<div class="result-box" id="resultText"></div>
+
+<div class="actions">
+
+<button class="action" onclick="copyResult()">
+Copy
+</button>
+
+<button class="action" onclick="regenerate()">
+↻ Regenerate
+</button>
+
+<button class="action" onclick="editResult()">
+Edit
+</button>
+
+<button class="action" onclick="shareResult()">
+Share
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+<script>
+
+const API="/api/chat";
+
+let selectedTool="caption";
+let lastPrompt="";
+
+const info={
+
+caption:{
+heading:"Instagram Caption Generator",
+subtitle:"Create engaging Instagram captions for your content."
+},
+
+reel:{
+heading:"Reel Caption Generator",
+subtitle:"Create catchy captions for Instagram Reels."
+},
+
+hashtags:{
+heading:"Instagram Hashtag Generator",
+subtitle:"Generate relevant hashtags for your content."
+},
+
+keywords:{
+heading:"Instagram Keyword Generator",
+subtitle:"Generate useful keywords for Instagram discovery."
+},
+
+ideas:{
+heading:"Instagram Reel Ideas",
+subtitle:"Generate fresh and engaging Reel concepts."
+},
+
+hook:{
+heading:"Instagram Viral Hook Generator",
+subtitle:"Create strong hooks that capture attention."
+},
+
+bio:{
+heading:"Instagram Bio Generator",
+subtitle:"Create stylish and professional Instagram bios."
+},
+
+carousel:{
+heading:"Instagram Carousel Ideas",
+subtitle:"Generate useful carousel content ideas."
+},
+
+story:{
+heading:"Instagram Story Ideas",
+subtitle:"Create engaging Instagram Story ideas."
+},
+
+calendar:{
+heading:"Instagram Content Calendar",
+subtitle:"Create a practical content posting plan."
+},
+
+post:{
+heading:"Instagram Post Ideas",
+subtitle:"Generate fresh Instagram post concepts."
+}
+
+};
+
+document.querySelectorAll(".tool").forEach(btn=>{
+
+btn.addEventListener("click",()=>{
+
+document.querySelectorAll(".tool")
+.forEach(x=>x.classList.remove("active"));
+
+btn.classList.add("active");
+
+selectedTool=btn.dataset.tool;
+
+document.getElementById("heading").textContent=
+info[selectedTool].heading;
+
+document.getElementById("subtitle").textContent=
+info[selectedTool].subtitle;
+
+document.getElementById("result").style.display="none";
+
+document.getElementById("status").textContent="";
+
+});
+
+});
+
+function buildPrompt(topic,tone,length){
+
+const base=`
+You are RG Creator AI, a professional Instagram creator assistant.
+
+Topic:
+${topic}
+
+Tone:
+${tone}
+
+Length:
+${length}
+
+Create high-quality, natural and useful Instagram content.
+
+Do not make false guarantees such as "this will definitely go viral".
+Avoid spammy keyword stuffing.
+`;
+
+switch(selectedTool){
+
+case "caption":
+return base+`
+Generate 10 Instagram captions.
+Make them catchy, natural and ready to post.
+`;
+
+case "reel":
+return base+`
+Generate 10 Instagram Reel captions.
+Include a natural CTA where appropriate.
+`;
+
+case "hashtags":
+return base+`
+Generate 20 relevant Instagram hashtags.
+Group them naturally by relevance.
+`;
+
+case "keywords":
+return base+`
+Generate useful Instagram keywords.
+Give primary, secondary and long-tail style keywords.
+`;
+
+case "ideas":
+return base+`
+Generate 15 Instagram Reel ideas.
+For each give:
+Idea
+Hook
+Short concept
+CTA
+`;
+
+case "hook":
+return base+`
+Generate 15 strong Instagram Reel hooks.
+Keep each hook short and attention-grabbing.
+`;
+
+case "bio":
+return base+`
+Generate 10 Instagram bio options.
+Keep them stylish, concise and easy to copy.
+`;
+
+case "carousel":
+return base+`
+Generate 10 Instagram carousel ideas.
+For each include:
+Title
+Slide structure
+CTA
+`;
+
+case "story":
+return base+`
+Generate 15 Instagram Story ideas.
+Include interactive ideas such as polls, questions and sliders where suitable.
+`;
+
+case "calendar":
+return base+`
+Create a 7-day Instagram content calendar.
+Include:
+Day
+Content type
+Topic
+Hook
+Caption idea
+CTA
+`;
+
+case "post":
+return base+`
+Generate 15 Instagram post ideas.
+Include a short explanation and suggested CTA.
+`;
+
+default:
+return base;
+}
+
+}
+
+async function generate(){
+
+const topic=document.getElementById("topic").value.trim();
+
+const tone=document.getElementById("tone").value;
+
+const length=document.getElementById("length").value;
+
+const status=document.getElementById("status");
+
+const result=document.getElementById("result");
+
+const resultText=document.getElementById("resultText");
+
+const btn=document.getElementById("generate");
+
+if(!topic){
+
+status.textContent="Please enter your topic.";
+
+return;
+
+}
+
+lastPrompt=buildPrompt(topic,tone,length);
+
+btn.disabled=true;
+
+btn.textContent="Generating...";
+
+status.textContent="RG Creator AI is generating...";
+
+result.style.display="none";
+
+try{
+
+const response=await fetch(API,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+message:lastPrompt
+})
+
+});
+
+const data=await response.json();
+
+if(!response.ok || !data.ok){
+
+throw new Error(
+data?.error || "AI request failed"
+);
+
+}
+
+resultText.textContent=data.reply||"No response received.";
+
+result.style.display="block";
+
+status.textContent="Done ✓";
+
+}catch(error){
+
+console.error(error);
+
+status.textContent="Error: "+error.message;
+
+}finally{
+
+btn.disabled=false;
+
+btn.textContent="✦ Generate with AI";
+
+}
+
+}
+
+document
+.getElementById("generate")
+.addEventListener("click",generate);
+
+async function regenerate(){
+
+if(!lastPrompt)return;
+
+const status=document.getElementById("status");
+
+status.textContent="Regenerating...";
+
+try{
+
+const response=await fetch(API,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+message:lastPrompt
+})
+
+});
+
+const data=await response.json();
+
+if(!response.ok || !data.ok){
+
+throw new Error(
+data?.error || "Regeneration failed"
+);
+
+}
+
+document.getElementById("resultText").textContent=
+data.reply;
+
+status.textContent="Regenerated ✓";
+
+}catch(error){
+
+status.textContent=error.message;
+
+}
+
+}
+
+function copyResult(){
+
+const text=
+document.getElementById("resultText").textContent;
+
+navigator.clipboard.writeText(text);
+
+document.getElementById("status").textContent=
+"Copied ✓";
+
+}
+
+function editResult(){
+
+const box=document.getElementById("resultText");
+
+box.contentEditable="true";
+
+box.focus();
+
+document.getElementById("status").textContent=
+"Editing enabled.";
+
+}
+
+async function shareResult(){
+
+const text=
+document.getElementById("resultText").textContent;
+
+if(navigator.share){
+
+try{
+
+await navigator.share({
+title:"RG Creator AI",
+text:text
+});
+
+}catch(e){}
+
+}else{
+
+await navigator.clipboard.writeText(text);
+
+document.getElementById("status").textContent=
+"Result copied.";
+
+}
+
+}
+
+function goBack(){
+
+if(document.referrer){
+
+history.back();
+
+}else{
+
+window.location.href="../index.html";
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
