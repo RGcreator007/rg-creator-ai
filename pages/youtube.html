@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RG Creator AI — YouTube Tools</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      background: #000;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    button,
+    textarea,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      max-width: 900px;
+      margin: auto;
+      padding-bottom: 40px;
+    }
+
+    .topbar {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 18px;
+      border-bottom: 1px solid #222;
+      position: sticky;
+      top: 0;
+      background: rgba(0,0,0,.95);
+      z-index: 10;
+    }
+
+    .back {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #333;
+      background: #111;
+      color: #fff;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .page {
+      padding: 28px 18px;
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      color: #999;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .tool {
+      background: #101010;
+      border: 1px solid #292929;
+      color: #fff;
+      border-radius: 16px;
+      padding: 17px;
+      text-align: left;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .tool:hover,
+    .tool.active {
+      border-color: #fff;
+      background: #151515;
+    }
+
+    .tool-icon {
+      font-size: 24px;
+      margin-bottom: 9px;
+    }
+
+    .tool-title {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .tool-desc {
+      color: #888;
+      font-size: 12px;
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+
+    .panel {
+      background: #0d0d0d;
+      border: 1px solid #292929;
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .panel h2 {
+      font-size: 20px;
+      margin-bottom: 6px;
+    }
+
+    .panel-subtitle {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      color: #ccc;
+      font-size: 13px;
+      margin: 15px 0 8px;
+    }
+
+    textarea,
+    input,
+    select {
+      width: 100%;
+      background: #111;
+      color: #fff;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    textarea:focus,
+    input:focus,
+    select:focus {
+      border-color: #777;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .generate {
+      width: 100%;
+      margin-top: 20px;
+      padding: 15px;
+      border: 0;
+      border-radius: 13px;
+      background: #fff;
+      color: #000;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .generate:disabled {
+      opacity: .5;
+      cursor: wait;
+    }
+
+    .result {
+      margin-top: 20px;
+      display: none;
+    }
+
+    .result-box {
+      background: #090909;
+      border: 1px solid #292929;
+      border-radius: 14px;
+      padding: 16px;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      color: #eee;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .action {
+      background: #111;
+      color: #fff;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 9px 13px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .status {
+      color: #888;
+      font-size: 13px;
+      margin-top: 10px;
+      min-height: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        padding: 22px 14px;
+      }
+
+      .hero h1 {
+        font-size: 27px;
+      }
+
+      .tools-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .options {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header class="topbar">
+    <button class="back" onclick="goBack()">‹</button>
+    <div class="brand">▶ RG Creator AI — YouTube</div>
+  </header>
+
+  <main class="page">
+
+    <section class="hero">
+      <h1>YouTube Tools</h1>
+      <p>
+        Create titles, descriptions, scripts, hooks, keywords,
+        hashtags and complete YouTube content with AI.
+      </p>
+    </section>
+
+    <section class="tools-grid">
+
+      <button class="tool active" data-tool="title">
+        <div class="tool-icon">🎯</div>
+        <div class="tool-title">Title Generator</div>
+        <div class="tool-desc">Create clickable YouTube titles</div>
+      </button>
+
+      <button class="tool" data-tool="description">
+        <div class="tool-icon">📝</div>
+        <div class="tool-title">Description</div>
+        <div class="tool-desc">SEO-friendly descriptions</div>
+      </button>
+
+      <button class="tool" data-tool="shorts">
+        <div class="tool-icon">⚡</div>
+        <div class="tool-title">Shorts Script</div>
+        <div class="tool-desc">Create short-form scripts</div>
+      </button>
+
+      <button class="tool" data-tool="ideas">
+        <div class="tool-icon">💡</div>
+        <div class="tool-title">Video Ideas</div>
+        <div class="tool-desc">Generate content ideas</div>
+      </button>
+
+      <button class="tool" data-tool="hook">
+        <div class="tool-icon">🪝</div>
+        <div class="tool-title">Hook Generator</div>
+        <div class="tool-desc">Strong opening hooks</div>
+      </button>
+
+      <button class="tool" data-tool="keywords">
+        <div class="tool-icon">🔎</div>
+        <div class="tool-title">Keywords</div>
+        <div class="tool-desc">YouTube keywords</div>
+      </button>
+
+      <button class="tool" data-tool="hashtags">
+        <div class="tool-icon">#️⃣</div>
+        <div class="tool-title">Hashtags</div>
+        <div class="tool-desc">Relevant hashtags</div>
+      </button>
+
+      <button class="tool" data-tool="thumbnail">
+        <div class="tool-icon">🖼️</div>
+        <div class="tool-title">Thumbnail Text</div>
+        <div class="tool-desc">Short thumbnail phrases</div>
+      </button>
+
+      <button class="tool" data-tool="seo">
+        <div class="tool-icon">📈</div>
+        <div class="tool-title">SEO Assistant</div>
+        <div class="tool-desc">Improve YouTube SEO</div>
+      </button>
+
+      <button class="tool" data-tool="caption">
+        <div class="tool-icon">✍️</div>
+        <div class="tool-title">Shorts Caption</div>
+        <div class="tool-desc">Create Shorts captions</div>
+      </button>
+
+      <button class="tool" data-tool="longscript">
+        <div class="tool-icon">🎬</div>
+        <div class="tool-title">Long Video Script</div>
+        <div class="tool-desc">Full video scripts</div>
+      </button>
+
+    </section>
+
+    <section class="panel">
+
+      <h2 id="toolHeading">YouTube Title Generator</h2>
+
+      <p class="panel-subtitle" id="toolSubtitle">
+        Create engaging titles for your video.
+      </p>
+
+      <label for="topic">Video topic</label>
+
+      <textarea
+        id="topic"
+        placeholder="Example: Dance reel, AI tools, fitness, travel..."
+      ></textarea>
+
+      <div class="options">
+
+        <div>
+          <label for="tone">Tone</label>
+          <select id="tone">
+            <option>Viral</option>
+            <option>Professional</option>
+            <option>Funny</option>
+            <option>Emotional</option>
+            <option>Curious</option>
+            <option>Casual</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="length">Length</label>
+          <select id="length">
+            <option>Short</option>
+            <option>Medium</option>
+            <option>Long</option>
+          </select>
+        </div>
+
+      </div>
+
+      <button class="generate" id="generateBtn">
+        ✦ Generate with AI
+      </button>
+
+      <div class="status" id="status"></div>
+
+      <div class="result" id="result">
+
+        <div class="result-box" id="resultText"></div>
+
+        <div class="actions">
+          <button class="action" onclick="copyResult()">Copy</button>
+          <button class="action" onclick="regenerate()">↻ Regenerate</button>
+          <button class="action" onclick="editResult()">Edit</button>
+          <button class="action" onclick="shareResult()">Share</button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<script>
+
+const API_URL = "/api/chat";
+
+let selectedTool = "title";
+let lastPrompt = "";
+
+const toolInfo = {
+
+  title: {
+    heading: "YouTube Title Generator",
+    subtitle: "Create engaging and clickable titles for your video."
+  },
+
+  description: {
+    heading: "YouTube Description Generator",
+    subtitle: "Create an SEO-friendly video description."
+  },
+
+  shorts: {
+    heading: "YouTube Shorts Script",
+    subtitle: "Create an engaging short-form video script."
+  },
+
+  ideas: {
+    heading: "YouTube Video Ideas",
+    subtitle: "Generate fresh content ideas for your channel."
+  },
+
+  hook: {
+    heading: "YouTube Hook Generator",
+    subtitle: "Create powerful opening hooks that grab attention."
+  },
+
+  keywords: {
+    heading: "YouTube Keywords",
+    subtitle: "Generate relevant keywords for your video."
+  },
+
+  hashtags: {
+    heading: "YouTube Hashtags",
+    subtitle: "Generate relevant hashtags for your content."
+  },
+
+  thumbnail: {
+    heading: "Thumbnail Text Ideas",
+    subtitle: "Create short, attention-grabbing thumbnail text."
+  },
+
+  seo: {
+    heading: "YouTube SEO Assistant",
+    subtitle: "Improve your video's title, description and discoverability."
+  },
+
+  caption: {
+    heading: "YouTube Shorts Caption",
+    subtitle: "Create a short and engaging Shorts caption."
+  },
+
+  longscript: {
+    heading: "Long Video Script",
+    subtitle: "Create a complete YouTube video script."
+  }
+
+};
+
+
+document.querySelectorAll(".tool").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    document.querySelectorAll(".tool")
+      .forEach(item => item.classList.remove("active"));
+
+    button.classList.add("active");
+
+    selectedTool = button.dataset.tool;
+
+    document.getElementById("toolHeading").textContent =
+      toolInfo[selectedTool].heading;
+
+    document.getElementById("toolSubtitle").textContent =
+      toolInfo[selectedTool].subtitle;
+
+    document.getElementById("result").style.display = "none";
+
+    document.getElementById("status").textContent = "";
+
+  });
+
+});
+
+
+function buildPrompt(topic, tone, length) {
+
+  const common =
+    `You are RG Creator AI, a professional YouTube creator assistant.
+
+Create high-quality YouTube content.
+
+Topic:
+${topic}
+
+Tone:
+${tone}
+
+Length:
+${length}
+
+Do not give unnecessary explanations.
+Make the output practical and ready to use.
+`;
+
+  switch (selectedTool) {
+
+    case "title":
+      return common +
+        `
+Generate 10 different YouTube titles.
+
+Make them:
+- clickable
+- natural
+- relevant to the topic
+- not misleading
+- suitable for YouTube
+`;
+
+    case "description":
+      return common +
+        `
+Write a complete YouTube video description.
+
+Include:
+1. Strong opening
+2. Short video summary
+3. Relevant keywords naturally
+4. Call to action
+5. Relevant hashtags
+`;
+
+    case "shorts":
+      return common +
+        `
+Write a YouTube Shorts script.
+
+Structure:
+HOOK
+MAIN CONTENT
+ENDING
+CTA
+
+Keep the script engaging and suitable for short-form video.
+`;
+
+    case "ideas":
+      return common +
+        `
+Generate 15 YouTube video ideas.
+
+For every idea provide:
+- Video idea
+- Short explanation
+- Possible hook
+`;
+
+    case "hook":
+      return common +
+        `
+Generate 15 powerful YouTube hooks.
+
+Each hook should make the viewer curious enough to continue watching.
+`;
+
+    case "keywords":
+      return common +
+        `
+Generate a useful list of YouTube SEO keywords.
+
+Give:
+- primary keywords
+- secondary keywords
+- long-tail keywords
+
+Do not keyword-stuff unnecessarily.
+`;
+
+    case "hashtags":
+      return common +
+        `
+Generate 15 relevant YouTube hashtags.
+
+Keep them directly related to the topic.
+`;
+
+    case "thumbnail":
+      return common +
+        `
+Generate 15 short thumbnail text ideas.
+
+Each should be:
+- very short
+- easy to read
+- attention grabbing
+- relevant
+`;
+
+    case "seo":
+      return common +
+        `
+Act as a YouTube SEO assistant.
+
+Provide:
+1. 5 optimized titles
+2. SEO description
+3. Primary keywords
+4. Secondary keywords
+5. Hashtags
+6. Thumbnail text ideas
+7. Suggested CTA
+`;
+
+    case "caption":
+      return common +
+        `
+Generate 10 short YouTube Shorts captions.
+
+Keep them catchy, natural and relevant.
+`;
+
+    case "longscript":
+      return common +
+        `
+Create a complete YouTube video script.
+
+Structure:
+TITLE
+HOOK
+INTRODUCTION
+MAIN CONTENT
+TRANSITIONS
+KEY POINTS
+ENDING
+CALL TO ACTION
+
+Make it natural for voice-over.
+`;
+
+    default:
+      return common;
+  }
+
+}
+
+
+async function generate() {
+
+  const topic = document.getElementById("topic").value.trim();
+
+  const tone = document.getElementById("tone").value;
+
+  const length = document.getElementById("length").value;
+
+  const status = document.getElementById("status");
+
+  const result = document.getElementById("result");
+
+  const resultText = document.getElementById("resultText");
+
+  const button = document.getElementById("generateBtn");
+
+
+  if (!topic) {
+
+    status.textContent = "Please enter a video topic.";
+
+    return;
+
+  }
+
+
+  lastPrompt = buildPrompt(topic, tone, length);
+
+  button.disabled = true;
+
+  button.textContent = "Generating...";
+
+  status.textContent = "RG Creator AI is generating your content...";
+
+  result.style.display = "none";
+
+
+  try {
+
+    const response = await fetch(API_URL, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        message: lastPrompt
+      })
+
+    });
+
+
+    const data = await response.json();
+
+
+    if (!response.ok || !data.ok) {
+
+      throw new Error(
+        data?.error || "AI request failed"
+      );
+
+    }
+
+
+    resultText.textContent = data.reply || "No response received.";
+
+    result.style.display = "block";
+
+    status.textContent = "Done ✓";
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+    status.textContent =
+      "Something went wrong: " + error.message;
+
+  }
+
+  finally {
+
+    button.disabled = false;
+
+    button.textContent = "✦ Generate with AI";
+
+  }
+
+}
+
+
+document
+  .getElementById("generateBtn")
+  .addEventListener("click", generate);
+
+
+async function regenerate() {
+
+  if (!lastPrompt) return;
+
+  document.getElementById("status").textContent =
+    "Regenerating...";
+
+  document.getElementById("generateBtn").disabled = true;
+
+  try {
+
+    const response = await fetch(API_URL, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        message: lastPrompt
+      })
+
+    });
+
+
+    const data = await response.json();
+
+    if (!response.ok || !data.ok) {
+      throw new Error(data?.error || "Regeneration failed");
+    }
+
+    document.getElementById("resultText").textContent =
+      data.reply;
+
+    document.getElementById("status").textContent =
+      "Regenerated ✓";
+
+  }
+
+  catch (error) {
+
+    document.getElementById("status").textContent =
+      error.message;
+
+  }
+
+  finally {
+
+    document.getElementById("generateBtn").disabled = false;
+
+  }
+
+}
+
+
+function copyResult() {
+
+  const text =
+    document.getElementById("resultText").textContent;
+
+  navigator.clipboard.writeText(text);
+
+  document.getElementById("status").textContent =
+    "Copied ✓";
+
+}
+
+
+function editResult() {
+
+  const box = document.getElementById("resultText");
+
+  box.contentEditable = true;
+
+  box.focus();
+
+  document.getElementById("status").textContent =
+    "Editing enabled.";
+
+}
+
+
+async function shareResult() {
+
+  const text =
+    document.getElementById("resultText").textContent;
+
+  if (navigator.share) {
+
+    try {
+
+      await navigator.share({
+        title: "RG Creator AI",
+        text: text
+      });
+
+    } catch (error) {}
+
+  } else {
+
+    await navigator.clipboard.writeText(text);
+
+    document.getElementById("status").textContent =
+      "Sharing is not supported. Result copied instead.";
+
+  }
+
+}
+
+
+function goBack() {
+
+  if (document.referrer) {
+
+    history.back();
+
+  } else {
+
+    window.location.href = "/";
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
