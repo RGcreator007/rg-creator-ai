@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Generator — RG Creator AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+    }
+
+    button,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding-bottom: 35px;
+    }
+
+    /* HEADER */
+
+    .header {
+      height: 64px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, .96);
+      border-bottom: 1px solid #222;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 12px;
+      background: #151515;
+      color: #fff;
+      font-size: 20px;
+    }
+
+    .brand {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .page-name {
+      color: #888;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .more-btn {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      font-size: 23px;
+    }
+
+    /* MAIN */
+
+    .container {
+      width: min(950px, 100%);
+      margin: auto;
+      padding: 30px 18px 70px;
+    }
+
+    .hero {
+      margin-bottom: 27px;
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      margin-bottom: 9px;
+    }
+
+    .hero p {
+      color: #999;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .section {
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    /* MODES */
+
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 9px;
+    }
+
+    .mode-btn {
+      min-height: 55px;
+      border-radius: 12px;
+      border: 1px solid #292929;
+      background: #101010;
+      color: #aaa;
+      font-size: 12px;
+    }
+
+    .mode-btn.active {
+      border-color: #e52b2b;
+      background: #190909;
+      color: #fff;
+    }
+
+    /* LANGUAGE */
+
+    .control-box {
+      background: #101010;
+      border: 1px solid #292929;
+      border-radius: 16px;
+      padding: 15px;
+    }
+
+    .control-box label {
+      display: block;
+      color: #aaa;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    select {
+      width: 100%;
+      height: 46px;
+      padding: 0 12px;
+      border-radius: 11px;
+      border: 1px solid #333;
+      background: #171717;
+      color: #fff;
+      outline: none;
+    }
+
+    /* PROMPT */
+
+    .prompt-box {
+      background: #101010;
+      border: 1px solid #292929;
+      border-radius: 17px;
+      padding: 14px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 155px;
+      resize: vertical;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    textarea::placeholder {
+      color: #666;
+    }
+
+    /* GENERATE */
+
+    .generate-btn {
+      width: 100%;
+      height: 52px;
+      border: 0;
+      border-radius: 14px;
+      background: #fff;
+      color: #000;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .generate-btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    /* OUTPUT */
+
+    .output {
+      display: none;
+      margin-top: 28px;
+    }
+
+    .output-card {
+      background: #0d0d0d;
+      border: 1px solid #292929;
+      border-radius: 17px;
+      overflow: hidden;
+    }
+
+    .output-header {
+      padding: 13px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #292929;
+    }
+
+    .output-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .output-language {
+      color: #777;
+      font-size: 11px;
+    }
+
+    /* CODE */
+
+    .code-wrap {
+      position: relative;
+      background: #080808;
+    }
+
+    pre {
+      margin: 0;
+      padding: 20px;
+      min-height: 220px;
+      max-height: 600px;
+      overflow: auto;
+      color: #e6e6e6;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+      line-height: 1.65;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .copy-code {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: 1px solid #333;
+      background: #171717;
+      color: #ddd;
+      border-radius: 9px;
+      padding: 7px 10px;
+      font-size: 11px;
+    }
+
+    .copy-code:hover {
+      background: #222;
+    }
+
+    /* ACTIONS */
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid #292929;
+    }
+
+    .action-btn {
+      padding: 10px 5px;
+      border-radius: 10px;
+      border: 1px solid #303030;
+      background: #161616;
+      color: #ddd;
+      font-size: 12px;
+    }
+
+    .action-btn:hover {
+      background: #222;
+    }
+
+    /* MOBILE NAV */
+
+    .bottom-nav {
+      display: none;
+    }
+
+    @media (max-width: 700px) {
+
+      .container {
+        padding: 25px 14px 95px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .mode-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .actions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .bottom-nav {
+        position: fixed;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 68px;
+        background: rgba(10,10,10,.97);
+        border-top: 1px solid #292929;
+        z-index: 50;
+        backdrop-filter: blur(12px);
+      }
+
+      .nav-item {
+        background: transparent;
+        border: 0;
+        color: #777;
+        font-size: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .nav-item .icon {
+        font-size: 19px;
+      }
+
+      .nav-item.active {
+        color: #fff;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+      <div class="header-left">
+
+        <button
+          class="back-btn"
+          onclick="goBack()"
+          aria-label="Back"
+        >
+          ←
+        </button>
+
+        <div>
+          <div class="brand">RG Creator AI</div>
+          <div class="page-name">Code Generator</div>
+        </div>
+
+      </div>
+
+      <button
+        class="more-btn"
+        onclick="openMore()"
+        aria-label="More"
+      >
+        ⋯
+      </button>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+      <section class="hero">
+
+        <h1>Code Generator</h1>
+
+        <p>
+          Generate, explain, fix, optimize and convert code with AI.
+        </p>
+
+      </section>
+
+
+      <!-- MODE -->
+
+      <section class="section">
+
+        <div class="section-title">
+          What do you want to do?
+        </div>
+
+        <div class="mode-grid">
+
+          <button
+            class="mode-btn active"
+            data-mode="Generate Code"
+            onclick="selectMode(this)"
+          >
+            Generate Code
+          </button>
+
+          <button
+            class="mode-btn"
+            data-mode="Explain Code"
+            onclick="selectMode(this)"
+          >
+            Explain Code
+          </button>
+
+          <button
+            class="mode-btn"
+            data-mode="Fix Code"
+            onclick="selectMode(this)"
+          >
+            Fix Code
+          </button>
+
+          <button
+            class="mode-btn"
+            data-mode="Optimize Code"
+            onclick="selectMode(this)"
+          >
+            Optimize Code
+          </button>
+
+          <button
+            class="mode-btn"
+            data-mode="Convert Code"
+            onclick="selectMode(this)"
+          >
+            Convert Code
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- LANGUAGE -->
+
+      <section class="section">
+
+        <div class="section-title">
+          Programming language
+        </div>
+
+        <div class="control-box">
+
+          <label for="language">
+            Select language
+          </label>
+
+          <select id="language">
+
+            <option value="HTML">HTML</option>
+            <option value="CSS">CSS</option>
+            <option value="JavaScript">JavaScript</option>
+            <option value="Python">Python</option>
+            <option value="Java">Java</option>
+            <option value="C">C</option>
+            <option value="C++">C++</option>
+            <option value="PHP">PHP</option>
+            <option value="SQL">SQL</option>
+            <option value="TypeScript">TypeScript</option>
+            <option value="React">React</option>
+            <option value="Node.js">Node.js</option>
+            <option value="Kotlin">Kotlin</option>
+            <option value="Swift">Swift</option>
+
+          </select>
+
+        </div>
+
+      </section>
+
+
+      <!-- PROMPT -->
+
+      <section class="section">
+
+        <div class="section-title">
+          Describe what you want to build
+        </div>
+
+        <div class="prompt-box">
+
+          <textarea
+            id="prompt"
+            placeholder="Example: Create a responsive login page using HTML and CSS..."
+          ></textarea>
+
+        </div>
+
+      </section>
+
+
+      <!-- GENERATE -->
+
+      <section class="section">
+
+        <button
+          class="generate-btn"
+          id="generateBtn"
+          onclick="generateCode()"
+        >
+          ✦ Generate Code
+        </button>
+
+      </section>
+
+
+      <!-- OUTPUT -->
+
+      <section
+        class="output"
+        id="output"
+      >
+
+        <div class="output-card">
+
+          <div class="output-header">
+
+            <div class="output-title">
+              AI Output
+            </div>
+
+            <div
+              class="output-language"
+              id="outputLanguage"
+            >
+              HTML
+            </div>
+
+          </div>
+
+
+          <div class="code-wrap">
+
+            <pre id="codeOutput"></pre>
+
+            <button
+              class="copy-code"
+              onclick="copyCode()"
+            >
+              Copy Code
+            </button>
+
+          </div>
+
+
+          <div class="actions">
+
+            <button
+              class="action-btn"
+              onclick="copyCode()"
+            >
+              Copy
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="editCode()"
+            >
+              Edit
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="downloadCode()"
+            >
+              Download
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="explainCode()"
+            >
+              Explain
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="regenerateCode()"
+            >
+              ↻ Regenerate
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- MOBILE NAV -->
+
+    <nav class="bottom-nav">
+
+      <button
+        class="nav-item"
+        onclick="goHome()"
+      >
+        <span class="icon">⌂</span>
+        <span>Home</span>
+      </button>
+
+      <button
+        class="nav-item"
+        onclick="goChat()"
+      >
+        <span class="icon">💬</span>
+        <span>AI Chat</span>
+      </button>
+
+      <button
+        class="nav-item active"
+      >
+        <span class="icon">✦</span>
+        <span>Tools</span>
+      </button>
+
+      <button
+        class="nav-item"
+        onclick="goProfile()"
+      >
+        <span class="icon">◉</span>
+        <span>Profile</span>
+      </button>
+
+    </nav>
+
+  </div>
+
+
+  <script>
+
+    let selectedMode = "Generate Code";
+    let lastPrompt = "";
+    let lastCode = "";
+
+
+    /* MODE */
+
+    function selectMode(button) {
+
+      document
+        .querySelectorAll(".mode-btn")
+        .forEach(btn => {
+          btn.classList.remove("active");
+        });
+
+      button.classList.add("active");
+
+      selectedMode = button.dataset.mode;
+
+      const prompt =
+        document.getElementById("prompt");
+
+      const generateButton =
+        document.getElementById("generateBtn");
+
+
+      if (selectedMode === "Generate Code") {
+
+        prompt.placeholder =
+          "Example: Create a responsive login page using HTML and CSS...";
+
+        generateButton.textContent =
+          "✦ Generate Code";
+
+      } else if (selectedMode === "Explain Code") {
+
+        prompt.placeholder =
+          "Paste your code and ask RG Creator AI to explain it...";
+
+        generateButton.textContent =
+          "✦ Explain Code";
+
+      } else if (selectedMode === "Fix Code") {
+
+        prompt.placeholder =
+          "Paste the code and describe the error or problem...";
+
+        generateButton.textContent =
+          "✦ Fix Code";
+
+      } else if (selectedMode === "Optimize Code") {
+
+        prompt.placeholder =
+          "Paste your code and describe what should be optimized...";
+
+        generateButton.textContent =
+          "✦ Optimize Code";
+
+      } else if (selectedMode === "Convert Code") {
+
+        prompt.placeholder =
+          "Paste your code and describe the target language or format...";
+
+        generateButton.textContent =
+          "✦ Convert Code";
+
+      }
+
+    }
+
+
+    /* GENERATE */
+
+    async function generateCode() {
+
+      const prompt =
+        document.getElementById("prompt")
+          .value
+          .trim();
+
+      const language =
+        document.getElementById("language")
+          .value;
+
+      const button =
+        document.getElementById("generateBtn");
+
+      const output =
+        document.getElementById("output");
+
+      const codeOutput =
+        document.getElementById("codeOutput");
+
+      const outputLanguage =
+        document.getElementById("outputLanguage");
+
+
+      if (!prompt) {
+
+        alert("Please describe what you want to do.");
+
+        return;
+
+      }
+
+
+      lastPrompt = prompt;
+
+      button.disabled = true;
+
+      button.textContent = "Generating...";
+
+      output.style.display = "block";
+
+      codeOutput.textContent =
+        "RG Creator AI is working...";
+
+      outputLanguage.textContent =
+        language;
+
+
+      try {
+
+        const message = `
+
+You are the Code Generator inside RG Creator AI.
+
+Mode:
+${selectedMode}
+
+Programming language:
+${language}
+
+User request:
+${prompt}
+
+Instructions:
+
+- Provide a useful and correct response.
+- For Generate Code, provide complete code.
+- For Explain Code, explain the supplied code clearly.
+- For Fix Code, identify and fix the problem.
+- For Optimize Code, improve the supplied code.
+- For Convert Code, convert it to the requested target format/language.
+- When code is requested, return the code in a clean code block.
+- Do not unnecessarily add unrelated explanations.
+- Preserve important requirements from the user's request.
+
+        `.trim();
+
+
+        const response =
+          await fetch("/api/chat", {
+
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              message
+            })
+
+          });
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok || !data.ok) {
+
+          throw new Error(
+            data?.error ||
+            "Code generation failed."
+          );
+
+        }
+
+
+        lastCode =
+          data.reply || "";
+
+        codeOutput.textContent =
+          lastCode;
+
+
+      } catch (error) {
+
+        codeOutput.textContent =
+          error.message ||
+          "Something went wrong.";
+
+      } finally {
+
+        button.disabled = false;
+
+        if (selectedMode === "Generate Code") {
+          button.textContent = "✦ Generate Code";
+        } else {
+          button.textContent =
+            "✦ " + selectedMode;
+        }
+
+      }
+
+    }
+
+
+    /* COPY */
+
+    async function copyCode() {
+
+      const code =
+        document.getElementById("codeOutput")
+          .textContent;
+
+      if (!code) return;
+
+      try {
+
+        await navigator.clipboard.writeText(code);
+
+        alert("Code copied!");
+
+      } catch {
+
+        alert("Copy failed.");
+
+      }
+
+    }
+
+
+    /* EDIT */
+
+    function editCode() {
+
+      const codeOutput =
+        document.getElementById("codeOutput");
+
+      codeOutput.contentEditable = "true";
+
+      codeOutput.focus();
+
+    }
+
+
+    /* DOWNLOAD */
+
+    function downloadCode() {
+
+      const code =
+        document.getElementById("codeOutput")
+          .textContent;
+
+      if (!code) {
+
+        alert("Generate code first.");
+
+        return;
+
+      }
+
+
+      const language =
+        document.getElementById("language")
+          .value
+          .toLowerCase();
+
+
+      const extensions = {
+
+        html: "html",
+        css: "css",
+        javascript: "js",
+        python: "py",
+        java: "java",
+        c: "c",
+        "c++": "cpp",
+        php: "php",
+        sql: "sql",
+        typescript: "ts",
+        react: "jsx",
+        "node.js": "js",
+        kotlin: "kt",
+        swift: "swift"
+
+      };
+
+
+      const extension =
+        extensions[language] || "txt";
+
+
+      const blob =
+        new Blob(
+          [code],
+          { type: "text/plain" }
+        );
+
+
+      const url =
+        URL.createObjectURL(blob);
+
+      const link =
+        document.createElement("a");
+
+      link.href = url;
+
+      link.download =
+        `rg-creator-ai-code.${extension}`;
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      link.remove();
+
+      URL.revokeObjectURL(url);
+
+    }
+
+
+    /* EXPLAIN */
+
+    function explainCode() {
+
+      const code =
+        document.getElementById("codeOutput")
+          .textContent;
+
+      if (!code) {
+
+        alert("Generate or enter code first.");
+
+        return;
+
+      }
+
+
+      document.getElementById("prompt").value =
+        `Explain this code clearly:\n\n${code}`;
+
+      document.getElementById("prompt").focus();
+
+    }
+
+
+    /* REGENERATE */
+
+    function regenerateCode() {
+
+      if (!lastPrompt) {
+
+        alert("Generate code first.");
+
+        return;
+
+      }
+
+      document.getElementById("prompt").value =
+        lastPrompt;
+
+      generateCode();
+
+    }
+
+
+    /* MORE */
+
+    function openMore() {
+
+      alert(
+        "More Code Generator options will be added here."
+      );
+
+    }
+
+
+    /* NAVIGATION */
+
+    function goBack() {
+
+      history.back();
+
+    }
+
+
+    function goHome() {
+
+      window.location.href = "/";
+
+    }
+
+
+    function goChat() {
+
+      window.location.href =
+        "/pages/chat.html";
+
+    }
+
+
+    function goProfile() {
+
+      alert(
+        "Profile & Settings will be added later."
+      );
+
+    }
+
+  </script>
+
+</body>
+</html>
