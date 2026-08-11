@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <title>AI Image — RG Creator AI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Image Generator — RG Creator AI</title>
 
   <style>
     * {
@@ -14,280 +13,296 @@
     }
 
     body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #000000;
-      color: #ffffff;
+      background: #000;
+      color: #fff;
+      font-family: Inter, Arial, sans-serif;
       min-height: 100vh;
     }
 
     button,
+    input,
     textarea,
-    select,
-    input {
+    select {
       font: inherit;
     }
 
-    .page {
-      min-height: 100vh;
-      padding-bottom: 40px;
+    button {
+      cursor: pointer;
     }
-
-    /* Header */
 
     .header {
       height: 64px;
+      padding: 0 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 18px;
-      border-bottom: 1px solid #222222;
+      border-bottom: 1px solid #222;
       position: sticky;
       top: 0;
-      z-index: 10;
-      background: rgba(0, 0, 0, 0.95);
+      z-index: 20;
+      background: rgba(0,0,0,.96);
       backdrop-filter: blur(12px);
     }
 
     .header-left {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 11px;
     }
 
-    .back-btn {
-      width: 40px;
-      height: 40px;
-      border: 0;
-      border-radius: 12px;
-      background: #151515;
-      color: #ffffff;
-      cursor: pointer;
-      font-size: 20px;
-    }
-
-    .brand {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .header-title {
-      font-size: 14px;
-      color: #aaaaaa;
-    }
-
+    .back-btn,
     .more-btn {
       width: 40px;
       height: 40px;
       border: 0;
-      border-radius: 12px;
+      border-radius: 11px;
       background: transparent;
-      color: #ffffff;
-      font-size: 22px;
-      cursor: pointer;
+      color: #fff;
     }
 
-    /* Main */
+    .back-btn {
+      background: #151515;
+      font-size: 20px;
+    }
+
+    .more-btn {
+      font-size: 23px;
+    }
+
+    .brand {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .page-name {
+      color: #888;
+      font-size: 11px;
+      margin-top: 2px;
+    }
 
     .container {
       width: min(900px, 100%);
       margin: auto;
-      padding: 32px 18px;
+      padding: 28px 16px 90px;
     }
 
     .hero {
-      margin-bottom: 28px;
+      margin-bottom: 25px;
     }
 
     .hero h1 {
-      font-size: 32px;
-      line-height: 1.15;
-      margin-bottom: 10px;
+      font-size: 30px;
+      margin-bottom: 8px;
     }
 
     .hero p {
-      color: #999999;
+      color: #999;
+      font-size: 14px;
       line-height: 1.5;
-      font-size: 15px;
     }
 
-    /* Prompt */
-
     .section {
-      margin-bottom: 24px;
+      margin-bottom: 21px;
     }
 
     .section-title {
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 700;
-      margin-bottom: 10px;
+      margin-bottom: 9px;
     }
 
     .prompt-box {
-      background: #111111;
-      border: 1px solid #333333;
-      border-radius: 18px;
-      padding: 14px;
+      background: #101010;
+      border: 1px solid #292929;
+      border-radius: 16px;
+      padding: 13px;
     }
 
     textarea {
       width: 100%;
-      min-height: 150px;
+      min-height: 130px;
       resize: vertical;
       border: 0;
-      outline: 0;
+      outline: none;
       background: transparent;
-      color: #ffffff;
-      font-size: 16px;
-      line-height: 1.5;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.55;
     }
 
     textarea::placeholder {
-      color: #666666;
+      color: #666;
     }
 
-    .prompt-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    .reference-btn {
-      border: 1px solid #333333;
-      background: #171717;
-      color: #dddddd;
-      border-radius: 12px;
-      padding: 10px 13px;
-      cursor: pointer;
-    }
-
-    .reference-btn:hover {
-      border-color: #666666;
-    }
-
-    #referenceInput {
-      display: none;
-    }
-
-    #referenceName {
-      color: #777777;
-      font-size: 12px;
-      margin-left: 8px;
-    }
-
-    /* Controls */
-
-    .control-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    .control {
+    .control-box {
       background: #101010;
       border: 1px solid #292929;
-      border-radius: 16px;
-      padding: 15px;
+      border-radius: 15px;
+      padding: 14px;
     }
 
-    .control label {
+    label {
       display: block;
-      font-size: 13px;
-      color: #bbbbbb;
-      margin-bottom: 9px;
+      color: #999;
+      font-size: 11px;
+      margin-bottom: 7px;
     }
 
     select {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #333333;
-      border-radius: 11px;
+      height: 45px;
+      border-radius: 10px;
+      border: 1px solid #333;
       background: #171717;
-      color: #ffffff;
+      color: #fff;
+      padding: 0 11px;
       outline: none;
     }
 
-    /* Style buttons */
-
-    .style-grid {
+    .option-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 9px;
+      gap: 8px;
     }
 
-    .style-btn {
-      padding: 11px 6px;
+    .option-btn {
+      min-height: 45px;
+      border: 1px solid #292929;
       border-radius: 11px;
-      border: 1px solid #303030;
-      background: #111111;
-      color: #cccccc;
-      cursor: pointer;
+      background: #101010;
+      color: #aaa;
       font-size: 12px;
     }
 
-    .style-btn.active {
-      border-color: #ff3333;
-      color: #ffffff;
-      background: #1b0a0a;
+    .option-btn.active {
+      border-color: #e52b2b;
+      background: #190909;
+      color: #fff;
     }
 
-    /* Generate */
+    .quality-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .reference-box {
+      border: 1px dashed #383838;
+      border-radius: 15px;
+      padding: 18px;
+      text-align: center;
+      background: #0d0d0d;
+    }
+
+    .reference-box input {
+      display: none;
+    }
+
+    .reference-label {
+      display: block;
+      cursor: pointer;
+    }
+
+    .reference-icon {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .reference-text {
+      font-size: 13px;
+      color: #ddd;
+    }
+
+    .reference-sub {
+      color: #777;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .preview {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .preview img {
+      width: 100%;
+      max-height: 350px;
+      object-fit: contain;
+      border-radius: 14px;
+      border: 1px solid #292929;
+      background: #080808;
+    }
 
     .generate-btn {
       width: 100%;
-      padding: 16px;
+      height: 52px;
       border: 0;
-      border-radius: 15px;
-      background: #ffffff;
-      color: #000000;
+      border-radius: 14px;
+      background: #fff;
+      color: #000;
       font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .generate-btn:hover {
-      transform: translateY(-1px);
-      background: #eeeeee;
+      font-size: 15px;
     }
 
     .generate-btn:disabled {
-      opacity: 0.5;
+      opacity: .55;
       cursor: not-allowed;
-      transform: none;
     }
-
-    /* Result */
 
     .result {
       display: none;
-      margin-top: 28px;
+      margin-top: 27px;
     }
 
     .result-card {
-      background: #101010;
+      background: #0d0d0d;
       border: 1px solid #292929;
-      border-radius: 18px;
+      border-radius: 17px;
       overflow: hidden;
     }
 
-    .result-placeholder {
-      min-height: 300px;
+    .result-header {
+      padding: 13px 15px;
+      border-bottom: 1px solid #292929;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .result-title {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .result-status {
+      color: #888;
+      font-size: 11px;
+    }
+
+    .image-area {
+      min-height: 280px;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: #070707;
+      padding: 14px;
+    }
+
+    .image-area img {
+      display: none;
+      width: 100%;
+      max-height: 650px;
+      object-fit: contain;
+      border-radius: 11px;
+    }
+
+    .loading {
+      color: #888;
+      font-size: 13px;
       text-align: center;
-      color: #777777;
-      padding: 30px;
     }
 
-    .result-placeholder span {
-      display: block;
-      font-size: 48px;
-      margin-bottom: 12px;
-    }
-
-    .result-actions {
+    .actions {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
@@ -296,82 +311,63 @@
     }
 
     .action-btn {
-      padding: 11px 5px;
+      min-height: 40px;
       border-radius: 10px;
       border: 1px solid #303030;
-      background: #151515;
-      color: #dddddd;
-      cursor: pointer;
+      background: #161616;
+      color: #ddd;
       font-size: 12px;
     }
-
-    .action-btn:hover {
-      background: #202020;
-    }
-
-    /* Bottom nav */
 
     .bottom-nav {
       display: none;
     }
 
-    /* Mobile */
-
-    @media (max-width: 600px) {
-
+    @media (max-width: 700px) {
       .container {
-        padding: 25px 14px 90px;
+        padding-bottom: 95px;
       }
 
-      .hero h1 {
-        font-size: 28px;
-      }
-
-      .control-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .style-grid {
+      .option-grid {
         grid-template-columns: repeat(2, 1fr);
       }
 
-      .result-actions {
+      .actions {
         grid-template-columns: repeat(2, 1fr);
       }
 
       .bottom-nav {
         position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 68px;
-        background: rgba(10, 10, 10, 0.96);
-        border-top: 1px solid #292929;
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        z-index: 20;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 68px;
+        background: rgba(10,10,10,.97);
+        border-top: 1px solid #292929;
+        z-index: 50;
         backdrop-filter: blur(12px);
       }
 
       .nav-item {
+        border: 0;
+        background: transparent;
+        color: #777;
+        font-size: 10px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         gap: 4px;
-        background: transparent;
-        border: 0;
-        color: #777777;
-        font-size: 11px;
-        cursor: pointer;
-      }
-
-      .nav-item span:first-child {
-        font-size: 20px;
       }
 
       .nav-item.active {
-        color: #ffffff;
+        color: #fff;
+      }
+
+      .nav-icon {
+        font-size: 19px;
       }
     }
   </style>
@@ -379,561 +375,683 @@
 
 <body>
 
-  <div class="page">
+<header class="header">
 
-    <!-- Header -->
+  <div class="header-left">
 
-    <header class="header">
+    <button class="back-btn" onclick="history.back()">
+      ←
+    </button>
 
-      <div class="header-left">
+    <div>
+      <div class="brand">RG Creator AI</div>
+      <div class="page-name">AI Image Generator</div>
+    </div>
 
-        <button class="back-btn" onclick="goBack()">
-          ←
-        </button>
+  </div>
 
-        <div>
-          <div class="brand">RG Creator AI</div>
-          <div class="header-title">AI Image</div>
+  <button class="more-btn" onclick="moreOptions()">
+    ⋯
+  </button>
+
+</header>
+
+
+<main class="container">
+
+  <section class="hero">
+
+    <h1>Create an Image</h1>
+
+    <p>
+      Describe what you want to create and turn your idea into an image.
+    </p>
+
+  </section>
+
+
+  <!-- PROMPT -->
+
+  <section class="section">
+
+    <div class="section-title">
+      Describe your image
+    </div>
+
+    <div class="prompt-box">
+
+      <textarea
+        id="prompt"
+        placeholder="Example: A cinematic portrait in a futuristic city at night..."
+      ></textarea>
+
+    </div>
+
+  </section>
+
+
+  <!-- STYLE -->
+
+  <section class="section">
+
+    <div class="section-title">
+      Style
+    </div>
+
+    <div class="option-grid">
+
+      <button class="option-btn active" onclick="selectOption(this,'style')">
+        Realistic
+      </button>
+
+      <button class="option-btn" onclick="selectOption(this,'style')">
+        Cinematic
+      </button>
+
+      <button class="option-btn" onclick="selectOption(this,'style')">
+        Anime
+      </button>
+
+      <button class="option-btn" onclick="selectOption(this,'style')">
+        3D
+      </button>
+
+      <button class="option-btn" onclick="selectOption(this,'style')">
+        Illustration
+      </button>
+
+      <button class="option-btn" onclick="selectOption(this,'style')">
+        Digital Art
+      </button>
+
+      <button class="option-btn" onclick="selectOption(this,'style')">
+        Minimal
+      </button>
+
+      <button class="option-btn" onclick="selectOption(this,'style')">
+        Photography
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ASPECT RATIO -->
+
+  <section class="section">
+
+    <div class="section-title">
+      Aspect Ratio
+    </div>
+
+    <div class="option-grid">
+
+      <button
+        class="option-btn active"
+        onclick="selectOption(this,'ratio')"
+      >
+        1:1
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'ratio')"
+      >
+        16:9
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'ratio')"
+      >
+        9:16
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'ratio')"
+      >
+        4:5
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- QUALITY -->
+
+  <section class="section">
+
+    <div class="section-title">
+      Image Quality
+    </div>
+
+    <div class="quality-grid">
+
+      <button
+        class="option-btn active"
+        onclick="selectOption(this,'quality')"
+      >
+        Standard
+      </button>
+
+      <button
+        class="option-btn"
+        onclick="selectOption(this,'quality')"
+      >
+        High Quality
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- REFERENCE -->
+
+  <section class="section">
+
+    <div class="section-title">
+      Reference Image
+    </div>
+
+    <div class="reference-box">
+
+      <label
+        class="reference-label"
+        for="referenceImage"
+      >
+
+        <div class="reference-icon">
+          📷
+        </div>
+
+        <div class="reference-text">
+          Add reference image
+        </div>
+
+        <div class="reference-sub">
+          Upload an image to guide the generation
+        </div>
+
+      </label>
+
+      <input
+        id="referenceImage"
+        type="file"
+        accept="image/*"
+        onchange="previewReference(event)"
+      >
+
+    </div>
+
+    <div
+      class="preview"
+      id="referencePreview"
+    >
+      <img id="referencePreviewImage" alt="Reference preview">
+    </div>
+
+  </section>
+
+
+  <!-- GENERATE -->
+
+  <section class="section">
+
+    <button
+      class="generate-btn"
+      id="generateBtn"
+      onclick="generateImage()"
+    >
+      ✦ Generate Image
+    </button>
+
+  </section>
+
+
+  <!-- RESULT -->
+
+  <section
+    class="result"
+    id="result"
+  >
+
+    <div class="result-card">
+
+      <div class="result-header">
+
+        <div class="result-title">
+          Generated Image
+        </div>
+
+        <div
+          class="result-status"
+          id="resultStatus"
+        >
+          Ready
         </div>
 
       </div>
 
-      <button class="more-btn">
-        ⋯
-      </button>
 
-    </header>
+      <div class="image-area">
 
-
-    <!-- Main -->
-
-    <main class="container">
-
-      <section class="hero">
-
-        <h1>Create an Image</h1>
-
-        <p>
-          Describe what you want to create and turn your idea into an image.
-        </p>
-
-      </section>
-
-
-      <!-- Prompt -->
-
-      <section class="section">
-
-        <div class="section-title">
-          Describe your image
-        </div>
-
-        <div class="prompt-box">
-
-          <textarea
-            id="prompt"
-            placeholder="Example: A cinematic portrait of a creator standing in a futuristic city at night..."
-          ></textarea>
-
-          <div class="prompt-bottom">
-
-            <div>
-
-              <button
-                class="reference-btn"
-                onclick="document.getElementById('referenceInput').click()"
-              >
-                ＋ Add reference image
-              </button>
-
-              <input
-                type="file"
-                id="referenceInput"
-                accept="image/*"
-                onchange="referenceSelected(this)"
-              />
-
-              <span id="referenceName"></span>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- Style -->
-
-      <section class="section">
-
-        <div class="section-title">
-          Style
-        </div>
-
-        <div class="style-grid">
-
-          <button class="style-btn active" data-style="Realistic">
-            Realistic
-          </button>
-
-          <button class="style-btn" data-style="Cinematic">
-            Cinematic
-          </button>
-
-          <button class="style-btn" data-style="Anime">
-            Anime
-          </button>
-
-          <button class="style-btn" data-style="3D">
-            3D
-          </button>
-
-          <button class="style-btn" data-style="Illustration">
-            Illustration
-          </button>
-
-          <button class="style-btn" data-style="Digital Art">
-            Digital Art
-          </button>
-
-          <button class="style-btn" data-style="Minimal">
-            Minimal
-          </button>
-
-          <button class="style-btn" data-style="Photography">
-            Photography
-          </button>
-
-        </div>
-
-      </section>
-
-
-      <!-- Controls -->
-
-      <section class="section">
-
-        <div class="control-grid">
-
-          <div class="control">
-
-            <label for="ratio">
-              Aspect Ratio
-            </label>
-
-            <select id="ratio">
-
-              <option value="1:1">
-                1:1 — Square
-              </option>
-
-              <option value="16:9">
-                16:9 — Landscape
-              </option>
-
-              <option value="9:16">
-                9:16 — Shorts / Reels
-              </option>
-
-              <option value="4:5">
-                4:5 — Instagram
-              </option>
-
-            </select>
-
-          </div>
-
-
-          <div class="control">
-
-            <label for="quality">
-              Image Quality
-            </label>
-
-            <select id="quality">
-
-              <option value="standard">
-                Standard
-              </option>
-
-              <option value="high">
-                High Quality
-              </option>
-
-            </select>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- Generate -->
-
-      <section class="section">
-
-        <button
-          class="generate-btn"
-          id="generateBtn"
-          onclick="generateImage()"
+        <div
+          class="loading"
+          id="loadingText"
         >
-          ✦ Generate Image
+          Your generated image will appear here.
+        </div>
+
+        <img
+          id="generatedImage"
+          alt="Generated image"
+        >
+
+      </div>
+
+
+      <div class="actions">
+
+        <button class="action-btn" onclick="downloadImage()">
+          ⬇ Download
         </button>
 
-      </section>
+        <button class="action-btn" onclick="regenerateImage()">
+          ↻ Regenerate
+        </button>
+
+        <button class="action-btn" onclick="editImage()">
+          ✨ Edit
+        </button>
+
+        <button class="action-btn" onclick="shareImage()">
+          🔗 Share
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
 
 
-      <!-- Result -->
+<!-- MOBILE NAV -->
 
-      <section class="result" id="result">
+<nav class="bottom-nav">
 
-        <div class="result-card">
+  <button class="nav-item" onclick="goHome()">
+    <span class="nav-icon">⌂</span>
+    <span>Home</span>
+  </button>
 
-          <div class="result-placeholder" id="resultContent">
+  <button class="nav-item" onclick="goChat()">
+    <span class="nav-icon">💬</span>
+    <span>AI Chat</span>
+  </button>
 
-            <div>
+  <button class="nav-item active">
+    <span class="nav-icon">✦</span>
+    <span>Tools</span>
+  </button>
 
-              <span>✦</span>
+  <button class="nav-item" onclick="goProfile()">
+    <span class="nav-icon">◉</span>
+    <span>Profile</span>
+  </button>
 
-              <div>
-                Your generated image will appear here.
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <div class="result-actions">
-
-            <button class="action-btn" onclick="downloadImage()">
-              ⬇ Download
-            </button>
-
-            <button class="action-btn" onclick="regenerateImage()">
-              ↻ Regenerate
-            </button>
-
-            <button class="action-btn" onclick="editImage()">
-              ✨ Edit
-            </button>
-
-            <button class="action-btn" onclick="shareImage()">
-              🔗 Share
-            </button>
-
-          </div>
-
-        </div>
-
-      </section>
-
-    </main>
+</nav>
 
 
-    <!-- Mobile Navigation -->
+<script>
 
-    <nav class="bottom-nav">
-
-      <button class="nav-item" onclick="goHome()">
-        <span>⌂</span>
-        <span>Home</span>
-      </button>
-
-      <button class="nav-item" onclick="goChat()">
-        <span>💬</span>
-        <span>AI Chat</span>
-      </button>
-
-      <button class="nav-item active">
-        <span>✦</span>
-        <span>Tools</span>
-      </button>
-
-      <button class="nav-item" onclick="goProfile()">
-        <span>◉</span>
-        <span>Profile</span>
-      </button>
-
-    </nav>
-
-  </div>
+  let selectedStyle = "Realistic";
+  let selectedRatio = "1:1";
+  let selectedQuality = "Standard";
+  let lastPrompt = "";
 
 
-  <script>
+  function selectOption(button, type) {
 
-    let selectedStyle = "Realistic";
-    let lastPrompt = "";
+    const parent = button.parentElement;
+
+    parent
+      .querySelectorAll(".option-btn")
+      .forEach(btn => btn.classList.remove("active"));
+
+    button.classList.add("active");
+
+    if (type === "style") {
+      selectedStyle = button.textContent.trim();
+    }
+
+    if (type === "ratio") {
+      selectedRatio = button.textContent.trim();
+    }
+
+    if (type === "quality") {
+      selectedQuality = button.textContent.trim();
+    }
+
+  }
 
 
-    /* Style selection */
+  function previewReference(event) {
 
-    document.querySelectorAll(".style-btn").forEach(button => {
+    const file = event.target.files[0];
 
-      button.addEventListener("click", () => {
+    if (!file) return;
 
-        document.querySelectorAll(".style-btn")
-          .forEach(btn => btn.classList.remove("active"));
+    const url = URL.createObjectURL(file);
 
-        button.classList.add("active");
+    const preview =
+      document.getElementById("referencePreview");
 
-        selectedStyle = button.dataset.style;
+    const image =
+      document.getElementById("referencePreviewImage");
 
-      });
+    image.src = url;
 
-    });
+    preview.style.display = "block";
+
+  }
 
 
-    /* Reference image */
+  async function generateImage() {
 
-    function referenceSelected(input) {
+    const prompt =
+      document.getElementById("prompt")
+        .value
+        .trim();
 
-      const name = document.getElementById("referenceName");
+    const button =
+      document.getElementById("generateBtn");
 
-      if (input.files && input.files.length > 0) {
+    const result =
+      document.getElementById("result");
 
-        name.textContent = input.files[0].name;
+    const loading =
+      document.getElementById("loadingText");
 
-      } else {
+    const image =
+      document.getElementById("generatedImage");
 
-        name.textContent = "";
+    const status =
+      document.getElementById("resultStatus");
 
-      }
+
+    if (!prompt) {
+
+      alert("Please describe the image you want.");
+
+      return;
 
     }
 
 
-    /* Generate */
+    lastPrompt = prompt;
 
-    async function generateImage() {
+    button.disabled = true;
+    button.textContent = "Generating...";
 
-      const prompt =
-        document.getElementById("prompt").value.trim();
+    result.style.display = "block";
 
-      const ratio =
-        document.getElementById("ratio").value;
+    image.style.display = "none";
 
-      const quality =
-        document.getElementById("quality").value;
+    loading.style.display = "block";
 
-      const button =
-        document.getElementById("generateBtn");
+    loading.textContent =
+      "RG Creator AI is generating your image...";
 
-      const result =
-        document.getElementById("result");
-
-      const resultContent =
-        document.getElementById("resultContent");
+    status.textContent = "Generating";
 
 
-      if (!prompt) {
+    try {
 
-        alert("Please describe the image you want to create.");
+      /*
+        IMPORTANT:
 
-        return;
+        This frontend is ready for a dedicated image
+        generation backend endpoint.
+
+        The endpoint should be:
+
+        /api/image
+
+        It should receive:
+        {
+          prompt,
+          style,
+          ratio,
+          quality
+        }
+
+        and return:
+        {
+          ok: true,
+          imageUrl: "..."
+        }
+      */
+
+
+      const response =
+        await fetch("/api/image", {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+
+            prompt,
+            style: selectedStyle,
+            ratio: selectedRatio,
+            quality: selectedQuality
+
+          })
+
+        });
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok || !data.ok) {
+
+        throw new Error(
+          data?.error ||
+          "Image generation failed."
+        );
 
       }
 
 
-      lastPrompt = prompt;
+      if (!data.imageUrl) {
 
-      button.disabled = true;
+        throw new Error(
+          "Image API did not return an image."
+        );
 
-      button.textContent = "Generating...";
+      }
 
-      result.style.display = "block";
 
-      resultContent.innerHTML = `
+      image.src = data.imageUrl;
 
-        <div>
+      image.style.display = "block";
 
-          <span>⏳</span>
+      loading.style.display = "none";
 
-          <div>
-            Preparing your image...
-          </div>
+      status.textContent = "Ready";
 
-          <p style="
-            margin-top:10px;
-            color:#666;
-            font-size:12px;
-          ">
-            Image generation API will be connected here.
-          </p>
 
-        </div>
+    } catch (error) {
 
-      `;
+      loading.textContent =
+        error.message ||
+        "Image generation failed.";
 
+      status.textContent = "Error";
+
+    } finally {
+
+      button.disabled = false;
+
+      button.textContent =
+        "✦ Generate Image";
+
+    }
+
+  }
+
+
+  function regenerateImage() {
+
+    if (!lastPrompt) {
+
+      alert("Generate an image first.");
+
+      return;
+
+    }
+
+    generateImage();
+
+  }
+
+
+  function editImage() {
+
+    const prompt =
+      document.getElementById("prompt");
+
+    prompt.value =
+      prompt.value +
+      "\n\nEdit the generated image: ";
+
+    prompt.focus();
+
+  }
+
+
+  async function shareImage() {
+
+    const image =
+      document.getElementById("generatedImage");
+
+    if (!image.src) {
+
+      alert("Generate an image first.");
+
+      return;
+
+    }
+
+    if (
+      navigator.share
+    ) {
 
       try {
 
-        /*
-          Image-generation API will be connected here.
+        await navigator.share({
+          title: "RG Creator AI Image",
+          text: "Created with RG Creator AI",
+          url: image.src
+        });
 
-          We are intentionally NOT sending the Gemini
-          text-chat API key directly from the browser.
-        */
+      } catch {}
 
-        await new Promise(resolve => setTimeout(resolve, 1000));
+    } else {
 
+      try {
 
-        resultContent.innerHTML = `
+        await navigator.clipboard.writeText(
+          image.src
+        );
 
-          <div>
+        alert("Image link copied.");
 
-            <span>✦</span>
+      } catch {
 
-            <div>
-              Image generation interface is ready.
-            </div>
-
-            <p style="
-              margin-top:10px;
-              color:#777;
-              font-size:12px;
-              line-height:1.5;
-            ">
-              Style: ${escapeHtml(selectedStyle)}<br>
-              Ratio: ${escapeHtml(ratio)}<br>
-              Quality: ${escapeHtml(quality)}
-            </p>
-
-          </div>
-
-        `;
-
-      } catch (error) {
-
-        resultContent.innerHTML = `
-
-          <div>
-
-            <span>⚠</span>
-
-            <div>
-              Something went wrong.
-            </div>
-
-          </div>
-
-        `;
-
-      } finally {
-
-        button.disabled = false;
-
-        button.textContent = "✦ Generate Image";
+        alert("Sharing is not supported on this device.");
 
       }
 
     }
 
-
-    function regenerateImage() {
-
-      if (!lastPrompt) {
-
-        alert("Generate an image first.");
-
-        return;
-
-      }
-
-      generateImage();
-
-    }
+  }
 
 
-    function downloadImage() {
+  function downloadImage() {
 
-      alert("Download will work after the image-generation API is connected.");
+    const image =
+      document.getElementById("generatedImage");
+
+    if (!image.src) {
+
+      alert("Generate an image first.");
+
+      return;
 
     }
 
+    const link =
+      document.createElement("a");
 
-    function editImage() {
+    link.href = image.src;
 
-      alert("Image editing will be connected with the image-generation system.");
+    link.download =
+      "rg-creator-ai-image.png";
 
-    }
+    document.body.appendChild(link);
 
+    link.click();
 
-    async function shareImage() {
+    link.remove();
 
-      if (navigator.share) {
-
-        try {
-
-          await navigator.share({
-
-            title: "RG Creator AI",
-
-            text: "Created with RG Creator AI"
-
-          });
-
-        } catch (error) {}
-
-      } else {
-
-        alert("Sharing is not supported on this browser.");
-
-      }
-
-    }
+  }
 
 
-    function goBack() {
+  function moreOptions() {
 
-      if (document.referrer) {
+    alert(
+      "More image options will be added here."
+    );
 
-        history.back();
-
-      } else {
-
-        goHome();
-
-      }
-
-    }
+  }
 
 
-    function goHome() {
+  function goHome() {
 
-      window.location.href = "/";
+    window.location.href = "/";
 
-    }
-
-
-    function goChat() {
-
-      window.location.href = "/pages/chat.html";
-
-    }
+  }
 
 
-    function goProfile() {
+  function goChat() {
 
-      alert("Profile & Settings will be added next.");
+    window.location.href =
+      "/pages/chat.html";
 
-    }
+  }
 
 
-    function escapeHtml(text) {
+  function goProfile() {
 
-      const div = document.createElement("div");
+    alert(
+      "Profile & Settings will be added later."
+    );
 
-      div.textContent = text;
+  }
 
-      return div.innerHTML;
-
-    }
-
-  </script>
+</script>
 
 </body>
 </html>
