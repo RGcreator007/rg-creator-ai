@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta
-    name="description"
-    content="RG Creator AI — AI tools for chat, content, code, images, YouTube and Instagram."
-  />
   <title>RG Creator AI</title>
+
+  <!-- Premium modern font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     * {
@@ -16,313 +17,469 @@
       padding: 0;
     }
 
+    :root {
+      --bg: #000000;
+      --surface: #111111;
+      --surface2: #171717;
+      --border: #292929;
+      --text: #ffffff;
+      --muted: #9a9a9a;
+      --accent: #ff3030;
+    }
+
     body {
+      font-family: "Inter", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      background: #000;
-      color: #fff;
-      font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
+      letter-spacing: -0.2px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
     button,
-    a,
     input,
     textarea {
-      font: inherit;
-    }
-
-    button,
-    a {
-      -webkit-tap-highlight-color: transparent;
+      font-family: inherit;
     }
 
     .app {
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      padding-bottom: 82px;
     }
 
     /* HEADER */
 
-    .header {
-      height: 64px;
+    header {
+      height: 70px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 16px;
-      border-bottom: 1px solid #1c1c1c;
-      background: #000;
+      padding: 0 18px;
+      border-bottom: 1px solid #171717;
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 50;
+      background: rgba(0,0,0,.94);
+      backdrop-filter: blur(14px);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 18px;
+      gap: 11px;
     }
 
-    .brand-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      background: #151515;
-      border: 1px solid #292929;
-      font-size: 15px;
-    }
-
-    .menu-btn,
-    .more-btn {
+    .logo {
       width: 40px;
       height: 40px;
-      border: 0;
-      background: transparent;
-      color: #ccc;
-      border-radius: 10px;
+      border-radius: 12px;
+      background: #fff;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .brand-text {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .brand-text span {
+      color: #aaa;
+      font-weight: 500;
+    }
+
+    .menu-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: white;
+      border-radius: 50%;
+      font-size: 21px;
       cursor: pointer;
-      font-size: 25px;
     }
 
-    .menu-btn:hover,
-    .more-btn:hover {
-      background: #151515;
-      color: #fff;
-    }
-
-    /* MAIN */
-
-    .main {
-      width: 100%;
-      max-width: 1050px;
-      margin: 0 auto;
-      padding: 55px 20px 100px;
-      flex: 1;
-    }
+    /* HERO */
 
     .hero {
+      padding: 55px 20px 20px;
       text-align: center;
-      max-width: 800px;
-      margin: 0 auto;
     }
 
     .hero h1 {
-      font-size: clamp(34px, 7vw, 62px);
+      font-size: clamp(32px, 9vw, 52px);
       line-height: 1.05;
-      letter-spacing: -2px;
-      margin-bottom: 18px;
+      font-weight: 800;
+      letter-spacing: -1.8px;
+    }
+
+    .hero h1 span {
+      color: #bdbdbd;
     }
 
     .hero p {
-      color: #999;
-      font-size: 16px;
-      line-height: 1.6;
-      margin-bottom: 34px;
+      color: var(--muted);
+      margin-top: 14px;
+      font-size: 15px;
     }
 
-    /* CHAT INPUT */
+    /* MAIN AI BOX */
 
-    .chat-box {
-      width: 100%;
-      max-width: 760px;
-      margin: 0 auto 48px;
-      border: 1px solid #303030;
+    .ai-box {
+      width: min(760px, calc(100% - 28px));
+      margin: 30px auto 0;
       background: #101010;
-      border-radius: 22px;
-      padding: 12px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+      border: 1px solid #303030;
+      border-radius: 24px;
+      padding: 15px;
+      box-shadow: 0 0 35px rgba(255,255,255,.025);
     }
 
-    .chat-input {
+    .selected-file {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: #191919;
+      border: 1px solid #2b2b2b;
+      padding: 9px 12px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      color: #ddd;
+      font-size: 13px;
+    }
+
+    .selected-file.show {
+      display: flex;
+    }
+
+    textarea {
       width: 100%;
-      min-height: 70px;
-      max-height: 180px;
-      resize: vertical;
-      border: 0;
+      min-height: 105px;
+      resize: none;
+      border: none;
       outline: none;
       background: transparent;
-      color: #fff;
-      padding: 10px 12px;
-      font-size: 16px;
+      color: white;
+      font-size: 17px;
+      line-height: 1.55;
+      padding: 5px;
     }
 
-    .chat-input::placeholder {
-      color: #777;
+    textarea::placeholder {
+      color: #666;
     }
 
-    .chat-actions {
+    .input-bottom {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      padding-top: 8px;
+      gap: 10px;
+      margin-top: 10px;
     }
 
     .left-actions,
     .right-actions {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     .icon-btn {
-      width: 40px;
-      height: 40px;
-      border: 0;
-      border-radius: 11px;
-      background: transparent;
-      color: #aaa;
+      width: 43px;
+      height: 43px;
+      border-radius: 50%;
+      border: 1px solid #303030;
+      background: #181818;
+      color: white;
       cursor: pointer;
-      display: grid;
-      place-items: center;
+      font-size: 19px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .icon-btn:hover {
-      background: #1c1c1c;
-      color: #fff;
+      border-color: #555;
     }
 
     .send-btn {
-      background: #fff;
-      color: #000;
+      width: 48px;
+      height: 48px;
+      border: none;
+      border-radius: 50%;
+      background: white;
+      color: black;
+      font-size: 20px;
+      cursor: pointer;
+      font-weight: 700;
     }
 
-    .send-btn:hover {
-      background: #ddd;
-      color: #000;
+    .send-btn:active {
+      transform: scale(.95);
     }
 
-    .icon-btn svg {
-      width: 20px;
-      height: 20px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+    /* PLUS MENU */
+
+    .plus-wrapper {
+      position: relative;
     }
 
-    /* SECTION */
+    .plus-menu {
+      position: absolute;
+      left: 0;
+      bottom: 57px;
+      width: 190px;
+      background: #151515;
+      border: 1px solid #333;
+      border-radius: 17px;
+      padding: 8px;
+      display: none;
+      box-shadow: 0 15px 40px rgba(0,0,0,.6);
+      z-index: 100;
+    }
+
+    .plus-menu.open {
+      display: block;
+      animation: pop .15s ease;
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 0;
+        transform: translateY(6px) scale(.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .upload-option {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px;
+      border: none;
+      background: transparent;
+      color: white;
+      border-radius: 11px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .upload-option:hover {
+      background: #222;
+    }
+
+    .upload-icon {
+      width: 31px;
+      height: 31px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9px;
+      background: #242424;
+      font-size: 16px;
+    }
+
+    /* QUICK ACTIONS */
 
     .section {
-      margin-top: 45px;
+      width: min(900px, calc(100% - 28px));
+      margin: 38px auto 0;
     }
 
     .section-title {
-      font-size: 20px;
-      margin-bottom: 16px;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 15px;
     }
 
-    /* CARDS */
-
-    .cards {
+    .quick-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
     }
 
-    .card {
-      display: block;
-      text-decoration: none;
-      color: #fff;
-      background: #0d0d0d;
-      border: 1px solid #222;
-      border-radius: 16px;
-      padding: 20px;
-      min-height: 125px;
-      transition: 0.18s ease;
+    .quick-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      padding: 17px;
+      min-height: 100px;
+      transition: .2s;
     }
 
-    .card:hover {
+    .quick-card:hover {
       transform: translateY(-2px);
-      border-color: #444;
-      background: #121212;
+      border-color: #454545;
     }
 
-    .card-icon {
-      font-size: 25px;
-      margin-bottom: 14px;
+    .quick-icon {
+      font-size: 23px;
+      margin-bottom: 12px;
     }
 
-    .card h3 {
-      font-size: 16px;
-      margin-bottom: 7px;
+    .quick-card strong {
+      display: block;
+      font-size: 14px;
     }
 
-    .card p {
-      color: #888;
-      font-size: 13px;
-      line-height: 1.45;
+    .quick-card small {
+      display: block;
+      color: #777;
+      margin-top: 5px;
+      line-height: 1.4;
     }
 
-    /* FOOTER */
+    /* CAPABILITIES */
 
-    .footer {
-      text-align: center;
-      color: #666;
+    .capability {
+      display: grid;
+      gap: 10px;
+    }
+
+    .cap-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .cap-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      background: #1c1c1c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 21px;
+    }
+
+    .cap-card strong {
+      font-size: 14px;
+    }
+
+    .cap-card p {
+      color: #777;
       font-size: 12px;
-      padding: 25px 15px;
-      border-top: 1px solid #171717;
+      margin-top: 4px;
     }
 
-    /* MOBILE */
+    /* STATUS */
 
-    @media (max-width: 700px) {
-      .header {
-        height: 58px;
+    .status {
+      width: min(760px, calc(100% - 28px));
+      margin: 25px auto;
+      color: #777;
+      text-align: center;
+      font-size: 13px;
+      min-height: 20px;
+    }
+
+    .status.error {
+      color: #ff6666;
+    }
+
+    /* RESULT */
+
+    .result {
+      width: min(760px, calc(100% - 28px));
+      margin: 20px auto;
+      display: none;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .result-card {
+      background: #101010;
+      border: 1px solid #292929;
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .result-title {
+      color: #aaa;
+      font-size: 12px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+    }
+
+    .result-text {
+      white-space: pre-wrap;
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    /* BOTTOM NAV */
+
+    .bottom-nav {
+      position: fixed;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      height: 65px;
+      border: 1px solid #292929;
+      background: rgba(16,16,16,.96);
+      backdrop-filter: blur(18px);
+      border-radius: 20px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      z-index: 80;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #777;
+      font-size: 10px;
+    }
+
+    .nav-item span {
+      font-size: 19px;
+    }
+
+    .nav-item.active {
+      color: white;
+    }
+
+    .nav-item.active span {
+      color: var(--accent);
+    }
+
+    /* HIDDEN FILE INPUTS */
+
+    .hidden-input {
+      display: none;
+    }
+
+    @media (min-width: 700px) {
+      .quick-grid {
+        grid-template-columns: repeat(3, 1fr);
       }
 
-      .main {
-        padding: 42px 14px 80px;
-      }
-
-      .hero h1 {
-        letter-spacing: -1.2px;
-      }
-
-      .hero p {
-        font-size: 14px;
-      }
-
-      .chat-box {
-        border-radius: 18px;
-      }
-
-      .cards {
+      .capability {
         grid-template-columns: repeat(2, 1fr);
-      }
-
-      .card {
-        padding: 16px;
-        min-height: 120px;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .cards {
-        grid-template-columns: 1fr 1fr;
-        gap: 9px;
-      }
-
-      .card {
-        min-height: 112px;
-        padding: 14px;
-      }
-
-      .card-icon {
-        font-size: 22px;
       }
     }
   </style>
@@ -330,243 +487,560 @@
 
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <!-- HEADER -->
-    <header class="header">
+  <!-- HEADER -->
+  <header>
+    <a href="/" class="brand">
+      <div class="logo">RG</div>
+      <div class="brand-text">
+        RG Creator <span>AI</span>
+      </div>
+    </a>
 
-      <button
-        id="menuButton"
-        class="menu-btn"
-        aria-label="Menu"
-        type="button"
-      >
-        ☰
-      </button>
+    <button class="menu-btn" onclick="openMenu()" aria-label="Menu">
+      ⋯
+    </button>
+  </header>
 
-      <a href="/" class="brand">
-        <span class="brand-icon">RG</span>
-        <span>RG Creator AI</span>
-      </a>
 
-      <button
-        id="moreButton"
-        class="more-btn"
-        aria-label="More"
-        type="button"
-      >
-        ⋯
-      </button>
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Create with <span>RG Creator AI</span></h1>
+    <p>Your AI-powered creative workspace</p>
+  </section>
 
-    </header>
 
-    <!-- MAIN -->
-    <main class="main">
+  <!-- AI PROMPT -->
+  <div class="ai-box">
 
-      <section class="hero">
+    <div id="selectedFile" class="selected-file">
+      <span>📎</span>
+      <span id="fileName">File selected</span>
+    </div>
 
-        <h1>Create with AI.</h1>
+    <textarea
+      id="prompt"
+      placeholder="What do you want to create?"
+      autocomplete="off"
+    ></textarea>
 
-        <p>
-          Chat, create images, write content, generate code and grow
-          your YouTube & Instagram content with RG Creator AI.
-        </p>
+    <div class="input-bottom">
 
-        <!-- MAIN AI INPUT -->
-        <div class="chat-box">
+      <div class="left-actions">
 
-          <textarea
-            id="prompt"
-            class="chat-input"
-            rows="1"
-            placeholder="What do you want to create?"
-            aria-label="Message RG Creator AI"
-          ></textarea>
+        <!-- PLUS -->
+        <div class="plus-wrapper">
 
-          <div class="chat-actions">
+          <button
+            class="icon-btn"
+            onclick="togglePlusMenu()"
+            aria-label="Attach"
+          >
+            ＋
+          </button>
 
-            <div class="left-actions">
+          <div id="plusMenu" class="plus-menu">
 
-              <button
-                id="attachButton"
-                class="icon-btn"
-                aria-label="Add file"
-                type="button"
-              >
-                <svg viewBox="0 0 24 24">
-                  <path d="M21.4 11.6l-8.9 8.9a6 6 0 01-8.5-8.5l9.2-9.2a4 4 0 015.7 5.7l-9.2 9.2a2 2 0 01-2.8-2.8l8.6-8.6"></path>
-                </svg>
-              </button>
+            <button class="upload-option" onclick="selectImage()">
+              <span class="upload-icon">🖼️</span>
+              <span>Image</span>
+            </button>
 
-              <button
-                id="capabilityButton"
-                class="icon-btn"
-                aria-label="Capabilities"
-                type="button"
-              >
-                <svg viewBox="0 0 24 24">
-                  <rect x="4" y="4" width="6" height="6"></rect>
-                  <rect x="14" y="4" width="6" height="6"></rect>
-                  <rect x="4" y="14" width="6" height="6"></rect>
-                  <rect x="14" y="14" width="6" height="6"></rect>
-                </svg>
-              </button>
+            <button class="upload-option" onclick="openCamera()">
+              <span class="upload-icon">📷</span>
+              <span>Camera</span>
+            </button>
 
-            </div>
+            <button class="upload-option" onclick="selectVideo()">
+              <span class="upload-icon">🎥</span>
+              <span>Video</span>
+            </button>
 
-            <div class="right-actions">
+            <button class="upload-option" onclick="selectFile()">
+              <span class="upload-icon">📄</span>
+              <span>File</span>
+            </button>
 
-              <button
-                id="voiceButton"
-                class="icon-btn"
-                aria-label="Voice"
-                type="button"
-              >
-                <svg viewBox="0 0 24 24">
-                  <rect
-                    x="9"
-                    y="3"
-                    width="6"
-                    height="12"
-                    rx="3"
-                  ></rect>
-                  <path d="M5 11a7 7 0 0 0 14 0"></path>
-                  <path d="M12 18v3"></path>
-                  <path d="M8 21h8"></path>
-                </svg>
-              </button>
-
-              <button
-                id="sendButton"
-                class="icon-btn send-btn"
-                aria-label="Send"
-                type="button"
-              >
-                <svg viewBox="0 0 24 24">
-                  <path d="M5 12h13"></path>
-                  <path d="M13 6l6 6-6 6"></path>
-                </svg>
-              </button>
-
-            </div>
+            <button class="upload-option" onclick="selectPDF()">
+              <span class="upload-icon">📕</span>
+              <span>PDF</span>
+            </button>
 
           </div>
-
         </div>
 
-      </section>
 
-      <!-- QUICK ACTIONS -->
-      <section class="section">
+        <!-- VOICE -->
+        <button
+          class="icon-btn"
+          onclick="startVoice()"
+          aria-label="Voice"
+        >
+          🎤
+        </button>
 
-        <h2 class="section-title">Quick actions</h2>
+      </div>
 
-        <div class="cards">
 
-          <a href="/pages/chat.html" class="card">
-            <div class="card-icon">💬</div>
-            <h3>AI Chat</h3>
-            <p>Chat with RG Creator AI.</p>
-          </a>
+      <div class="right-actions">
 
-          <a href="/pages/image.html" class="card">
-            <div class="card-icon">🖼️</div>
-            <h3>AI Image</h3>
-            <p>Create images from your ideas.</p>
-          </a>
+        <button
+          class="send-btn"
+          onclick="sendPrompt()"
+          aria-label="Send"
+        >
+          ➤
+        </button>
 
-          <a href="/pages/writer.html" class="card">
-            <div class="card-icon">✍️</div>
-            <h3>Content Writer</h3>
-            <p>Create captions, scripts and content.</p>
-          </a>
+      </div>
 
-          <a href="/pages/code.html" class="card">
-            <div class="card-icon">💻</div>
-            <h3>Code Generator</h3>
-            <p>Generate, explain and fix code.</p>
-          </a>
-
-          <a href="/pages/youtube.html" class="card">
-            <div class="card-icon">▶️</div>
-            <h3>YouTube Tools</h3>
-            <p>Titles, scripts, keywords and more.</p>
-          </a>
-
-          <a href="/pages/instagram.html" class="card">
-            <div class="card-icon">📸</div>
-            <h3>Instagram Tools</h3>
-            <p>Captions, hooks, keywords and ideas.</p>
-          </a>
-
-        </div>
-
-      </section>
-
-    </main>
-
-    <footer class="footer">
-      RG Creator AI • AI tools for creators
-    </footer>
+    </div>
 
   </div>
 
-  <script>
-    const prompt = document.getElementById("prompt");
-    const sendButton = document.getElementById("sendButton");
 
-    sendButton.addEventListener("click", function () {
-      const message = prompt.value.trim();
+  <!-- HIDDEN UPLOAD INPUTS -->
 
-      if (!message) {
-        prompt.focus();
-        return;
+  <input
+    id="imageInput"
+    class="hidden-input"
+    type="file"
+    accept="image/*"
+    onchange="handleFile(this)"
+  >
+
+  <input
+    id="cameraInput"
+    class="hidden-input"
+    type="file"
+    accept="image/*"
+    capture="environment"
+    onchange="handleFile(this)"
+  >
+
+  <input
+    id="videoInput"
+    class="hidden-input"
+    type="file"
+    accept="video/*"
+    onchange="handleFile(this)"
+  >
+
+  <input
+    id="fileInput"
+    class="hidden-input"
+    type="file"
+    accept=".txt,.doc,.docx,.csv,.json,.html,.css,.js,.py,.java,.php"
+    onchange="handleFile(this)"
+  >
+
+  <input
+    id="pdfInput"
+    class="hidden-input"
+    type="file"
+    accept="application/pdf"
+    onchange="handleFile(this)"
+  >
+
+
+  <!-- STATUS -->
+  <div id="status" class="status">
+    Ready
+  </div>
+
+
+  <!-- AI RESULT -->
+  <div id="result" class="result">
+
+    <div class="result-card">
+
+      <div class="result-title">
+        RG Creator AI
+      </div>
+
+      <div id="resultText" class="result-text"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- QUICK ACTIONS -->
+  <section class="section">
+
+    <div class="section-title">
+      Quick Actions
+    </div>
+
+    <div class="quick-grid">
+
+      <a href="/pages/chat.html" class="quick-card">
+        <div class="quick-icon">💬</div>
+        <strong>AI Chat</strong>
+        <small>Ask anything</small>
+      </a>
+
+      <a href="/pages/image.html" class="quick-card">
+        <div class="quick-icon">🖼️</div>
+        <strong>Create Image</strong>
+        <small>Generate visuals</small>
+      </a>
+
+      <a href="/pages/writer.html" class="quick-card">
+        <div class="quick-icon">✍️</div>
+        <strong>Content Writer</strong>
+        <small>Create content</small>
+      </a>
+
+      <a href="/pages/code.html" class="quick-card">
+        <div class="quick-icon">💻</div>
+        <strong>Code Generator</strong>
+        <small>Generate & fix code</small>
+      </a>
+
+      <a href="/pages/youtube.html" class="quick-card">
+        <div class="quick-icon">▶️</div>
+        <strong>YouTube Tools</strong>
+        <small>Titles, scripts & SEO</small>
+      </a>
+
+      <a href="/pages/instagram.html" class="quick-card">
+        <div class="quick-icon">📸</div>
+        <strong>Instagram Tools</strong>
+        <small>Captions & ideas</small>
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <!-- CAPABILITIES -->
+  <section class="section">
+
+    <div class="section-title">
+      What can I help you create?
+    </div>
+
+    <div class="capability">
+
+      <div class="cap-card">
+        <div class="cap-icon">💬</div>
+        <div>
+          <strong>AI Chat</strong>
+          <p>Ask questions, brainstorm and solve problems.</p>
+        </div>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-icon">✍️</div>
+        <div>
+          <strong>Content Writer</strong>
+          <p>Captions, scripts, blogs and creative writing.</p>
+        </div>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-icon">💻</div>
+        <div>
+          <strong>Code Generator</strong>
+          <p>Generate, explain, fix and improve code.</p>
+        </div>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-icon">🖼️</div>
+        <div>
+          <strong>AI Image Generator</strong>
+          <p>Create images from simple text prompts.</p>
+        </div>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-icon">▶️</div>
+        <div>
+          <strong>YouTube Tools</strong>
+          <p>Titles, descriptions, scripts, keywords and ideas.</p>
+        </div>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-icon">📸</div>
+        <div>
+          <strong>Instagram Tools</strong>
+          <p>Captions, hooks, hashtags, bios and reel ideas.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom-nav">
+
+  <a href="/" class="nav-item active">
+    <span>⌂</span>
+    Home
+  </a>
+
+  <a href="/pages/chat.html" class="nav-item">
+    <span>💬</span>
+    AI Chat
+  </a>
+
+  <a href="/pages/writer.html" class="nav-item">
+    <span>🛠</span>
+    Tools
+  </a>
+
+  <a href="#" class="nav-item" onclick="openMenu()">
+    <span>⋯</span>
+    More
+  </a>
+
+</nav>
+
+
+<script>
+
+  /* PLUS MENU */
+
+  function togglePlusMenu() {
+    const menu = document.getElementById("plusMenu");
+    menu.classList.toggle("open");
+  }
+
+
+  /* UPLOAD */
+
+  function selectImage() {
+    closePlus();
+    document.getElementById("imageInput").click();
+  }
+
+  function openCamera() {
+    closePlus();
+    document.getElementById("cameraInput").click();
+  }
+
+  function selectVideo() {
+    closePlus();
+    document.getElementById("videoInput").click();
+  }
+
+  function selectFile() {
+    closePlus();
+    document.getElementById("fileInput").click();
+  }
+
+  function selectPDF() {
+    closePlus();
+    document.getElementById("pdfInput").click();
+  }
+
+  function closePlus() {
+    document.getElementById("plusMenu").classList.remove("open");
+  }
+
+
+  function handleFile(input) {
+
+    if (!input.files || !input.files.length) return;
+
+    const file = input.files[0];
+
+    document.getElementById("fileName").textContent = file.name;
+
+    document
+      .getElementById("selectedFile")
+      .classList.add("show");
+
+    document.getElementById("status").textContent =
+      "Attached: " + file.name;
+  }
+
+
+  /* VOICE */
+
+  function startVoice() {
+
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      document.getElementById("status").textContent =
+        "Voice input is not supported in this browser.";
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-IN";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    document.getElementById("status").textContent =
+      "Listening... 🎤";
+
+    recognition.start();
+
+    recognition.onresult = function(event) {
+
+      const text =
+        event.results[0][0].transcript;
+
+      document.getElementById("prompt").value = text;
+
+      document.getElementById("status").textContent =
+        "Voice added";
+    };
+
+    recognition.onerror = function() {
+
+      document.getElementById("status").textContent =
+        "Voice input failed.";
+    };
+  }
+
+
+  /* AI CHAT */
+
+  async function sendPrompt() {
+
+    const prompt =
+      document.getElementById("prompt").value.trim();
+
+    if (!prompt) {
+
+      document.getElementById("status").textContent =
+        "Please type something first.";
+
+      return;
+    }
+
+    const status =
+      document.getElementById("status");
+
+    const result =
+      document.getElementById("result");
+
+    const resultText =
+      document.getElementById("resultText");
+
+    status.classList.remove("error");
+
+    status.textContent =
+      "RG Creator AI is thinking...";
+
+    result.classList.add("show");
+
+    resultText.textContent =
+      "Generating response...";
+
+    try {
+
+      const response = await fetch("/api/chat", {
+
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          message: prompt
+        })
+
+      });
+
+      const data =
+        await response.json();
+
+      if (!response.ok || !data.ok) {
+
+        throw new Error(
+          data.error || "AI request failed"
+        );
       }
 
-      window.location.href =
-        "/pages/chat.html?message=" +
-        encodeURIComponent(message);
-    });
+      resultText.textContent =
+        data.reply;
 
-    prompt.addEventListener("keydown", function (event) {
-      if (event.key === "Enter" && !event.shiftKey) {
+      status.textContent =
+        "Ready";
+
+    } catch (error) {
+
+      console.error(error);
+
+      resultText.textContent =
+        "Sorry, something went wrong.";
+
+      status.textContent =
+        error.message || "AI request failed";
+
+      status.classList.add("error");
+    }
+  }
+
+
+  /* MENU */
+
+  function openMenu() {
+
+    alert(
+      "More options will be added here: Profile, Settings, History, Privacy and About."
+    );
+  }
+
+
+  /* ENTER TO SEND */
+
+  document
+    .getElementById("prompt")
+    .addEventListener("keydown", function(event) {
+
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+
         event.preventDefault();
-        sendButton.click();
+
+        sendPrompt();
       }
+
     });
 
-    document
-      .getElementById("menuButton")
-      .addEventListener("click", function () {
-        window.location.href = "/pages/chat.html";
-      });
 
-    document
-      .getElementById("moreButton")
-      .addEventListener("click", function () {
-        alert("Settings and more options will be available here.");
-      });
+  /* CLOSE PLUS WHEN CLICKING OUTSIDE */
 
-    document
-      .getElementById("capabilityButton")
-      .addEventListener("click", function () {
-        document
-          .querySelector(".section")
-          .scrollIntoView({ behavior: "smooth" });
-      });
+  document.addEventListener("click", function(event) {
 
-    document
-      .getElementById("attachButton")
-      .addEventListener("click", function () {
-        alert("File upload will be connected in the AI Chat.");
-      });
+    const wrapper =
+      document.querySelector(".plus-wrapper");
 
-    document
-      .getElementById("voiceButton")
-      .addEventListener("click", function () {
-        alert("Voice input will be connected in the AI Chat.");
-      });
-  </script>
+    const menu =
+      document.getElementById("plusMenu");
+
+    if (
+      !wrapper.contains(event.target) &&
+      menu.classList.contains("open")
+    ) {
+
+      menu.classList.remove("open");
+    }
+
+  });
+
+</script>
 
 </body>
 </html>
