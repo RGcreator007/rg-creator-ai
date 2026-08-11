@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>AI Image — RG Creator AI</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #000000;
+      color: #ffffff;
+      min-height: 100vh;
+    }
+
+    button,
+    textarea,
+    select,
+    input {
+      font: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    /* Header */
+
+    .header {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid #222222;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(12px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-btn {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 12px;
+      background: #151515;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .header-title {
+      font-size: 14px;
+      color: #aaaaaa;
+    }
+
+    .more-btn {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: #ffffff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    /* Main */
+
+    .container {
+      width: min(900px, 100%);
+      margin: auto;
+      padding: 32px 18px;
+    }
+
+    .hero {
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: #999999;
+      line-height: 1.5;
+      font-size: 15px;
+    }
+
+    /* Prompt */
+
+    .section {
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .prompt-box {
+      background: #111111;
+      border: 1px solid #333333;
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #ffffff;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    textarea::placeholder {
+      color: #666666;
+    }
+
+    .prompt-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .reference-btn {
+      border: 1px solid #333333;
+      background: #171717;
+      color: #dddddd;
+      border-radius: 12px;
+      padding: 10px 13px;
+      cursor: pointer;
+    }
+
+    .reference-btn:hover {
+      border-color: #666666;
+    }
+
+    #referenceInput {
+      display: none;
+    }
+
+    #referenceName {
+      color: #777777;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+
+    /* Controls */
+
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .control {
+      background: #101010;
+      border: 1px solid #292929;
+      border-radius: 16px;
+      padding: 15px;
+    }
+
+    .control label {
+      display: block;
+      font-size: 13px;
+      color: #bbbbbb;
+      margin-bottom: 9px;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #333333;
+      border-radius: 11px;
+      background: #171717;
+      color: #ffffff;
+      outline: none;
+    }
+
+    /* Style buttons */
+
+    .style-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+    }
+
+    .style-btn {
+      padding: 11px 6px;
+      border-radius: 11px;
+      border: 1px solid #303030;
+      background: #111111;
+      color: #cccccc;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .style-btn.active {
+      border-color: #ff3333;
+      color: #ffffff;
+      background: #1b0a0a;
+    }
+
+    /* Generate */
+
+    .generate-btn {
+      width: 100%;
+      padding: 16px;
+      border: 0;
+      border-radius: 15px;
+      background: #ffffff;
+      color: #000000;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .generate-btn:hover {
+      transform: translateY(-1px);
+      background: #eeeeee;
+    }
+
+    .generate-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Result */
+
+    .result {
+      display: none;
+      margin-top: 28px;
+    }
+
+    .result-card {
+      background: #101010;
+      border: 1px solid #292929;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .result-placeholder {
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #777777;
+      padding: 30px;
+    }
+
+    .result-placeholder span {
+      display: block;
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .result-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid #292929;
+    }
+
+    .action-btn {
+      padding: 11px 5px;
+      border-radius: 10px;
+      border: 1px solid #303030;
+      background: #151515;
+      color: #dddddd;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .action-btn:hover {
+      background: #202020;
+    }
+
+    /* Bottom nav */
+
+    .bottom-nav {
+      display: none;
+    }
+
+    /* Mobile */
+
+    @media (max-width: 600px) {
+
+      .container {
+        padding: 25px 14px 90px;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .control-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .style-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .result-actions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 68px;
+        background: rgba(10, 10, 10, 0.96);
+        border-top: 1px solid #292929;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        z-index: 20;
+        backdrop-filter: blur(12px);
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+        background: transparent;
+        border: 0;
+        color: #777777;
+        font-size: 11px;
+        cursor: pointer;
+      }
+
+      .nav-item span:first-child {
+        font-size: 20px;
+      }
+
+      .nav-item.active {
+        color: #ffffff;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <!-- Header -->
+
+    <header class="header">
+
+      <div class="header-left">
+
+        <button class="back-btn" onclick="goBack()">
+          ←
+        </button>
+
+        <div>
+          <div class="brand">RG Creator AI</div>
+          <div class="header-title">AI Image</div>
+        </div>
+
+      </div>
+
+      <button class="more-btn">
+        ⋯
+      </button>
+
+    </header>
+
+
+    <!-- Main -->
+
+    <main class="container">
+
+      <section class="hero">
+
+        <h1>Create an Image</h1>
+
+        <p>
+          Describe what you want to create and turn your idea into an image.
+        </p>
+
+      </section>
+
+
+      <!-- Prompt -->
+
+      <section class="section">
+
+        <div class="section-title">
+          Describe your image
+        </div>
+
+        <div class="prompt-box">
+
+          <textarea
+            id="prompt"
+            placeholder="Example: A cinematic portrait of a creator standing in a futuristic city at night..."
+          ></textarea>
+
+          <div class="prompt-bottom">
+
+            <div>
+
+              <button
+                class="reference-btn"
+                onclick="document.getElementById('referenceInput').click()"
+              >
+                ＋ Add reference image
+              </button>
+
+              <input
+                type="file"
+                id="referenceInput"
+                accept="image/*"
+                onchange="referenceSelected(this)"
+              />
+
+              <span id="referenceName"></span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- Style -->
+
+      <section class="section">
+
+        <div class="section-title">
+          Style
+        </div>
+
+        <div class="style-grid">
+
+          <button class="style-btn active" data-style="Realistic">
+            Realistic
+          </button>
+
+          <button class="style-btn" data-style="Cinematic">
+            Cinematic
+          </button>
+
+          <button class="style-btn" data-style="Anime">
+            Anime
+          </button>
+
+          <button class="style-btn" data-style="3D">
+            3D
+          </button>
+
+          <button class="style-btn" data-style="Illustration">
+            Illustration
+          </button>
+
+          <button class="style-btn" data-style="Digital Art">
+            Digital Art
+          </button>
+
+          <button class="style-btn" data-style="Minimal">
+            Minimal
+          </button>
+
+          <button class="style-btn" data-style="Photography">
+            Photography
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- Controls -->
+
+      <section class="section">
+
+        <div class="control-grid">
+
+          <div class="control">
+
+            <label for="ratio">
+              Aspect Ratio
+            </label>
+
+            <select id="ratio">
+
+              <option value="1:1">
+                1:1 — Square
+              </option>
+
+              <option value="16:9">
+                16:9 — Landscape
+              </option>
+
+              <option value="9:16">
+                9:16 — Shorts / Reels
+              </option>
+
+              <option value="4:5">
+                4:5 — Instagram
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="control">
+
+            <label for="quality">
+              Image Quality
+            </label>
+
+            <select id="quality">
+
+              <option value="standard">
+                Standard
+              </option>
+
+              <option value="high">
+                High Quality
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- Generate -->
+
+      <section class="section">
+
+        <button
+          class="generate-btn"
+          id="generateBtn"
+          onclick="generateImage()"
+        >
+          ✦ Generate Image
+        </button>
+
+      </section>
+
+
+      <!-- Result -->
+
+      <section class="result" id="result">
+
+        <div class="result-card">
+
+          <div class="result-placeholder" id="resultContent">
+
+            <div>
+
+              <span>✦</span>
+
+              <div>
+                Your generated image will appear here.
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="result-actions">
+
+            <button class="action-btn" onclick="downloadImage()">
+              ⬇ Download
+            </button>
+
+            <button class="action-btn" onclick="regenerateImage()">
+              ↻ Regenerate
+            </button>
+
+            <button class="action-btn" onclick="editImage()">
+              ✨ Edit
+            </button>
+
+            <button class="action-btn" onclick="shareImage()">
+              🔗 Share
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- Mobile Navigation -->
+
+    <nav class="bottom-nav">
+
+      <button class="nav-item" onclick="goHome()">
+        <span>⌂</span>
+        <span>Home</span>
+      </button>
+
+      <button class="nav-item" onclick="goChat()">
+        <span>💬</span>
+        <span>AI Chat</span>
+      </button>
+
+      <button class="nav-item active">
+        <span>✦</span>
+        <span>Tools</span>
+      </button>
+
+      <button class="nav-item" onclick="goProfile()">
+        <span>◉</span>
+        <span>Profile</span>
+      </button>
+
+    </nav>
+
+  </div>
+
+
+  <script>
+
+    let selectedStyle = "Realistic";
+    let lastPrompt = "";
+
+
+    /* Style selection */
+
+    document.querySelectorAll(".style-btn").forEach(button => {
+
+      button.addEventListener("click", () => {
+
+        document.querySelectorAll(".style-btn")
+          .forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
+
+        selectedStyle = button.dataset.style;
+
+      });
+
+    });
+
+
+    /* Reference image */
+
+    function referenceSelected(input) {
+
+      const name = document.getElementById("referenceName");
+
+      if (input.files && input.files.length > 0) {
+
+        name.textContent = input.files[0].name;
+
+      } else {
+
+        name.textContent = "";
+
+      }
+
+    }
+
+
+    /* Generate */
+
+    async function generateImage() {
+
+      const prompt =
+        document.getElementById("prompt").value.trim();
+
+      const ratio =
+        document.getElementById("ratio").value;
+
+      const quality =
+        document.getElementById("quality").value;
+
+      const button =
+        document.getElementById("generateBtn");
+
+      const result =
+        document.getElementById("result");
+
+      const resultContent =
+        document.getElementById("resultContent");
+
+
+      if (!prompt) {
+
+        alert("Please describe the image you want to create.");
+
+        return;
+
+      }
+
+
+      lastPrompt = prompt;
+
+      button.disabled = true;
+
+      button.textContent = "Generating...";
+
+      result.style.display = "block";
+
+      resultContent.innerHTML = `
+
+        <div>
+
+          <span>⏳</span>
+
+          <div>
+            Preparing your image...
+          </div>
+
+          <p style="
+            margin-top:10px;
+            color:#666;
+            font-size:12px;
+          ">
+            Image generation API will be connected here.
+          </p>
+
+        </div>
+
+      `;
+
+
+      try {
+
+        /*
+          Image-generation API will be connected here.
+
+          We are intentionally NOT sending the Gemini
+          text-chat API key directly from the browser.
+        */
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+
+        resultContent.innerHTML = `
+
+          <div>
+
+            <span>✦</span>
+
+            <div>
+              Image generation interface is ready.
+            </div>
+
+            <p style="
+              margin-top:10px;
+              color:#777;
+              font-size:12px;
+              line-height:1.5;
+            ">
+              Style: ${escapeHtml(selectedStyle)}<br>
+              Ratio: ${escapeHtml(ratio)}<br>
+              Quality: ${escapeHtml(quality)}
+            </p>
+
+          </div>
+
+        `;
+
+      } catch (error) {
+
+        resultContent.innerHTML = `
+
+          <div>
+
+            <span>⚠</span>
+
+            <div>
+              Something went wrong.
+            </div>
+
+          </div>
+
+        `;
+
+      } finally {
+
+        button.disabled = false;
+
+        button.textContent = "✦ Generate Image";
+
+      }
+
+    }
+
+
+    function regenerateImage() {
+
+      if (!lastPrompt) {
+
+        alert("Generate an image first.");
+
+        return;
+
+      }
+
+      generateImage();
+
+    }
+
+
+    function downloadImage() {
+
+      alert("Download will work after the image-generation API is connected.");
+
+    }
+
+
+    function editImage() {
+
+      alert("Image editing will be connected with the image-generation system.");
+
+    }
+
+
+    async function shareImage() {
+
+      if (navigator.share) {
+
+        try {
+
+          await navigator.share({
+
+            title: "RG Creator AI",
+
+            text: "Created with RG Creator AI"
+
+          });
+
+        } catch (error) {}
+
+      } else {
+
+        alert("Sharing is not supported on this browser.");
+
+      }
+
+    }
+
+
+    function goBack() {
+
+      if (document.referrer) {
+
+        history.back();
+
+      } else {
+
+        goHome();
+
+      }
+
+    }
+
+
+    function goHome() {
+
+      window.location.href = "/";
+
+    }
+
+
+    function goChat() {
+
+      window.location.href = "/pages/chat.html";
+
+    }
+
+
+    function goProfile() {
+
+      alert("Profile & Settings will be added next.");
+
+    }
+
+
+    function escapeHtml(text) {
+
+      const div = document.createElement("div");
+
+      div.textContent = text;
+
+      return div.innerHTML;
+
+    }
+
+  </script>
+
+</body>
+</html>
