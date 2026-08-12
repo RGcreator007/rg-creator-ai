@@ -1,1052 +1,1308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RG Creator AI</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    :root {
-      --bg: #000000;
-      --surface: #111111;
-      --surface2: #171717;
-      --border: #292929;
-      --text: #ffffff;
-      --muted: #9a9a9a;
-      --accent: #ff3030;
-    }
-
-    body {
-      font-family:
-        "Söhne",
-        "Inter",
-        "Segoe UI",
-        "Helvetica Neue",
-        Arial,
-        sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      letter-spacing: -0.2px;
-    }
-
-    button,
-    input,
-    textarea,
-    select {
-      font-family: inherit;
-    }
-
-    code,
-    pre,
-    .code,
-    .code-block,
-    .code-output,
-    .technical-text {
-      font-family:
-        "Söhne Mono",
-        "Consolas",
-        "Monaco",
-        monospace;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .app {
-      min-height: 100vh;
-      padding-bottom: 82px;
-    }
-
-    /* HEADER */
-
-    header {
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 18px;
-      border-bottom: 1px solid #171717;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(0,0,0,.94);
-      backdrop-filter: blur(14px);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-    }
-
-    .logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: #fff;
-      color: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 16px;
-    }
-
-    .brand-text {
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .brand-text span {
-      color: #aaa;
-      font-weight: 500;
-    }
-
-    .menu-btn {
-      width: 42px;
-      height: 42px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: white;
-      border-radius: 50%;
-      font-size: 21px;
-      cursor: pointer;
-    }
-
-    /* HERO */
-
-    .hero {
-      padding: 55px 20px 20px;
-      text-align: center;
-    }
-
-    .hero h1 {
-      font-size: clamp(32px, 9vw, 52px);
-      line-height: 1.05;
-      font-weight: 800;
-      letter-spacing: -1.8px;
-    }
-
-    .hero h1 span {
-      color: #bdbdbd;
-    }
-
-    .hero p {
-      color: var(--muted);
-      margin-top: 14px;
-      font-size: 15px;
-    }
-
-    /* MAIN AI BOX */
-
-    .ai-box {
-      width: min(760px, calc(100% - 28px));
-      margin: 30px auto 0;
-      background: #101010;
-      border: 1px solid #303030;
-      border-radius: 24px;
-      padding: 15px;
-      box-shadow: 0 0 35px rgba(255,255,255,.025);
-    }
-
-    .selected-file {
-      display: none;
-      align-items: center;
-      gap: 8px;
-      background: #191919;
-      border: 1px solid #2b2b2b;
-      padding: 9px 12px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      color: #ddd;
-      font-size: 13px;
-    }
-
-    .selected-file.show {
-      display: flex;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 105px;
-      resize: none;
-      border: none;
-      outline: none;
-      background: transparent;
-      color: white;
-      font-size: 17px;
-      line-height: 1.55;
-      padding: 5px;
-    }
-
-    textarea::placeholder {
-      color: #666;
-    }
-
-    .input-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .left-actions,
-    .right-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .icon-btn {
-      width: 43px;
-      height: 43px;
-      border-radius: 50%;
-      border: 1px solid #303030;
-      background: #181818;
-      color: white;
-      cursor: pointer;
-      font-size: 19px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .icon-btn:hover {
-      border-color: #555;
-    }
-
-    .send-btn {
-      width: 48px;
-      height: 48px;
-      border: none;
-      border-radius: 50%;
-      background: white;
-      color: black;
-      font-size: 20px;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .send-btn:active {
-      transform: scale(.95);
-    }
-
-    /* PLUS MENU */
-
-    .plus-wrapper {
-      position: relative;
-    }
-
-    .plus-menu {
-      position: absolute;
-      left: 0;
-      bottom: 57px;
-      width: 190px;
-      background: #151515;
-      border: 1px solid #333;
-      border-radius: 17px;
-      padding: 8px;
-      display: none;
-      box-shadow: 0 15px 40px rgba(0,0,0,.6);
-      z-index: 100;
-    }
-
-    .plus-menu.open {
-      display: block;
-      animation: pop .15s ease;
-    }
-
-    @keyframes pop {
-      from {
-        opacity: 0;
-        transform: translateY(6px) scale(.97);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    .upload-option {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 11px;
-      border: none;
-      background: transparent;
-      color: white;
-      border-radius: 11px;
-      cursor: pointer;
-      text-align: left;
-      font-size: 14px;
-    }
-
-    .upload-option:hover {
-      background: #222;
-    }
-
-    .upload-icon {
-      width: 31px;
-      height: 31px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 9px;
-      background: #242424;
-      font-size: 16px;
-    }
-
-    /* QUICK ACTIONS */
-
-    .section {
-      width: min(900px, calc(100% - 28px));
-      margin: 38px auto 0;
-    }
-
-    .section-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 15px;
-    }
-
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-
-    .quick-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 17px;
-      padding: 17px;
-      min-height: 100px;
-      transition: .2s;
-    }
-
-    .quick-card:hover {
-      transform: translateY(-2px);
-      border-color: #454545;
-    }
-
-    .quick-icon {
-      font-size: 23px;
-      margin-bottom: 12px;
-    }
-
-    .quick-card strong {
-      display: block;
-      font-size: 14px;
-    }
-
-    .quick-card small {
-      display: block;
-      color: #777;
-      margin-top: 5px;
-      line-height: 1.4;
-    }
-
-    /* STATUS */
-
-    .status {
-      width: min(760px, calc(100% - 28px));
-      margin: 25px auto;
-      color: #777;
-      text-align: center;
-      font-size: 13px;
-      min-height: 20px;
-    }
-
-    .status.error {
-      color: #ff6666;
-    }
-
-    /* RESULT */
-
-    .result {
-      width: min(760px, calc(100% - 28px));
-      margin: 20px auto;
-      display: none;
-    }
-
-    .result.show {
-      display: block;
-    }
-
-    .result-card {
-      background: #101010;
-      border: 1px solid #292929;
-      border-radius: 20px;
-      padding: 18px;
-    }
-
-    .result-title {
-      color: #aaa;
-      font-size: 12px;
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      letter-spacing: .7px;
-    }
-
-    .result-text {
-      white-space: pre-wrap;
-      line-height: 1.65;
-      font-size: 15px;
-    }
-
-    /* BOTTOM NAV */
-
-    .bottom-nav {
-      position: fixed;
-      left: 10px;
-      right: 10px;
-      bottom: 10px;
-      height: 65px;
-      border: 1px solid #292929;
-      background: rgba(16,16,16,.96);
-      backdrop-filter: blur(18px);
-      border-radius: 20px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      z-index: 80;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      color: #777;
-      font-size: 10px;
-    }
-
-    .nav-item span {
-      font-size: 19px;
-    }
-
-    .nav-item.active {
-      color: white;
-    }
-
-    .nav-item.active span {
-      color: var(--accent);
-    }
-
-    /* MORE MENU */
-
-    .more-menu {
-      position: fixed;
-      top: 64px;
-      right: 14px;
-      width: min(285px, calc(100vw - 28px));
-      max-height: calc(100vh - 90px);
-      overflow-y: auto;
-      background: #151515;
-      border: 1px solid #333;
-      border-radius: 18px;
-      padding: 8px;
-      display: none;
-      box-shadow: 0 18px 50px rgba(0,0,0,.7);
-      z-index: 200;
-    }
-
-    .more-menu.open {
-      display: block;
-      animation: pop .15s ease;
-    }
-
-    .more-item {
-      width: 100%;
-      min-height: 46px;
-      border: 0;
-      background: transparent;
-      color: #fff;
-      border-radius: 11px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-      cursor: pointer;
-      text-align: left;
-      font-size: 14px;
-    }
-
-    .more-item:hover {
-      background: #222;
-    }
-
-    .more-item-icon {
-      width: 24px;
-      text-align: center;
-      font-size: 18px;
-    }
-
-    .more-divider {
-      height: 1px;
-      background: #292929;
-      margin: 7px 5px;
-    }
-
-    /* MODAL */
-
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.72);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 500;
-    }
-
-    .modal-backdrop.show {
-      display: flex;
-    }
-
-    .modal {
-      width: min(430px,100%);
-      max-height: 85vh;
-      overflow-y: auto;
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 22px;
-      padding: 18px;
-      box-shadow: 0 25px 80px rgba(0,0,0,.8);
-    }
-
-    .modal-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-
-    .modal-head h2 {
-      font-size: 20px;
-    }
-
-    .modal-close {
-      width: 36px;
-      height: 36px;
-      border: 0;
-      background: #1d1d1d;
-      color: #fff;
-      border-radius: 50%;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .modal-subtitle {
-      color: #888;
-      font-size: 13px;
-      line-height: 1.5;
-      margin-bottom: 15px;
-    }
-
-    .modal-note {
-      color: #666;
-      font-size: 12px;
-      line-height: 1.5;
-      margin-top: 14px;
-    }
-
-    .primary-action,
-    .secondary-action {
-      width: 100%;
-      min-height: 46px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 14px;
-      margin-bottom: 9px;
-    }
-
-    .primary-action {
-      background: #fff;
-      color: #000;
-      border: 0;
-    }
-
-    .secondary-action {
-      background: #181818;
-      color: #fff;
-      border: 1px solid #303030;
-    }
-
-    .auth-input {
-      width: 100%;
-      height: 46px;
-      background: #181818;
-      border: 1px solid #303030;
-      color: #fff;
-      border-radius: 12px;
-      padding: 0 13px;
-      outline: none;
-      margin-bottom: 9px;
-      font-size: 14px;
-    }
-
-    .auth-input:focus {
-      border-color: #555;
-    }
-
-    /* MOBILE */
-
-    @media (max-width: 600px) {
-
-      header {
-        height: 64px;
-        padding: 0 14px;
-      }
-
-      .hero {
-        padding-top: 42px;
-      }
-
-      .quick-grid {
-        grid-template-columns: repeat(2,1fr);
-      }
-
-      .quick-card {
-        min-height: 94px;
-      }
-
-      .more-menu {
-        top: 58px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#000000">
+<title>RG Creator AI</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --bg:#000;
+  --surface:#111;
+  --surface2:#181818;
+  --surface3:#222;
+  --border:#2b2b2b;
+  --text:#fff;
+  --muted:#8a8a8a;
+  --accent:#ff3030;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+  background:#000;
+  color:#fff;
+  font-family:
+    "Söhne",
+    "Inter",
+    "Segoe UI",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  overflow:hidden;
+}
+
+button,
+input,
+textarea,
+select{
+  font-family:inherit;
+}
+
+pre,
+code,
+.code,
+.code-block,
+.code-output,
+.technical-text{
+  font-family:
+    "Söhne Mono",
+    "Consolas",
+    "Monaco",
+    monospace;
+}
+
+button{
+  cursor:pointer;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* ================= APP ================= */
+
+.app{
+  width:100%;
+  height:100%;
+  position:relative;
+  background:#000;
+}
+
+/* ================= HEADER ================= */
+
+.header{
+  height:62px;
+  position:relative;
+  z-index:30;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 13px;
+  background:rgba(0,0,0,.94);
+  border-bottom:1px solid #171717;
+  backdrop-filter:blur(16px);
+}
+
+.header-left,
+.header-right{
+  display:flex;
+  align-items:center;
+}
+
+.header-left{
+  gap:8px;
+  min-width:0;
+}
+
+.icon-btn{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:12px;
+  background:transparent;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.icon-btn:hover{
+  background:#191919;
+}
+
+.icon{
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.logo-title{
+  max-width:58vw;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:16px;
+  font-weight:600;
+}
+
+/* ================= TOP MORE ================= */
+
+.more-menu{
+  position:absolute;
+  top:56px;
+  right:12px;
+  z-index:80;
+  width:235px;
+  padding:7px;
+  background:#191919;
+  border:1px solid #303030;
+  border-radius:17px;
+  box-shadow:0 20px 55px rgba(0,0,0,.75);
+  display:none;
+}
+
+.more-menu.open{
+  display:block;
+}
+
+.more-item{
+  width:100%;
+  min-height:44px;
+  border:0;
+  background:transparent;
+  color:#fff;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:0 11px;
+  text-align:left;
+  font-size:14px;
+}
+
+.more-item:hover{
+  background:#292929;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+  height:calc(100% - 62px);
+  position:relative;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ================= MESSAGES ================= */
+
+.messages{
+  flex:1;
+  overflow-y:auto;
+  padding:20px 14px 160px;
+  scroll-behavior:smooth;
+}
+
+.messages::-webkit-scrollbar{
+  width:5px;
+}
+
+.messages::-webkit-scrollbar-thumb{
+  background:#292929;
+  border-radius:20px;
+}
+
+/* ================= WELCOME ================= */
+
+.welcome{
+  width:min(760px,100%);
+  margin:13vh auto 0;
+  text-align:center;
+  transition:.2s;
+}
+
+.welcome-logo{
+  width:58px;
+  height:58px;
+  margin:auto;
+  border-radius:18px;
+  background:#fff;
+  color:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:18px;
+}
+
+.welcome h1{
+  margin-top:18px;
+  font-size:28px;
+  letter-spacing:-.8px;
+}
+
+.welcome p{
+  margin-top:8px;
+  color:#777;
+  font-size:14px;
+}
+
+/* ================= QUICK ACTIONS ================= */
+
+.quick-actions{
+  width:min(760px,100%);
+  margin:28px auto 0;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+}
+
+.quick-action{
+  min-height:58px;
+  padding:10px;
+  border:1px solid #252525;
+  background:#101010;
+  color:#fff;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  text-align:left;
+  transition:.18s;
+}
+
+.quick-action:hover{
+  background:#191919;
+  border-color:#383838;
+}
+
+.quick-icon{
+  font-size:20px;
+}
+
+.quick-text strong{
+  display:block;
+  font-size:13px;
+}
+
+.quick-text span{
+  display:block;
+  margin-top:3px;
+  color:#707070;
+  font-size:10px;
+}
+
+/* ================= MESSAGE ================= */
+
+.message{
+  width:min(760px,100%);
+  margin:0 auto 27px;
+}
+
+.user-message{
+  display:flex;
+  justify-content:flex-end;
+}
+
+.user-bubble{
+  max-width:84%;
+  padding:12px 15px;
+  border-radius:20px 20px 5px 20px;
+  background:#252525;
+  color:#fff;
+  font-size:15px;
+  line-height:1.55;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.ai-message{
+  font-size:15px;
+  line-height:1.7;
+}
+
+.ai-content{
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.message-actions{
+  margin-top:8px;
+  display:flex;
+  align-items:center;
+  gap:2px;
+}
+
+.action-btn{
+  width:36px;
+  height:36px;
+  border:0;
+  background:transparent;
+  color:#858585;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.action-btn:hover{
+  background:#181818;
+  color:#fff;
+}
+
+/* ================= COMPOSER ================= */
+
+.input-area{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:25;
+  padding:9px 11px 16px;
+  background:linear-gradient(
+    transparent,
+    #000 26%
+  );
+}
+
+.composer{
+  width:min(760px,100%);
+  margin:auto;
+  background:#151515;
+  border:1px solid #303030;
+  border-radius:24px;
+  padding:10px;
+  box-shadow:0 -10px 40px rgba(0,0,0,.5);
+}
+
+.composer textarea{
+  width:100%;
+  min-height:45px;
+  max-height:150px;
+  padding:7px 8px;
+  resize:none;
+  outline:none;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:15px;
+  line-height:1.5;
+}
+
+.composer textarea::placeholder{
+  color:#707070;
+}
+
+.composer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.composer-left,
+.composer-right{
+  display:flex;
+  align-items:center;
+  gap:3px;
+}
+
+.circle-btn{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#aaa;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.circle-btn:hover{
+  background:#252525;
+  color:#fff;
+}
+
+.send-btn{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  color:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.send-btn:hover{
+  transform:scale(1.04);
+}
+
+/* ================= PLUS MENU ================= */
+
+.plus-wrap{
+  position:relative;
+}
+
+.plus-menu{
+  position:absolute;
+  left:0;
+  bottom:49px;
+  width:215px;
+  padding:7px;
+  border:1px solid #333;
+  background:#1a1a1a;
+  border-radius:17px;
+  box-shadow:0 18px 55px rgba(0,0,0,.7);
+  display:none;
+}
+
+.plus-menu.open{
+  display:block;
+}
+
+.plus-item{
+  width:100%;
+  height:44px;
+  border:0;
+  background:transparent;
+  color:#fff;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:0 11px;
+  text-align:left;
+}
+
+.plus-item:hover{
+  background:#292929;
+}
+
+/* ================= ATTACHMENT ================= */
+
+.attachment{
+  display:none;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+  padding:8px 10px;
+  border-radius:11px;
+  background:#202020;
+  color:#bbb;
+  font-size:12px;
+}
+
+.attachment.show{
+  display:flex;
+}
+
+/* ================= SIDEBAR ================= */
+
+.overlay{
+  position:fixed;
+  inset:0;
+  z-index:90;
+  background:rgba(0,0,0,.67);
+  display:none;
+}
+
+.overlay.show{
+  display:block;
+}
+
+.sidebar{
+  position:fixed;
+  inset:0 auto 0 0;
+  z-index:100;
+  width:min(310px,87vw);
+  background:#111;
+  border-right:1px solid #292929;
+  transform:translateX(-100%);
+  transition:.23s ease;
+  display:flex;
+  flex-direction:column;
+}
+
+.sidebar.open{
+  transform:translateX(0);
+}
+
+.sidebar-head{
+  height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 11px;
+  border-bottom:1px solid #242424;
+}
+
+.sidebar-title{
+  font-size:16px;
+  font-weight:700;
+}
+
+.new-chat{
+  height:45px;
+  margin:12px;
+  border:1px solid #303030;
+  background:#191919;
+  color:#fff;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:0 14px;
+  font-size:14px;
+}
+
+.new-chat:hover{
+  background:#222;
+}
+
+.search{
+  width:calc(100% - 24px);
+  height:42px;
+  margin:0 12px 10px;
+  padding:0 12px;
+  border:1px solid #2b2b2b;
+  border-radius:12px;
+  outline:none;
+  background:#171717;
+  color:#fff;
+}
+
+.history{
+  flex:1;
+  overflow-y:auto;
+  padding:0 8px 8px;
+}
+
+.history-label{
+  padding:11px 8px 6px;
+  color:#6e6e6e;
+  font-size:11px;
+  text-transform:uppercase;
+}
+
+.history-item{
+  min-height:45px;
+  padding:0 8px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:#ddd;
+}
+
+.history-item:hover{
+  background:#1e1e1e;
+}
+
+.history-name{
+  flex:1;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:13px;
+}
+
+.history-more{
+  width:30px;
+  height:30px;
+  border:0;
+  background:transparent;
+  color:#777;
+  border-radius:8px;
+}
+
+.history-more:hover{
+  background:#292929;
+  color:#fff;
+}
+
+/* NORMAL MENU BOTTOM */
+
+.sidebar-bottom{
+  margin-top:auto;
+  padding:10px;
+  border-top:1px solid #252525;
+}
+
+.sidebar-bottom-btn{
+  width:100%;
+  min-height:46px;
+  border:0;
+  background:transparent;
+  color:#fff;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:0 11px;
+  text-align:left;
+  font-size:14px;
+}
+
+.sidebar-bottom-btn:hover{
+  background:#202020;
+}
+
+/* ================= MODAL ================= */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  background:rgba(0,0,0,.78);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+
+.modal-backdrop.show{
+  display:flex;
+}
+
+.modal{
+  width:min(430px,100%);
+  max-height:85vh;
+  overflow:auto;
+  padding:18px;
+  border:1px solid #333;
+  border-radius:20px;
+  background:#111;
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+
+.modal-head h2{
+  font-size:20px;
+}
+
+.modal-close{
+  width:36px;
+  height:36px;
+  border:0;
+  border-radius:50%;
+  background:#202020;
+  color:#fff;
+  font-size:20px;
+}
+
+.modal-text{
+  color:#999;
+  font-size:14px;
+  line-height:1.6;
+  margin-bottom:15px;
+}
+
+.modal-btn{
+  width:100%;
+  min-height:45px;
+  margin-top:8px;
+  border:1px solid #303030;
+  border-radius:11px;
+  background:#181818;
+  color:#fff;
+}
+
+.modal-btn.primary{
+  background:#fff;
+  color:#000;
+  border:0;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:95px;
+  z-index:600;
+  transform:translate(-50%,10px);
+  padding:10px 15px;
+  border:1px solid #333;
+  border-radius:12px;
+  background:#222;
+  color:#fff;
+  font-size:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:600px){
+
+  .quick-actions{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .welcome{
+    margin-top:12vh;
+  }
+
+  .welcome h1{
+    font-size:25px;
+  }
+
+  .messages{
+    padding-bottom:150px;
+  }
+
+  .user-bubble{
+    max-width:89%;
+  }
+
+  .input-area{
+    padding-bottom:11px;
+  }
+
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <!-- HEADER -->
+<!-- ================= HEADER ================= -->
 
-  <header>
+<header class="header">
 
-    <div class="brand">
-
-      <div class="logo">
-        RG
-      </div>
-
-      <div class="brand-text">
-        RG Creator <span>AI</span>
-      </div>
-
-    </div>
+  <div class="header-left">
 
     <button
-      class="menu-btn"
-      onclick="openMenu(event)"
-      aria-label="More options"
+      class="icon-btn"
+      onclick="openSidebar()"
+      aria-label="Menu"
     >
-      ⋯
+      <svg class="icon" viewBox="0 0 24 24">
+        <path d="M4 6h16"/>
+        <path d="M4 12h16"/>
+        <path d="M4 18h16"/>
+      </svg>
     </button>
 
-  </header>
+    <div class="logo-title">
+      RG Creator AI
+    </div>
 
+  </div>
 
-  <!-- MORE MENU -->
+  <div class="header-right">
 
-  <div
-    id="moreMenu"
-    class="more-menu"
-  >
-
-    <button class="more-item" onclick="showProfile()">
-      <span class="more-item-icon">👤</span>
-      <span>Profile</span>
-    </button>
-
-    <button class="more-item" onclick="showHistory()">
-      <span class="more-item-icon">💬</span>
-      <span>Chat History</span>
-    </button>
-
-    <button class="more-item" onclick="showPrivacy()">
-      <span class="more-item-icon">🔒</span>
-      <span>Privacy</span>
-    </button>
-
-    <button class="more-item" onclick="showAbout()">
-      <span class="more-item-icon">ⓘ</span>
-      <span>About</span>
-    </button>
-
-    <div class="more-divider"></div>
-
-    <!-- SETTINGS AT BOTTOM -->
-
-    <button class="more-item" onclick="openSettings()">
-      <span class="more-item-icon">⚙️</span>
-      <span>Settings</span>
-    </button>
-
-    <!-- LOGIN / SIGNUP AT VERY BOTTOM -->
-
-    <button class="more-item" onclick="openAuth()">
-      <span class="more-item-icon">👤</span>
-      <span>Log in / Sign up</span>
+    <button
+      class="icon-btn"
+      onclick="toggleMore()"
+      aria-label="More"
+    >
+      <svg class="icon" viewBox="0 0 24 24">
+        <circle cx="5" cy="12" r="1"/>
+        <circle cx="12" cy="12" r="1"/>
+        <circle cx="19" cy="12" r="1"/>
+      </svg>
     </button>
 
   </div>
 
-
-  <!-- HERO -->
-
-  <section class="hero">
-
-    <h1>
-      What can I help <span>you create?</span>
-    </h1>
-
-    <p>
-      Your AI-powered creative workspace
-    </p>
-
-  </section>
+</header>
 
 
-  <!-- AI BOX -->
+<!-- ================= MORE ================= -->
 
-  <section class="ai-box">
+<div
+  class="more-menu"
+  id="moreMenu"
+>
 
-    <div
-      id="selectedFile"
-      class="selected-file"
-    >
-      <span>📎</span>
-      <span id="fileName"></span>
-    </div>
-
-
-    <textarea
-      id="prompt"
-      placeholder="What do you want to create?"
-    ></textarea>
-
-
-    <div class="input-bottom">
-
-      <div class="left-actions">
-
-        <!-- PLUS -->
-
-        <div class="plus-wrapper">
-
-          <button
-            class="icon-btn"
-            onclick="togglePlusMenu()"
-            aria-label="Attach"
-          >
-            +
-          </button>
-
-          <div
-            id="plusMenu"
-            class="plus-menu"
-          >
-
-            <button
-              class="upload-option"
-              onclick="selectImage()"
-            >
-              <span class="upload-icon">🖼️</span>
-              Image
-            </button>
-
-            <button
-              class="upload-option"
-              onclick="openCamera()"
-            >
-              <span class="upload-icon">📷</span>
-              Camera
-            </button>
-
-            <button
-              class="upload-option"
-              onclick="selectVideo()"
-            >
-              <span class="upload-icon">🎥</span>
-              Video
-            </button>
-
-            <button
-              class="upload-option"
-              onclick="selectFile()"
-            >
-              <span class="upload-icon">📄</span>
-              File
-            </button>
-
-            <button
-              class="upload-option"
-              onclick="selectPDF()"
-            >
-              <span class="upload-icon">📕</span>
-              PDF
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <!-- VOICE -->
-
-        <button
-          class="icon-btn"
-          onclick="startVoice()"
-          aria-label="Voice"
-        >
-          🎤
-        </button>
-
-      </div>
-
-
-      <div class="right-actions">
-
-        <button
-          class="send-btn"
-          onclick="sendPrompt()"
-          aria-label="Send"
-        >
-          ↑
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- FILE INPUTS -->
-
-  <input
-    type="file"
-    id="imageInput"
-    accept="image/*"
-    hidden
-    onchange="handleFile(this)"
+  <button
+    class="more-item"
+    onclick="shareConversation()"
   >
+    🔗
+    Share
+  </button>
 
-  <input
-    type="file"
-    id="cameraInput"
-    accept="image/*"
-    capture="environment"
-    hidden
-    onchange="handleFile(this)"
+  <button
+    class="more-item"
+    onclick="openSidebar()"
   >
+    💬
+    Chat History
+  </button>
 
-  <input
-    type="file"
-    id="videoInput"
-    accept="video/*"
-    hidden
-    onchange="handleFile(this)"
+  <button
+    class="more-item"
+    onclick="showHelp()"
   >
+    ❓
+    Help
+  </button>
 
-  <input
-    type="file"
-    id="fileInput"
-    accept=".txt,.doc,.docx,.csv,.json,.html,.css,.js,.py,.java,.php"
-    hidden
-    onchange="handleFile(this)"
+  <button
+    class="more-item"
+    onclick="showFeedback()"
   >
+    💡
+    Feedback
+  </button>
 
-  <input
-    type="file"
-    id="pdfInput"
-    accept="application/pdf"
-    hidden
-    onchange="handleFile(this)"
+  <button
+    class="more-item"
+    onclick="showAbout()"
   >
+    ℹ️
+    About
+  </button>
 
-
-  <!-- STATUS -->
-
-  <div
-    id="status"
-    class="status"
+  <button
+    class="more-item"
+    onclick="deleteConversation()"
   >
-    Ready
-  </div>
-
-
-  <!-- RESULT -->
-
-  <section
-    id="result"
-    class="result"
-  >
-
-    <div class="result-card">
-
-      <div class="result-title">
-        RG Creator AI
-      </div>
-
-      <div
-        id="resultText"
-        class="result-text"
-      ></div>
-
-    </div>
-
-  </section>
-
-
-  <!-- QUICK ACTIONS -->
-
-  <section class="section">
-
-    <div class="section-title">
-      Quick Actions
-    </div>
-
-    <div class="quick-grid">
-
-      <a
-        href="/pages/chat.html"
-        class="quick-card"
-      >
-        <div class="quick-icon">
-          💬
-        </div>
-
-        <strong>
-          AI Chat
-        </strong>
-
-        <small>
-          Ask anything
-        </small>
-      </a>
-
-
-      <a
-        href="/pages/image.html"
-        class="quick-card"
-      >
-        <div class="quick-icon">
-          🖼️
-        </div>
-
-        <strong>
-          Create Image
-        </strong>
-
-        <small>
-          Generate visuals
-        </small>
-      </a>
-
-
-      <a
-        href="/pages/writer.html"
-        class="quick-card"
-      >
-        <div class="quick-icon">
-          ✍️
-        </div>
-
-        <strong>
-          Content Writer
-        </strong>
-
-        <small>
-          Create content
-        </small>
-      </a>
-
-
-      <a
-        href="/pages/code.html"
-        class="quick-card"
-      >
-        <div class="quick-icon">
-          💻
-        </div>
-
-        <strong>
-          Code Generator
-        </strong>
-
-        <small>
-          Generate & fix code
-        </small>
-      </a>
-
-
-      <a
-        href="/pages/youtube.html"
-        class="quick-card"
-      >
-        <div class="quick-icon">
-          ▶️
-        </div>
-
-        <strong>
-          YouTube Tools
-        </strong>
-
-        <small>
-          Titles, scripts & SEO
-        </small>
-      </a>
-
-
-      <a
-        href="/pages/instagram.html"
-        class="quick-card"
-      >
-        <div class="quick-icon">
-          📸
-        </div>
-
-        <strong>
-          Instagram Tools
-        </strong>
-
-        <small>
-          Captions & ideas
-        </small>
-      </a>
-
-    </div>
-
-  </section>
+    🗑️
+    Delete
+  </button>
 
 </div>
 
 
-<!-- SETTINGS / LOGIN MODAL -->
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+  <div
+    class="messages"
+    id="messages"
+  >
+
+    <!-- EMPTY HOME STATE -->
+
+    <section
+      class="welcome"
+      id="welcome"
+    >
+
+      <div class="welcome-logo">
+        RG
+      </div>
+
+      <h1>
+        How can I help you?
+      </h1>
+
+      <p>
+        Ask anything, create content or build something.
+      </p>
+
+
+      <div class="quick-actions">
+
+        <button
+          class="quick-action"
+          onclick="openTool('Image.html')"
+        >
+          <span class="quick-icon">🖼️</span>
+          <span class="quick-text">
+            <strong>AI Image</strong>
+            <span>Create images</span>
+          </span>
+        </button>
+
+
+        <button
+          class="quick-action"
+          onclick="openTool('writer.html')"
+        >
+          <span class="quick-icon">✍️</span>
+          <span class="quick-text">
+            <strong>Content Writer</strong>
+            <span>Write content</span>
+          </span>
+        </button>
+
+
+        <button
+          class="quick-action"
+          onclick="openTool('Code.html')"
+        >
+          <span class="quick-icon">💻</span>
+          <span class="quick-text">
+            <strong>Code Generator</strong>
+            <span>Build & fix code</span>
+          </span>
+        </button>
+
+
+        <button
+          class="quick-action"
+          onclick="openTool('youtube.html')"
+        >
+          <span class="quick-icon">▶️</span>
+          <span class="quick-text">
+            <strong>YouTube</strong>
+            <span>Creator tools</span>
+          </span>
+        </button>
+
+
+        <button
+          class="quick-action"
+          onclick="openTool('Instagram.html')"
+        >
+          <span class="quick-icon">📸</span>
+          <span class="quick-text">
+            <strong>Instagram</strong>
+            <span>Reels & captions</span>
+          </span>
+        </button>
+
+
+        <button
+          class="quick-action"
+          onclick="focusInput()"
+        >
+          <span class="quick-icon">💬</span>
+          <span class="quick-text">
+            <strong>AI Chat</strong>
+            <span>Ask anything</span>
+          </span>
+        </button>
+
+      </div>
+
+    </section>
+
+  </div>
+
+
+  <!-- ================= INPUT ================= -->
+
+  <div class="input-area">
+
+    <div class="composer">
+
+      <div
+        class="attachment"
+        id="attachment"
+      >
+        📎
+        <span id="attachmentName"></span>
+      </div>
+
+
+      <textarea
+        id="input"
+        rows="1"
+        placeholder="Ask anything..."
+      ></textarea>
+
+
+      <div class="composer-bottom">
+
+        <div class="composer-left">
+
+          <div class="plus-wrap">
+
+            <button
+              class="circle-btn"
+              onclick="togglePlus()"
+              aria-label="Attach"
+            >
+              <svg class="icon" viewBox="0 0 24 24">
+                <path d="M12 5v14"/>
+                <path d="M5 12h14"/>
+              </svg>
+            </button>
+
+
+            <div
+              class="plus-menu"
+              id="plusMenu"
+            >
+
+              <button
+                class="plus-item"
+                onclick="pick('imageInput')"
+              >
+                🖼️
+                Image
+              </button>
+
+              <button
+                class="plus-item"
+                onclick="pick('cameraInput')"
+              >
+                📷
+                Camera
+              </button>
+
+              <button
+                class="plus-item"
+                onclick="pick('videoInput')"
+              >
+                🎥
+                Video
+              </button>
+
+              <button
+                class="plus-item"
+                onclick="pick('fileInput')"
+              >
+                📄
+                File
+              </button>
+
+              <button
+                class="plus-item"
+                onclick="pick('pdfInput')"
+              >
+                📕
+                PDF
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <button
+            class="circle-btn"
+            onclick="startVoice()"
+            aria-label="Voice"
+          >
+            🎤
+          </button>
+
+        </div>
+
+
+        <div class="composer-right">
+
+          <button
+            class="send-btn"
+            onclick="sendMessage()"
+            aria-label="Send"
+          >
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M5 12h14"/>
+              <path d="m13 6 6 6-6 6"/>
+            </svg>
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- ================= FILE INPUTS ================= -->
+
+<input
+  id="imageInput"
+  type="file"
+  accept="image/*"
+  hidden
+  onchange="handleFile(this)"
+>
+
+<input
+  id="cameraInput"
+  type="file"
+  accept="image/*"
+  capture="environment"
+  hidden
+  onchange="handleFile(this)"
+>
+
+<input
+  id="videoInput"
+  type="file"
+  accept="video/*"
+  hidden
+  onchange="handleFile(this)"
+>
+
+<input
+  id="fileInput"
+  type="file"
+  accept=".txt,.doc,.docx,.csv,.json,.html,.css,.js,.py,.java,.php"
+  hidden
+  onchange="handleFile(this)"
+>
+
+<input
+  id="pdfInput"
+  type="file"
+  accept="application/pdf"
+  hidden
+  onchange="handleFile(this)"
+>
+
+
+<!-- ================= SIDEBAR ================= -->
 
 <div
-  id="modalBackdrop"
+  class="overlay"
+  id="overlay"
+  onclick="closeSidebar()"
+></div>
+
+
+<aside
+  class="sidebar"
+  id="sidebar"
+>
+
+  <div class="sidebar-head">
+
+    <div class="sidebar-title">
+      RG Creator AI
+    </div>
+
+    <button
+      class="icon-btn"
+      onclick="closeSidebar()"
+    >
+      ×
+    </button>
+
+  </div>
+
+
+  <button
+    class="new-chat"
+    onclick="newChat()"
+  >
+    ＋
+    New Chat
+  </button>
+
+
+  <input
+    class="search"
+    id="historySearch"
+    placeholder="Search chats..."
+    oninput="renderHistory()"
+  >
+
+
+  <div
+    class="history"
+    id="history"
+  >
+
+  </div>
+
+
+  <!-- MAIN MENU TOOLS — EACH ONLY ONCE -->
+
+  <div class="history-label">
+    Tools
+  </div>
+
+
+  <div class="history">
+
+    <div
+      class="history-item"
+      onclick="openTool('Image.html')"
+    >
+      <span>🖼️</span>
+      <span class="history-name">
+        AI Image
+      </span>
+    </div>
+
+
+    <div
+      class="history-item"
+      onclick="openTool('writer.html')"
+    >
+      <span>✍️</span>
+      <span class="history-name">
+        Content Writer
+      </span>
+    </div>
+
+
+    <div
+      class="history-item"
+      onclick="openTool('Code.html')"
+    >
+      <span>💻</span>
+      <span class="history-name">
+        Code Generator
+      </span>
+    </div>
+
+
+    <div
+      class="history-item"
+      onclick="openTool('youtube.html')"
+    >
+      <span>▶️</span>
+      <span class="history-name">
+        YouTube Tools
+      </span>
+    </div>
+
+
+    <div
+      class="history-item"
+      onclick="openTool('Instagram.html')"
+    >
+      <span>📸</span>
+      <span class="history-name">
+        Instagram Tools
+      </span>
+    </div>
+
+  </div>
+
+
+  <!-- BOTTOM NORMAL MENU -->
+
+  <div class="sidebar-bottom">
+
+    <button
+      class="sidebar-bottom-btn"
+      onclick="openSettings()"
+    >
+      ⚙️
+      Settings
+    </button>
+
+
+    <button
+      class="sidebar-bottom-btn"
+      onclick="openLogin()"
+    >
+      👤
+      Log in / Sign up
+    </button>
+
+  </div>
+
+</aside>
+
+
+<!-- ================= MODAL ================= -->
+
+<div
   class="modal-backdrop"
+  id="modalBackdrop"
   onclick="closeModal(event)"
 >
 
@@ -1077,125 +1333,133 @@
 </div>
 
 
-<!-- BOTTOM NAV -->
-
-<nav class="bottom-nav">
-
-  <a
-    href="/"
-    class="nav-item active"
-  >
-    <span>⌂</span>
-    Home
-  </a>
-
-
-  <a
-    href="/pages/chat.html"
-    class="nav-item"
-  >
-    <span>💬</span>
-    AI Chat
-  </a>
-
-
-  <a
-    href="/pages/writer.html"
-    class="nav-item"
-  >
-    <span>🛠</span>
-    Tools
-  </a>
-
-
-  <a
-    href="#"
-    class="nav-item"
-    onclick="openMenu(event)"
-  >
-    <span>⋯</span>
-    More
-  </a>
-
-</nav>
+<div
+  class="toast"
+  id="toast"
+></div>
 
 
 <script>
 
-/* =========================
-   PLUS MENU
-========================= */
+/* =====================================================
+   RG CREATOR AI — MAIN HOME + CHAT
+===================================================== */
 
-function togglePlusMenu() {
 
-  const menu =
-    document.getElementById("plusMenu");
+/* ================= STATE ================= */
 
-  menu.classList.toggle("open");
+let conversation =
+  JSON.parse(
+    localStorage.getItem(
+      "rg_creator_conversation"
+    ) || "[]"
+  );
+
+let currentAttachment = null;
+
+
+/* ================= ELEMENTS ================= */
+
+const input =
+  document.getElementById("input");
+
+const messages =
+  document.getElementById("messages");
+
+const welcome =
+  document.getElementById("welcome");
+
+
+/* ================= INIT ================= */
+
+renderConversation();
+
+renderHistory();
+
+autoResize();
+
+
+/* ================= TOAST ================= */
+
+function toast(text){
+
+  const el =
+    document.getElementById("toast");
+
+  el.textContent =
+    text;
+
+  el.classList.add("show");
+
+  setTimeout(
+    function(){
+      el.classList.remove("show");
+    },
+    2200
+  );
 
 }
 
 
-/* =========================
-   UPLOAD
-========================= */
+/* ================= INPUT ================= */
 
-function selectImage() {
+input.addEventListener(
+  "input",
+  autoResize
+);
 
-  closePlus();
+input.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key === "Enter" &&
+      !event.shiftKey
+    ){
+
+      event.preventDefault();
+
+      sendMessage();
+
+    }
+
+  }
+);
+
+
+function autoResize(){
+
+  input.style.height =
+    "auto";
+
+  input.style.height =
+    Math.min(
+      input.scrollHeight,
+      150
+    ) + "px";
+
+}
+
+
+function focusInput(){
+
+  input.focus();
+
+}
+
+
+/* ================= PLUS ================= */
+
+function togglePlus(){
 
   document
-    .getElementById("imageInput")
-    .click();
+    .getElementById("plusMenu")
+    .classList.toggle("open");
 
 }
 
 
-function openCamera() {
-
-  closePlus();
-
-  document
-    .getElementById("cameraInput")
-    .click();
-
-}
-
-
-function selectVideo() {
-
-  closePlus();
-
-  document
-    .getElementById("videoInput")
-    .click();
-
-}
-
-
-function selectFile() {
-
-  closePlus();
-
-  document
-    .getElementById("fileInput")
-    .click();
-
-}
-
-
-function selectPDF() {
-
-  closePlus();
-
-  document
-    .getElementById("pdfInput")
-    .click();
-
-}
-
-
-function closePlus() {
+function closePlus(){
 
   document
     .getElementById("plusMenu")
@@ -1204,171 +1468,119 @@ function closePlus() {
 }
 
 
-function handleFile(input) {
+/* ================= FILE ================= */
 
-  if (
-    !input.files ||
-    !input.files.length
-  ) {
+function pick(id){
+
+  closePlus();
+
+  document
+    .getElementById(id)
+    .click();
+
+}
+
+
+function handleFile(el){
+
+  if(
+    !el.files ||
+    !el.files.length
+  ){
     return;
   }
 
-  const file =
-    input.files[0];
+  currentAttachment =
+    el.files[0];
 
   document
-    .getElementById("fileName")
+    .getElementById("attachmentName")
     .textContent =
-    file.name;
+    currentAttachment.name;
 
   document
-    .getElementById("selectedFile")
+    .getElementById("attachment")
     .classList.add("show");
 
-  document
-    .getElementById("status")
-    .textContent =
-    "Attached: " + file.name;
+  toast(
+    "Attached: " +
+    currentAttachment.name
+  );
 
 }
 
 
-/* =========================
-   VOICE
-========================= */
+/* ================= SEND ================= */
 
-function startVoice() {
+async function sendMessage(){
 
-  const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+  const text =
+    input.value.trim();
 
-  if (!SpeechRecognition) {
+  if(!text){
 
-    document
-      .getElementById("status")
-      .textContent =
-      "Voice input is not supported in this browser.";
+    if(currentAttachment){
 
-    return;
+      toast(
+        "Write something about the attachment."
+      );
 
-  }
-
-  const recognition =
-    new SpeechRecognition();
-
-  recognition.lang =
-    "en-IN";
-
-  recognition.interimResults =
-    false;
-
-  recognition.maxAlternatives =
-    1;
-
-  document
-    .getElementById("status")
-    .textContent =
-    "Listening... 🎤";
-
-  recognition.start();
-
-
-  recognition.onresult =
-    function(event) {
-
-      const text =
-        event.results[0][0]
-          .transcript;
-
-      document
-        .getElementById("prompt")
-        .value =
-        text;
-
-      document
-        .getElementById("status")
-        .textContent =
-        "Voice added";
-
-    };
-
-
-  recognition.onerror =
-    function() {
-
-      document
-        .getElementById("status")
-        .textContent =
-        "Voice input failed.";
-
-    };
-
-}
-
-
-/* =========================
-   AI CHAT
-========================= */
-
-async function sendPrompt() {
-
-  const prompt =
-    document
-      .getElementById("prompt")
-      .value
-      .trim();
-
-  if (!prompt) {
-
-    document
-      .getElementById("status")
-      .textContent =
-      "Please type something first.";
+    }
 
     return;
 
   }
 
 
-  const status =
-    document.getElementById("status");
+  addMessage(
+    "user",
+    text
+  );
 
-  const result =
-    document.getElementById("result");
+  input.value = "";
 
-  const resultText =
-    document.getElementById("resultText");
+  autoResize();
 
-
-  status.classList.remove("error");
-
-  status.textContent =
-    "RG Creator AI is thinking...";
+  clearAttachment();
 
 
-  result.classList.add("show");
+  const thinkingIndex =
+    addMessage(
+      "assistant",
+      "Thinking..."
+    );
 
-  resultText.textContent =
-    "Generating response...";
 
+  try{
 
-  try {
+    const history =
+      conversation.map(
+        function(item){
+
+          return {
+            role:item.role,
+            content:item.content
+          };
+
+        }
+      );
+
 
     const response =
       await fetch(
         "/api/chat",
         {
-          method: "POST",
+          method:"POST",
 
-          headers: {
+          headers:{
             "Content-Type":
               "application/json"
           },
 
           body:
             JSON.stringify({
-              message: prompt
+              message:text,
+              history:history
             })
         }
       );
@@ -1378,10 +1590,10 @@ async function sendPrompt() {
       await response.json();
 
 
-    if (
+    if(
       !response.ok ||
       !data.ok
-    ) {
+    ){
 
       throw new Error(
         data.error ||
@@ -1391,101 +1603,1150 @@ async function sendPrompt() {
     }
 
 
-    resultText.textContent =
+    updateMessage(
+      thinkingIndex,
+      data.reply
+    );
+
+
+  }catch(error){
+
+    updateMessage(
+      thinkingIndex,
+      "Sorry, I couldn't complete that request.\n\n" +
+      (
+        error.message ||
+        "Server error"
+      )
+    );
+
+  }
+
+}
+
+
+/* ================= CONVERSATION ================= */
+
+function addMessage(
+  role,
+  content
+){
+
+  conversation.push({
+    role:role,
+    content:content,
+    time:Date.now()
+  });
+
+  saveConversation();
+
+  renderConversation();
+
+  return conversation.length - 1;
+
+}
+
+
+function updateMessage(
+  index,
+  content
+){
+
+  if(
+    !conversation[index]
+  ){
+    return;
+  }
+
+  conversation[index].content =
+    content;
+
+  saveConversation();
+
+  renderConversation();
+
+}
+
+
+function saveConversation(){
+
+  localStorage.setItem(
+    "rg_creator_conversation",
+    JSON.stringify(conversation)
+  );
+
+}
+
+
+/* ================= RENDER ================= */
+
+function renderConversation(){
+
+  if(
+    !conversation.length
+  ){
+
+    messages.innerHTML =
+      welcome.outerHTML;
+
+    return;
+
+  }
+
+
+  messages.innerHTML = "";
+
+
+  conversation.forEach(
+    function(item,index){
+
+      const wrapper =
+        document.createElement(
+          "div"
+        );
+
+
+      wrapper.className =
+        "message " +
+        (
+          item.role === "user"
+            ? "user-message"
+            : "ai-message"
+        );
+
+
+      if(
+        item.role === "user"
+      ){
+
+        wrapper.innerHTML = `
+          <div class="user-bubble">
+            ${escapeHTML(item.content)}
+          </div>
+        `;
+
+      }else{
+
+        wrapper.innerHTML = `
+
+          <div class="ai-content">
+            ${formatAI(item.content)}
+          </div>
+
+          <div class="message-actions">
+
+            <button
+              class="action-btn"
+              onclick="copyAI(${index})"
+              title="Copy"
+            >
+              ${copyIcon()}
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="feedback('like')"
+              title="Like"
+            >
+              👍
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="feedback('dislike')"
+              title="Dislike"
+            >
+              👎
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="shareAI(${index})"
+              title="Share"
+            >
+              ${shareIcon()}
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="regenerate(${index})"
+              title="Regenerate"
+            >
+              ${refreshIcon()}
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="aiMore(${index})"
+              title="More"
+            >
+              ${moreIcon()}
+            </button>
+
+          </div>
+        `;
+
+      }
+
+
+      messages.appendChild(
+        wrapper
+      );
+
+    }
+  );
+
+
+  requestAnimationFrame(
+    function(){
+
+      messages.scrollTop =
+        messages.scrollHeight;
+
+    }
+  );
+
+}
+
+
+/* ================= AI FORMAT ================= */
+
+function formatAI(text){
+
+  return escapeHTML(
+    text
+  );
+
+}
+
+
+/* ================= COPY ================= */
+
+async function copyAI(index){
+
+  try{
+
+    await navigator.clipboard.writeText(
+      conversation[index].content
+    );
+
+    toast("Copied");
+
+  }catch{
+
+    toast("Copy failed");
+
+  }
+
+}
+
+
+/* ================= FEEDBACK ================= */
+
+function feedback(type){
+
+  toast(
+    type === "like"
+      ? "Thanks for your feedback 👍"
+      : "Thanks for your feedback"
+  );
+
+}
+
+
+/* ================= SHARE ================= */
+
+async function shareAI(index){
+
+  const text =
+    conversation[index].content;
+
+  if(
+    navigator.share
+  ){
+
+    try{
+
+      await navigator.share({
+        title:"RG Creator AI",
+        text:text
+      });
+
+    }catch{}
+
+  }else{
+
+    await copyAI(index);
+
+  }
+
+}
+
+
+async function shareConversation(){
+
+  if(
+    !conversation.length
+  ){
+
+    toast(
+      "No conversation to share"
+    );
+
+    return;
+
+  }
+
+
+  const text =
+    conversation
+      .map(
+        function(item){
+
+          return (
+            item.role === "user"
+              ? "You: "
+              : "RG Creator AI: "
+          ) +
+          item.content;
+
+        }
+      )
+      .join("\n\n");
+
+
+  if(
+    navigator.share
+  ){
+
+    try{
+
+      await navigator.share({
+        title:"RG Creator AI",
+        text:text
+      });
+
+    }catch{}
+
+  }else{
+
+    try{
+
+      await navigator.clipboard.writeText(
+        text
+      );
+
+      toast(
+        "Conversation copied"
+      );
+
+    }catch{
+
+      toast(
+        "Share unavailable"
+      );
+
+    }
+
+  }
+
+}
+
+
+/* ================= REGENERATE ================= */
+
+async function regenerate(index){
+
+  let userMessage = "";
+
+  for(
+    let i=index-1;
+    i>=0;
+    i--
+  ){
+
+    if(
+      conversation[i].role === "user"
+    ){
+
+      userMessage =
+        conversation[i].content;
+
+      break;
+
+    }
+
+  }
+
+
+  if(!userMessage){
+
+    toast(
+      "No previous user message found"
+    );
+
+    return;
+
+  }
+
+
+  conversation[index].content =
+    "Regenerating...";
+
+  saveConversation();
+
+  renderConversation();
+
+
+  try{
+
+    const history =
+      conversation
+        .slice(0,index)
+        .map(
+          function(item){
+
+            return {
+              role:item.role,
+              content:item.content
+            };
+
+          }
+        );
+
+
+    const response =
+      await fetch(
+        "/api/chat",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              message:userMessage,
+              history:history
+            })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(
+      !response.ok ||
+      !data.ok
+    ){
+
+      throw new Error(
+        data.error ||
+        "Regeneration failed"
+      );
+
+    }
+
+
+    conversation[index].content =
       data.reply;
 
-    status.textContent =
-      "Ready";
+    saveConversation();
+
+    renderConversation();
 
 
-  } catch (error) {
+  }catch(error){
 
-    console.error(error);
+    conversation[index].content =
+      "Unable to regenerate response.\n\n" +
+      (
+        error.message ||
+        "Server error"
+      );
 
-    resultText.textContent =
-      "Sorry, something went wrong.";
+    saveConversation();
 
-    status.textContent =
-      error.message ||
-      "AI request failed";
-
-    status.classList.add("error");
+    renderConversation();
 
   }
 
 }
 
 
-/* =========================
-   MORE MENU
-========================= */
+/* ================= AI MORE ================= */
 
-function openMenu(event) {
+function aiMore(index){
 
-  if (event) {
-    event.preventDefault();
+  const option =
+    prompt(
+      "Choose:\n\n" +
+      "1 = Read aloud\n" +
+      "2 = Copy\n" +
+      "3 = Delete response\n" +
+      "4 = Save"
+    );
+
+
+  if(option === "1"){
+
+    readAloud(
+      conversation[index].content
+    );
+
+  }else if(option === "2"){
+
+    copyAI(index);
+
+  }else if(option === "3"){
+
+    conversation.splice(
+      index,
+      1
+    );
+
+    saveConversation();
+
+    renderConversation();
+
+    toast(
+      "Response deleted"
+    );
+
+  }else if(option === "4"){
+
+    localStorage.setItem(
+      "rg_saved_" + Date.now(),
+      conversation[index].content
+    );
+
+    toast("Saved");
+
   }
 
-  const menu =
-    document.getElementById("moreMenu");
+}
 
-  menu.classList.toggle("open");
+
+/* ================= READ ALOUD ================= */
+
+function readAloud(text){
+
+  if(
+    !window.speechSynthesis
+  ){
+
+    toast(
+      "Read aloud is not supported"
+    );
+
+    return;
+
+  }
+
+  speechSynthesis.cancel();
+
+  const speech =
+    new SpeechSynthesisUtterance(
+      text
+    );
+
+  speech.rate = 1;
+
+  speechSynthesis.speak(
+    speech
+  );
 
 }
 
 
-function hideMoreMenu() {
+/* ================= NEW CHAT ================= */
 
-  document
-    .getElementById("moreMenu")
-    .classList.remove("open");
+function newChat(){
+
+  conversation = [];
+
+  saveConversation();
+
+  renderConversation();
+
+  renderHistory();
+
+  closeSidebar();
+
+  toast(
+    "New chat started"
+  );
 
 }
 
 
-/* =========================
-   MODAL
-========================= */
+/* ================= DELETE ================= */
 
-function showModal(
-  title,
-  body
-) {
+function deleteConversation(){
 
-  hideMoreMenu();
+  if(
+    !conversation.length
+  ){
+
+    toast(
+      "No conversation to delete"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !confirm(
+      "Delete this conversation?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  conversation = [];
+
+  saveConversation();
+
+  renderConversation();
+
+  renderHistory();
+
+  closeMore();
+
+  toast(
+    "Conversation deleted"
+  );
+
+}
+
+
+/* ================= SIDEBAR ================= */
+
+function openSidebar(){
+
+  closeMore();
 
   document
-    .getElementById("modalTitle")
-    .textContent =
-    title;
+    .getElementById("sidebar")
+    .classList.add("open");
 
   document
-    .getElementById("modalBody")
-    .innerHTML =
-    body;
-
-  document
-    .getElementById("modalBackdrop")
+    .getElementById("overlay")
     .classList.add("show");
 
 }
 
 
-function hideModal() {
+function closeSidebar(){
 
   document
-    .getElementById("modalBackdrop")
+    .getElementById("sidebar")
+    .classList.remove("open");
+
+  document
+    .getElementById("overlay")
     .classList.remove("show");
 
 }
 
 
-function closeModal(event) {
+/* ================= HISTORY ================= */
 
-  if (
+function renderHistory(){
+
+  const box =
+    document.getElementById(
+      "history"
+    );
+
+  const search =
+    document
+      .getElementById(
+        "historySearch"
+      )
+      .value
+      .toLowerCase();
+
+
+  box.innerHTML = "";
+
+
+  if(
+    !conversation.length
+  ){
+
+    box.innerHTML = `
+      <div class="history-label">
+        Recent
+      </div>
+
+      <div
+        style="
+          padding:12px 8px;
+          color:#666;
+          font-size:12px;
+        "
+      >
+        No chats yet
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  const firstUser =
+    conversation.find(
+      function(item){
+        return item.role === "user";
+      }
+    );
+
+
+  const title =
+    firstUser
+      ? firstUser.content.slice(0,45)
+      : "New Chat";
+
+
+  if(
+    !title
+      .toLowerCase()
+      .includes(search)
+  ){
+
+    return;
+
+  }
+
+
+  box.innerHTML = `
+
+    <div class="history-label">
+      Today
+    </div>
+
+    <div
+      class="history-item"
+      onclick="closeSidebar()"
+    >
+
+      <span>💬</span>
+
+      <span class="history-name">
+        ${escapeHTML(title)}
+      </span>
+
+      <button
+        class="history-more"
+        onclick="
+          event.stopPropagation();
+          renameChat();
+        "
+      >
+        ⋯
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+function renameChat(){
+
+  const firstUser =
+    conversation.find(
+      function(item){
+        return item.role === "user";
+      }
+    );
+
+
+  const oldName =
+    firstUser
+      ? firstUser.content.slice(0,45)
+      : "New Chat";
+
+
+  const name =
+    prompt(
+      "Chat name:",
+      oldName
+    );
+
+
+  if(
+    !name ||
+    !name.trim()
+  ){
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    "rg_chat_title",
+    name.trim()
+  );
+
+  renderHistory();
+
+  toast(
+    "Chat renamed"
+  );
+
+}
+
+
+/* ================= VOICE ================= */
+
+function startVoice(){
+
+  const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+  if(!Recognition){
+
+    toast(
+      "Voice input is not supported"
+    );
+
+    return;
+
+  }
+
+
+  const recognition =
+    new Recognition();
+
+
+  recognition.lang =
+    "en-IN";
+
+  recognition.interimResults =
+    false;
+
+
+  recognition.onstart =
+    function(){
+
+      toast(
+        "Listening..."
+      );
+
+    };
+
+
+  recognition.onresult =
+    function(event){
+
+      input.value =
+        event.results[0][0]
+          .transcript;
+
+      autoResize();
+
+      input.focus();
+
+    };
+
+
+  recognition.onerror =
+    function(){
+
+      toast(
+        "Voice input failed"
+      );
+
+    };
+
+
+  recognition.start();
+
+}
+
+
+/* ================= ATTACHMENT CLEAR ================= */
+
+function clearAttachment(){
+
+  currentAttachment =
+    null;
+
+  document
+    .getElementById(
+      "attachment"
+    )
+    .classList.remove("show");
+
+}
+
+
+/* ================= TOOLS ================= */
+
+function openTool(file){
+
+  window.location.href =
+    file;
+
+}
+
+
+/* ================= SETTINGS ================= */
+
+function openSettings(){
+
+  openModal(
+    "Settings",
+    `
+      <div class="modal-text">
+        Manage your RG Creator AI settings.
+      </div>
+
+      <button
+        class="modal-btn"
+        onclick="
+          toast('Appearance settings coming next');
+        "
+      >
+        🌙 Appearance
+      </button>
+
+      <button
+        class="modal-btn"
+        onclick="
+          toast('Chat settings coming next');
+        "
+      >
+        💬 Chat Settings
+      </button>
+
+      <button
+        class="modal-btn"
+        onclick="
+          toast('Privacy settings coming next');
+        "
+      >
+        🔒 Privacy & Data
+      </button>
+    `
+  );
+
+}
+
+
+/* ================= LOGIN ================= */
+
+function openLogin(){
+
+  openModal(
+    "Log in / Sign up",
+    `
+      <div class="modal-text">
+        Log in to sync your chats and creator
+        workspace across devices.
+      </div>
+
+      <button
+        class="modal-btn primary"
+        onclick="
+          toast('Google login will be connected in the authentication step');
+        "
+      >
+        Continue with Google
+      </button>
+
+      <button
+        class="modal-btn"
+        onclick="
+          toast('Email login will be connected in the authentication step');
+        "
+      >
+        Continue with Email
+      </button>
+
+      <button
+        class="modal-btn"
+        onclick="
+          toast('Create account will be connected in the authentication step');
+        "
+      >
+        Create account
+      </button>
+    `
+  );
+
+}
+
+
+/* ================= HELP ================= */
+
+function showHelp(){
+
+  closeMore();
+
+  openModal(
+    "Help",
+    `
+      <div class="modal-text">
+        Use the message box to chat with RG Creator AI.
+        <br><br>
+        Use + to attach an image, camera photo,
+        video, file or PDF.
+        <br><br>
+        Use 🎤 for voice input.
+      </div>
+
+      <button
+        class="modal-btn"
+        onclick="hideModal()"
+      >
+        Close
+      </button>
+    `
+  );
+
+}
+
+
+/* ================= FEEDBACK ================= */
+
+function showFeedback(){
+
+  closeMore();
+
+  const value =
+    prompt(
+      "Tell us your feedback:"
+    );
+
+  if(
+    value &&
+    value.trim()
+  ){
+
+    toast(
+      "Thanks for your feedback"
+    );
+
+  }
+
+}
+
+
+/* ================= ABOUT ================= */
+
+function showAbout(){
+
+  closeMore();
+
+  openModal(
+    "About RG Creator AI",
+    `
+      <div class="modal-text">
+        RG Creator AI is an AI-powered creative
+        workspace for chat, images, writing, coding,
+        YouTube and Instagram tools.
+      </div>
+
+      <button
+        class="modal-btn"
+        onclick="hideModal()"
+      >
+        Close
+      </button>
+    `
+  );
+
+}
+
+
+/* ================= MORE ================= */
+
+function toggleMore(){
+
+  document
+    .getElementById(
+      "moreMenu"
+    )
+    .classList.toggle("open");
+
+}
+
+
+function closeMore(){
+
+  document
+    .getElementById(
+      "moreMenu"
+    )
+    .classList.remove("open");
+
+}
+
+
+/* ================= MODAL ================= */
+
+function openModal(
+  title,
+  html
+){
+
+  document
+    .getElementById(
+      "modalTitle"
+    )
+    .textContent =
+    title;
+
+  document
+    .getElementById(
+      "modalBody"
+    )
+    .innerHTML =
+    html;
+
+  document
+    .getElementById(
+      "modalBackdrop"
+    )
+    .classList.add("show");
+
+}
+
+
+function hideModal(){
+
+  document
+    .getElementById(
+      "modalBackdrop"
+    )
+    .classList.remove("show");
+
+}
+
+
+function closeModal(event){
+
+  if(
     event.target.id ===
     "modalBackdrop"
-  ) {
+  ){
 
     hideModal();
 
@@ -1494,319 +2755,114 @@ function closeModal(event) {
 }
 
 
-/* =========================
-   SETTINGS
-========================= */
+/* ================= ICONS ================= */
 
-function openSettings() {
+function copyIcon(){
 
-  showModal(
-    "Settings",
-
-    `
-      <div class="modal-subtitle">
-        Manage your RG Creator AI preferences.
-      </div>
-
-      <button
-        class="more-item"
-        style="background:#181818;margin-bottom:8px;"
-        onclick="toastMessage('Appearance settings are ready to connect.')"
-      >
-        <span class="more-item-icon">🌙</span>
-        <span>Appearance</span>
-      </button>
-
-      <button
-        class="more-item"
-        style="background:#181818;margin-bottom:8px;"
-        onclick="toastMessage('Chat settings are ready to connect.')"
-      >
-        <span class="more-item-icon">💬</span>
-        <span>Chat settings</span>
-      </button>
-
-      <button
-        class="more-item"
-        style="background:#181818;"
-        onclick="toastMessage('Privacy settings are ready to connect.')"
-      >
-        <span class="more-item-icon">🔒</span>
-        <span>Privacy & data</span>
-      </button>
-
-      <div class="modal-note">
-        Settings remain inside the More menu.
-      </div>
-    `
-  );
+  return `
+    <svg class="icon" viewBox="0 0 24 24">
+      <rect x="8" y="8" width="11" height="11" rx="2"/>
+      <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>
+    </svg>
+  `;
 
 }
 
 
-/* =========================
-   LOGIN / SIGNUP
-========================= */
+function shareIcon(){
 
-function openAuth() {
-
-  showModal(
-    "Log in / Sign up",
-
-    `
-      <div class="modal-subtitle">
-        Sign in to sync chats and your creator tools.
-      </div>
-
-      <button
-        class="primary-action"
-        onclick="toastMessage('Google login will be connected next.')"
-      >
-        Continue with Google
-      </button>
-
-      <input
-        class="auth-input"
-        type="email"
-        placeholder="Email address"
-        autocomplete="email"
-      >
-
-      <input
-        class="auth-input"
-        type="password"
-        placeholder="Password"
-        autocomplete="current-password"
-      >
-
-      <button
-        class="secondary-action"
-        onclick="toastMessage('Login backend will be connected next.')"
-      >
-        Log in
-      </button>
-
-      <button
-        class="secondary-action"
-        onclick="toastMessage('Signup backend will be connected next.')"
-      >
-        Create account
-      </button>
-
-      <div class="modal-note">
-        Login/signup UI is ready. Real authentication
-        will be connected to the backend separately.
-      </div>
-    `
-  );
+  return `
+    <svg class="icon" viewBox="0 0 24 24">
+      <path d="M12 15V3"/>
+      <path d="m7 8 5-5 5 5"/>
+      <path d="M5 12v8h14v-8"/>
+    </svg>
+  `;
 
 }
 
 
-/* =========================
-   HISTORY
-========================= */
+function refreshIcon(){
 
-function showHistory() {
-
-  showModal(
-    "Chat History",
-
-    `
-      <div class="modal-subtitle">
-        Your recent chats will appear here after
-        chat history is connected.
-      </div>
-
-      <button
-        class="secondary-action"
-        onclick="hideModal()"
-      >
-        Close
-      </button>
-    `
-  );
+  return `
+    <svg class="icon" viewBox="0 0 24 24">
+      <path d="M20 11a8 8 0 0 0-14-4L4 9"/>
+      <path d="M4 4v5h5"/>
+      <path d="M4 13a8 8 0 0 0 14 4l2-2"/>
+      <path d="M20 20v-5h-5"/>
+    </svg>
+  `;
 
 }
 
 
-/* =========================
-   PROFILE
-========================= */
+function moreIcon(){
 
-function showProfile() {
-
-  showModal(
-    "Profile",
-
-    `
-      <div class="modal-subtitle">
-        Log in to manage your profile and synced
-        creator workspace.
-      </div>
-
-      <button
-        class="primary-action"
-        onclick="openAuth()"
-      >
-        Log in / Sign up
-      </button>
-    `
-  );
+  return `
+    <svg class="icon" viewBox="0 0 24 24">
+      <circle cx="5" cy="12" r="1"/>
+      <circle cx="12" cy="12" r="1"/>
+      <circle cx="19" cy="12" r="1"/>
+    </svg>
+  `;
 
 }
 
 
-/* =========================
-   PRIVACY
-========================= */
+/* ================= ESCAPE ================= */
 
-function showPrivacy() {
+function escapeHTML(value){
 
-  showModal(
-    "Privacy",
-
-    `
-      <div class="modal-subtitle">
-        Your privacy controls will be available here.
-      </div>
-
-      <button
-        class="secondary-action"
-        onclick="hideModal()"
-      >
-        Close
-      </button>
-    `
-  );
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
-/* =========================
-   ABOUT
-========================= */
-
-function showAbout() {
-
-  showModal(
-    "About RG Creator AI",
-
-    `
-      <div class="modal-subtitle">
-        RG Creator AI — your AI-powered creative workspace.
-      </div>
-
-      <button
-        class="secondary-action"
-        onclick="hideModal()"
-      >
-        Close
-      </button>
-    `
-  );
-
-}
-
-
-/* =========================
-   TOAST
-========================= */
-
-function toastMessage(text) {
-
-  const status =
-    document.getElementById("status");
-
-  status.textContent =
-    text;
-
-  setTimeout(
-    () => {
-      status.textContent =
-        "Ready";
-    },
-    2500
-  );
-
-}
-
-
-/* =========================
-   ENTER TO SEND
-========================= */
-
-document
-  .getElementById("prompt")
-  .addEventListener(
-    "keydown",
-    function(event) {
-
-      if (
-        event.key === "Enter" &&
-        !event.shiftKey
-      ) {
-
-        event.preventDefault();
-
-        sendPrompt();
-
-      }
-
-    }
-  );
-
-
-/* =========================
-   CLOSE MORE MENU OUTSIDE
-========================= */
+/* ================= OUTSIDE CLICK ================= */
 
 document.addEventListener(
   "click",
-  function(event) {
+  function(event){
 
-    const menu =
-      document.getElementById("moreMenu");
+    const plus =
+      document.querySelector(
+        ".plus-wrap"
+      );
 
-    const menuButton =
-      document.querySelector(".menu-btn");
+    const plusMenu =
+      document.getElementById(
+        "plusMenu"
+      );
 
 
-    if (
-      menu.classList.contains("open") &&
-      !menu.contains(event.target) &&
-      !menuButton.contains(event.target)
-    ) {
+    if(
+      plusMenu.classList.contains("open") &&
+      !plus.contains(event.target)
+    ){
 
-      menu.classList.remove("open");
+      closePlus();
 
     }
 
-  }
-);
+
+    const more =
+      document.getElementById(
+        "moreMenu"
+      );
 
 
-/* =========================
-   CLOSE PLUS OUTSIDE
-========================= */
+    if(
+      more.classList.contains("open") &&
+      !event.target.closest(".header-right") &&
+      !event.target.closest(".more-menu")
+    ){
 
-document.addEventListener(
-  "click",
-  function(event) {
-
-    const wrapper =
-      document.querySelector(".plus-wrapper");
-
-    const menu =
-      document.getElementById("plusMenu");
-
-
-    if (
-      !wrapper.contains(event.target) &&
-      menu.classList.contains("open")
-    ) {
-
-      menu.classList.remove("open");
+      closeMore();
 
     }
 
