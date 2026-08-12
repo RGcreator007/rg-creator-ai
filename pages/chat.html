@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>RG Creator AI</title>
+<title>RG Creator AI — Chat</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,24 +20,54 @@
   --bg:#000;
   --panel:#111;
   --panel2:#181818;
-  --panel3:#202020;
-  --border:#2c2c2c;
+  --panel3:#222;
+  --border:#2d2d2d;
   --text:#fff;
-  --muted:#999;
+  --muted:#888;
   --accent:#ff3030;
 }
 
-html,body{
+html,
+body{
   width:100%;
   height:100%;
   background:#000;
   color:#fff;
-  font-family:Inter,Arial,sans-serif;
+
+  /* RG Creator AI normal font system */
+  font-family:
+    "Söhne",
+    "Inter",
+    "Segoe UI",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
   overflow:hidden;
 }
 
-button{
+button,
+input,
+textarea,
+select{
   font-family:inherit;
+}
+
+pre,
+code,
+.code,
+.code-block,
+.code-output,
+.technical-text{
+  font-family:
+    "Söhne Mono",
+    "Consolas",
+    "Monaco",
+    monospace;
+}
+
+button{
+  cursor:pointer;
 }
 
 .app{
@@ -54,17 +84,21 @@ button{
   align-items:center;
   justify-content:space-between;
   padding:0 14px;
-  border-bottom:1px solid #181818;
   background:rgba(0,0,0,.95);
+  border-bottom:1px solid #181818;
   backdrop-filter:blur(15px);
   position:relative;
-  z-index:20;
+  z-index:30;
+}
+
+.header-left,
+.header-right{
+  display:flex;
+  align-items:center;
 }
 
 .header-left{
-  display:flex;
-  align-items:center;
-  gap:10px;
+  gap:9px;
   min-width:0;
 }
 
@@ -78,7 +112,6 @@ button{
   display:flex;
   align-items:center;
   justify-content:center;
-  cursor:pointer;
 }
 
 .icon-btn:hover{
@@ -86,29 +119,25 @@ button{
 }
 
 .icon{
-  width:22px;
-  height:22px;
-  stroke:currentColor;
+  width:21px;
+  height:21px;
   fill:none;
+  stroke:currentColor;
   stroke-width:1.8;
   stroke-linecap:round;
   stroke-linejoin:round;
 }
 
 .title{
-  font-size:16px;
-  font-weight:600;
-  white-space:nowrap;
+  max-width:55vw;
   overflow:hidden;
   text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:16px;
+  font-weight:600;
 }
 
-.header-right{
-  display:flex;
-  align-items:center;
-}
-
-/* ================= CHAT ================= */
+/* ================= CHAT AREA ================= */
 
 .chat-area{
   height:calc(100% - 64px);
@@ -119,7 +148,7 @@ button{
 .messages{
   flex:1;
   overflow-y:auto;
-  padding:20px 16px 155px;
+  padding:20px 15px 155px;
   scroll-behavior:smooth;
 }
 
@@ -132,6 +161,8 @@ button{
   border-radius:10px;
 }
 
+/* ================= WELCOME ================= */
+
 .welcome{
   max-width:760px;
   margin:14vh auto 0;
@@ -141,10 +172,10 @@ button{
 .welcome-logo{
   width:58px;
   height:58px;
+  margin:auto;
   border-radius:18px;
   background:#fff;
   color:#000;
-  margin:auto;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -153,18 +184,18 @@ button{
 }
 
 .welcome h1{
-  font-size:28px;
   margin-top:18px;
+  font-size:28px;
   letter-spacing:-1px;
 }
 
 .welcome p{
-  color:#777;
   margin-top:8px;
+  color:#777;
   font-size:14px;
 }
 
-/* ================= MESSAGE ================= */
+/* ================= MESSAGES ================= */
 
 .message{
   width:100%;
@@ -178,13 +209,14 @@ button{
 }
 
 .user-bubble{
-  max-width:82%;
-  background:#252525;
+  max-width:84%;
   padding:12px 15px;
+  background:#252525;
   border-radius:20px 20px 5px 20px;
   font-size:15px;
   line-height:1.55;
   white-space:pre-wrap;
+  overflow-wrap:anywhere;
 }
 
 .ai-message{
@@ -194,6 +226,7 @@ button{
 
 .ai-content{
   white-space:pre-wrap;
+  overflow-wrap:anywhere;
 }
 
 .message-actions{
@@ -213,7 +246,6 @@ button{
   display:flex;
   align-items:center;
   justify-content:center;
-  cursor:pointer;
 }
 
 .action-btn:hover{
@@ -222,8 +254,8 @@ button{
 }
 
 .action-btn .icon{
-  width:19px;
-  height:19px;
+  width:18px;
+  height:18px;
 }
 
 /* ================= INPUT ================= */
@@ -233,34 +265,34 @@ button{
   left:0;
   right:0;
   bottom:0;
-  padding:12px 14px 18px;
+  padding:10px 12px 17px;
   background:linear-gradient(
     transparent,
     #000 25%
   );
-  z-index:15;
+  z-index:20;
 }
 
 .composer{
   width:min(760px,100%);
   margin:auto;
+  padding:10px;
   background:#151515;
   border:1px solid #303030;
   border-radius:24px;
-  padding:10px;
-  box-shadow:0 -8px 35px rgba(0,0,0,.4);
+  box-shadow:0 -8px 35px rgba(0,0,0,.45);
 }
 
 .attachment-preview{
   display:none;
   align-items:center;
   gap:8px;
-  background:#202020;
-  border-radius:12px;
   padding:8px 10px;
   margin-bottom:8px;
-  font-size:12px;
+  border-radius:12px;
+  background:#202020;
   color:#bbb;
+  font-size:12px;
 }
 
 .attachment-preview.show{
@@ -272,9 +304,9 @@ button{
   min-height:46px;
   max-height:150px;
   resize:none;
-  background:transparent;
   border:0;
   outline:0;
+  background:transparent;
   color:#fff;
   padding:7px 8px;
   font-size:15px;
@@ -301,14 +333,13 @@ button{
 .circle{
   width:40px;
   height:40px;
+  border:0;
   border-radius:50%;
   background:transparent;
-  border:0;
   color:#aaa;
   display:flex;
   align-items:center;
   justify-content:center;
-  cursor:pointer;
 }
 
 .circle:hover{
@@ -319,24 +350,17 @@ button{
 .send{
   width:42px;
   height:42px;
+  border:0;
   border-radius:50%;
   background:#fff;
   color:#000;
-  border:0;
   display:flex;
   align-items:center;
   justify-content:center;
-  cursor:pointer;
 }
 
 .send:hover{
   transform:scale(1.04);
-}
-
-.send .icon{
-  width:19px;
-  height:19px;
-  stroke-width:2.3;
 }
 
 /* ================= PLUS MENU ================= */
@@ -347,15 +371,16 @@ button{
 
 .plus-menu{
   position:absolute;
-  bottom:49px;
   left:0;
+  bottom:49px;
   width:210px;
+  padding:7px;
   background:#1b1b1b;
   border:1px solid #333;
   border-radius:18px;
-  padding:7px;
   display:none;
   box-shadow:0 18px 50px rgba(0,0,0,.7);
+  z-index:100;
 }
 
 .plus-menu.open{
@@ -373,7 +398,6 @@ button{
   gap:12px;
   padding:0 11px;
   border-radius:11px;
-  cursor:pointer;
   text-align:left;
 }
 
@@ -384,7 +408,6 @@ button{
 .menu-item .icon{
   width:20px;
   height:20px;
-  color:#ddd;
 }
 
 /* ================= SIDEBAR ================= */
@@ -392,7 +415,7 @@ button{
 .overlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.6);
+  background:rgba(0,0,0,.65);
   z-index:90;
   display:none;
 }
@@ -406,7 +429,7 @@ button{
   top:0;
   bottom:0;
   left:0;
-  width:min(310px,85vw);
+  width:min(310px,86vw);
   background:#111;
   border-right:1px solid #292929;
   z-index:100;
@@ -444,26 +467,25 @@ button{
   align-items:center;
   gap:10px;
   padding:0 14px;
-  cursor:pointer;
   font-size:14px;
 }
 
 .search{
   margin:0 13px 12px;
   height:42px;
+  width:calc(100% - 26px);
+  padding:0 12px;
   border:1px solid #292929;
   background:#171717;
   border-radius:12px;
   color:#fff;
-  padding:0 12px;
   outline:none;
-  width:calc(100% - 26px);
 }
 
 .history{
   flex:1;
   overflow-y:auto;
-  padding:0 8px 20px;
+  padding:0 8px 10px;
 }
 
 .history-title{
@@ -480,7 +502,6 @@ button{
   padding:11px 9px;
   border-radius:11px;
   color:#ddd;
-  cursor:pointer;
 }
 
 .chat-history-item:hover{
@@ -498,11 +519,10 @@ button{
 .history-more{
   width:28px;
   height:28px;
-  background:transparent;
   border:0;
+  background:transparent;
   color:#777;
   border-radius:8px;
-  cursor:pointer;
 }
 
 .history-more:hover{
@@ -510,20 +530,48 @@ button{
   color:#fff;
 }
 
-/* ================= TOP MORE ================= */
+/* SETTINGS + LOGIN AT NORMAL MENU BOTTOM */
+
+.sidebar-bottom{
+  margin-top:auto;
+  padding:10px;
+  border-top:1px solid #242424;
+  background:#111;
+}
+
+.sidebar-bottom-item{
+  width:100%;
+  min-height:46px;
+  border:0;
+  background:transparent;
+  color:#fff;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 12px;
+  font-size:14px;
+  text-align:left;
+}
+
+.sidebar-bottom-item:hover{
+  background:#202020;
+}
+
+/* ================= COMMON MORE MENU ================= */
 
 .more-menu{
   position:absolute;
   top:57px;
   right:12px;
   width:235px;
+  padding:7px;
   background:#1b1b1b;
   border:1px solid #333;
   border-radius:17px;
-  padding:7px;
   display:none;
   box-shadow:0 18px 50px rgba(0,0,0,.7);
-  z-index:50;
+  z-index:70;
 }
 
 .more-menu.open{
@@ -531,17 +579,16 @@ button{
 }
 
 .more-row{
-  height:45px;
   width:100%;
+  height:45px;
+  border:0;
   background:transparent;
   color:#fff;
-  border:0;
   display:flex;
   align-items:center;
   gap:12px;
   padding:0 11px;
   border-radius:11px;
-  cursor:pointer;
   text-align:left;
 }
 
@@ -552,7 +599,6 @@ button{
 .more-row .icon{
   width:20px;
   height:20px;
-  color:#ddd;
 }
 
 /* ================= TOAST ================= */
@@ -562,21 +608,104 @@ button{
   left:50%;
   bottom:100px;
   transform:translateX(-50%) translateY(10px);
+  padding:10px 15px;
   background:#222;
   border:1px solid #333;
-  color:#fff;
-  padding:10px 15px;
   border-radius:12px;
+  color:#fff;
   font-size:12px;
   opacity:0;
   pointer-events:none;
   transition:.2s;
-  z-index:300;
+  z-index:400;
 }
 
 .toast.show{
   opacity:1;
   transform:translateX(-50%) translateY(0);
+}
+
+/* ================= MODAL ================= */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:500;
+}
+
+.modal-backdrop.show{
+  display:flex;
+}
+
+.modal{
+  width:min(420px,100%);
+  max-height:85vh;
+  overflow:auto;
+  background:#111;
+  border:1px solid #333;
+  border-radius:20px;
+  padding:18px;
+}
+
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+
+.modal-head h2{
+  font-size:20px;
+}
+
+.modal-close{
+  width:36px;
+  height:36px;
+  border:0;
+  border-radius:50%;
+  background:#202020;
+  color:#fff;
+  font-size:20px;
+}
+
+.modal-text{
+  color:#999;
+  font-size:14px;
+  line-height:1.6;
+  margin-bottom:15px;
+}
+
+.modal-input{
+  width:100%;
+  height:46px;
+  margin-bottom:9px;
+  padding:0 12px;
+  border:1px solid #303030;
+  border-radius:11px;
+  background:#181818;
+  color:#fff;
+  outline:none;
+}
+
+.modal-button{
+  width:100%;
+  min-height:45px;
+  margin-top:8px;
+  border-radius:11px;
+  border:1px solid #303030;
+  background:#181818;
+  color:#fff;
+}
+
+.modal-button.primary{
+  background:#fff;
+  color:#000;
+  border:0;
 }
 
 /* ================= MOBILE ================= */
@@ -628,13 +757,20 @@ button{
 
   <div class="header-left">
 
-    <button class="icon-btn" onclick="openSidebar()">
+    <button
+      class="icon-btn"
+      onclick="openSidebar()"
+      aria-label="Open menu"
+    >
       <svg class="icon" viewBox="0 0 24 24">
         <path d="M4 6h16M4 12h16M4 18h16"/>
       </svg>
     </button>
 
-    <div class="title" id="chatTitle">
+    <div
+      class="title"
+      id="chatTitle"
+    >
       RG Creator AI
     </div>
 
@@ -642,7 +778,11 @@ button{
 
   <div class="header-right">
 
-    <button class="icon-btn" onclick="toggleTopMenu()">
+    <button
+      class="icon-btn"
+      onclick="toggleTopMenu()"
+      aria-label="More"
+    >
       <svg class="icon" viewBox="0 0 24 24">
         <circle cx="5" cy="12" r="1"/>
         <circle cx="12" cy="12" r="1"/>
@@ -655,51 +795,58 @@ button{
 </header>
 
 
-<!-- ================= TOP MENU ================= -->
+<!-- ================= COMMON MORE MENU ================= -->
 
-<div class="more-menu" id="topMenu">
+<div
+  class="more-menu"
+  id="topMenu"
+>
 
-  <button class="more-row" onclick="shareConversation()">
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="M12 16V3"/>
-      <path d="m7 8 5-5 5 5"/>
-      <path d="M5 13v6h14v-6"/>
-    </svg>
-    Share conversation
+  <button
+    class="more-row"
+    onclick="shareConversation();closeTopMenu()"
+  >
+    🔗
+    Share
   </button>
 
-  <button class="more-row" onclick="pinChat()">
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="m9 3 6 6"/>
-      <path d="m8 8-4 4 8 1 4 8 2-2-4-8 4-4"/>
-    </svg>
-    Pin
+  <button
+    class="more-row"
+    onclick="openSidebar();closeTopMenu()"
+  >
+    💬
+    Chat History
   </button>
 
-  <button class="more-row" onclick="renameChat()">
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="m4 20 4-1 11-11-3-3L5 16l-1 4z"/>
-      <path d="m14 5 3 3"/>
-    </svg>
-    Rename
+  <button
+    class="more-row"
+    onclick="showHelp();closeTopMenu()"
+  >
+    ❓
+    Help
   </button>
 
-  <button class="more-row" onclick="downloadConversation()">
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="M12 3v12"/>
-      <path d="m7 10 5 5 5-5"/>
-      <path d="M5 21h14"/>
-    </svg>
-    Download
+  <button
+    class="more-row"
+    onclick="showFeedback();closeTopMenu()"
+  >
+    💡
+    Feedback
   </button>
 
-  <button class="more-row" onclick="deleteConversation()">
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="M4 7h16"/>
-      <path d="M10 11v6M14 11v6"/>
-      <path d="M6 7l1 14h10l1-14"/>
-      <path d="M9 7V4h6v3"/>
-    </svg>
+  <button
+    class="more-row"
+    onclick="showAbout();closeTopMenu()"
+  >
+    ℹ️
+    About
+  </button>
+
+  <button
+    class="more-row"
+    onclick="deleteConversation();closeTopMenu()"
+  >
+    🗑️
     Delete
   </button>
 
@@ -710,17 +857,27 @@ button{
 
 <main class="chat-area">
 
-  <div class="messages" id="messages">
+  <div
+    class="messages"
+    id="messages"
+  >
 
-    <div class="welcome" id="welcome">
+    <div
+      class="welcome"
+      id="welcome"
+    >
 
       <div class="welcome-logo">
         RG
       </div>
 
-      <h1>How can I help you?</h1>
+      <h1>
+        How can I help you?
+      </h1>
 
-      <p>Ask anything, create content or build something.</p>
+      <p>
+        Ask anything, create content or build something.
+      </p>
 
     </div>
 
@@ -743,11 +900,13 @@ button{
       <span id="attachmentName"></span>
     </div>
 
+
     <textarea
       id="messageInput"
       placeholder="Ask anything..."
       rows="1"
     ></textarea>
+
 
     <div class="composer-bottom">
 
@@ -758,25 +917,24 @@ button{
           <button
             class="circle"
             onclick="togglePlus()"
+            aria-label="Attach"
           >
-
             <svg class="icon" viewBox="0 0 24 24">
               <path d="M12 5v14M5 12h14"/>
             </svg>
-
           </button>
 
-          <div class="plus-menu" id="plusMenu">
+
+          <div
+            class="plus-menu"
+            id="plusMenu"
+          >
 
             <button
               class="menu-item"
               onclick="chooseImage()"
             >
-              <svg class="icon" viewBox="0 0 24 24">
-                <rect x="3" y="4" width="18" height="16" rx="2"/>
-                <circle cx="8" cy="9" r="1.5"/>
-                <path d="m4 17 5-5 4 4 2-2 5 5"/>
-              </svg>
+              🖼️
               Image
             </button>
 
@@ -784,10 +942,7 @@ button{
               class="menu-item"
               onclick="chooseCamera()"
             >
-              <svg class="icon" viewBox="0 0 24 24">
-                <path d="M4 7h4l2-2h4l2 2h4v12H4z"/>
-                <circle cx="12" cy="13" r="4"/>
-              </svg>
+              📷
               Camera
             </button>
 
@@ -795,10 +950,7 @@ button{
               class="menu-item"
               onclick="chooseVideo()"
             >
-              <svg class="icon" viewBox="0 0 24 24">
-                <rect x="3" y="6" width="13" height="12" rx="2"/>
-                <path d="m16 10 5-3v10l-5-3z"/>
-              </svg>
+              🎥
               Video
             </button>
 
@@ -806,10 +958,7 @@ button{
               class="menu-item"
               onclick="chooseFile()"
             >
-              <svg class="icon" viewBox="0 0 24 24">
-                <path d="M6 3h9l4 4v14H6z"/>
-                <path d="M14 3v5h5"/>
-              </svg>
+              📄
               File
             </button>
 
@@ -817,11 +966,7 @@ button{
               class="menu-item"
               onclick="choosePDF()"
             >
-              <svg class="icon" viewBox="0 0 24 24">
-                <path d="M6 3h9l4 4v14H6z"/>
-                <path d="M14 3v5h5"/>
-                <path d="M9 16h6M9 12h4"/>
-              </svg>
+              📕
               PDF
             </button>
 
@@ -830,19 +975,12 @@ button{
         </div>
 
 
-        <!-- VOICE -->
-
         <button
           class="circle"
           onclick="startVoice()"
+          aria-label="Voice"
         >
-
-          <svg class="icon" viewBox="0 0 24 24">
-            <rect x="9" y="3" width="6" height="12" rx="3"/>
-            <path d="M5 11a7 7 0 0 0 14 0"/>
-            <path d="M12 18v3"/>
-          </svg>
-
+          🎤
         </button>
 
       </div>
@@ -853,13 +991,12 @@ button{
         <button
           class="send"
           onclick="sendMessage()"
+          aria-label="Send"
         >
-
           <svg class="icon" viewBox="0 0 24 24">
             <path d="M5 12h14"/>
             <path d="m13 6 6 6-6 6"/>
           </svg>
-
         </button>
 
       </div>
@@ -923,7 +1060,11 @@ button{
   onclick="closeSidebar()"
 ></div>
 
-<aside class="sidebar" id="sidebar">
+
+<aside
+  class="sidebar"
+  id="sidebar"
+>
 
   <div class="sidebar-head">
 
@@ -940,18 +1081,15 @@ button{
 
   </div>
 
+
   <button
     class="new-chat"
     onclick="newChat()"
   >
-
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="M12 5v14M5 12h14"/>
-    </svg>
-
+    +
     New chat
-
   </button>
+
 
   <input
     class="search"
@@ -960,12 +1098,72 @@ button{
     oninput="searchChats()"
   >
 
+
   <div
     class="history"
     id="history"
   ></div>
 
+
+  <!-- NORMAL MENU BOTTOM -->
+
+  <div class="sidebar-bottom">
+
+    <button
+      class="sidebar-bottom-item"
+      onclick="openSettings()"
+    >
+      ⚙️
+      Settings
+    </button>
+
+
+    <button
+      class="sidebar-bottom-item"
+      onclick="openLogin()"
+    >
+      👤
+      Log in / Sign up
+    </button>
+
+  </div>
+
 </aside>
+
+
+<!-- ================= MODAL ================= -->
+
+<div
+  class="modal-backdrop"
+  id="modalBackdrop"
+  onclick="closeModal(event)"
+>
+
+  <div
+    class="modal"
+    onclick="event.stopPropagation()"
+  >
+
+    <div class="modal-head">
+
+      <h2 id="modalTitle">
+        RG Creator AI
+      </h2>
+
+      <button
+        class="modal-close"
+        onclick="hideModal()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div id="modalBody"></div>
+
+  </div>
+
+</div>
 
 
 <div
@@ -981,14 +1179,13 @@ button{
 ===================================================== */
 
 let messagesData =
-  JSON.parse(localStorage.getItem("rg_messages") || "[]");
+  JSON.parse(
+    localStorage.getItem("rg_messages") || "[]"
+  );
 
 let chatName =
   localStorage.getItem("rg_chat_name") ||
   "RG Creator AI";
-
-let pinned =
-  localStorage.getItem("rg_pinned") === "true";
 
 let lastUserMessage = "";
 
@@ -1007,8 +1204,9 @@ const welcome =
 
 /* ================= INIT ================= */
 
-document.getElementById("chatTitle").textContent =
-  chatName;
+document
+  .getElementById("chatTitle")
+  .textContent = chatName;
 
 renderMessages();
 renderHistory();
@@ -1025,9 +1223,12 @@ function toast(text){
 
   el.classList.add("show");
 
-  setTimeout(()=>{
+  setTimeout(function(){
+
     el.classList.remove("show");
+
   },2200);
+
 }
 
 
@@ -1103,13 +1304,17 @@ function choosePDF(){
 }
 
 
-function handleAttachment(inputFile){
+function handleAttachment(fileInput){
 
-  if(!inputFile.files.length)
+  if(
+    !fileInput.files ||
+    !fileInput.files.length
+  ){
     return;
+  }
 
   const file =
-    inputFile.files[0];
+    fileInput.files[0];
 
   document
     .getElementById("attachmentName")
@@ -1120,7 +1325,10 @@ function handleAttachment(inputFile){
     .getElementById("attachmentPreview")
     .classList.add("show");
 
-  toast("Attachment added");
+  toast(
+    "Attachment added: " +
+    file.name
+  );
 
 }
 
@@ -1132,8 +1340,9 @@ async function sendMessage(){
   const text =
     input.value.trim();
 
-  if(!text)
+  if(!text){
     return;
+  }
 
   lastUserMessage = text;
 
@@ -1151,6 +1360,8 @@ async function sendMessage(){
     .getElementById("attachmentPreview")
     .classList.remove("show");
 
+  autoResize();
+
   renderMessages();
 
   const aiIndex =
@@ -1167,24 +1378,30 @@ async function sendMessage(){
   try{
 
     const response =
-      await fetch("/api/chat",{
+      await fetch(
+        "/api/chat",
+        {
+          method:"POST",
 
-        method:"POST",
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
 
-        headers:{
-          "Content-Type":"application/json"
-        },
-
-        body:JSON.stringify({
-          message:text
-        })
-
-      });
+          body:
+            JSON.stringify({
+              message:text
+            })
+        }
+      );
 
     const data =
       await response.json();
 
-    if(!response.ok || !data.ok){
+    if(
+      !response.ok ||
+      !data.ok
+    ){
 
       throw new Error(
         data.error ||
@@ -1204,7 +1421,10 @@ async function sendMessage(){
 
     messagesData[aiIndex].text =
       "Sorry, I couldn't complete that request.\n\n" +
-      (error.message || "Server error");
+      (
+        error.message ||
+        "Server error"
+      );
 
     saveMessages();
 
@@ -1234,16 +1454,19 @@ function renderMessages(){
   messagesEl.innerHTML = "";
 
   messagesData.forEach(
-    (message,index)=>{
+    function(message,index){
 
       const wrapper =
         document.createElement("div");
 
       wrapper.className =
         "message " +
-        (message.role === "user"
-          ? "user-message"
-          : "ai-message");
+        (
+          message.role === "user"
+            ? "user-message"
+            : "ai-message"
+        );
+
 
       if(message.role === "user"){
 
@@ -1256,56 +1479,58 @@ function renderMessages(){
       }else{
 
         wrapper.innerHTML = `
-          <div class="ai-content">${escapeHTML(message.text)}</div>
+          <div class="ai-content">
+            ${escapeHTML(message.text)}
+          </div>
 
           <div class="message-actions">
 
-            <button class="action-btn"
+            <button
+              class="action-btn"
               onclick="copyMessage(${index})"
-              title="Copy">
-
+              title="Copy"
+            >
               ${iconCopy()}
-
             </button>
 
-            <button class="action-btn"
+            <button
+              class="action-btn"
               onclick="likeMessage(${index})"
-              title="Like">
-
+              title="Like"
+            >
               ${iconLike()}
-
             </button>
 
-            <button class="action-btn"
+            <button
+              class="action-btn"
               onclick="dislikeMessage(${index})"
-              title="Dislike">
-
+              title="Dislike"
+            >
               ${iconDislike()}
-
             </button>
 
-            <button class="action-btn"
+            <button
+              class="action-btn"
               onclick="shareMessage(${index})"
-              title="Share">
-
+              title="Share"
+            >
               ${iconShare()}
-
             </button>
 
-            <button class="action-btn"
+            <button
+              class="action-btn"
               onclick="regenerateMessage(${index})"
-              title="Regenerate">
-
+              title="Regenerate"
+            >
               ${iconRefresh()}
-
             </button>
 
-            <button class="action-btn"
+            <button
+              class="action-btn"
               onclick="moreMessage(${index})"
-              title="More">
-
+              title="More"
+            >
               ${iconMore()}
-
             </button>
 
           </div>
@@ -1324,20 +1549,6 @@ function renderMessages(){
 }
 
 
-/* ================= ESCAPE ================= */
-
-function escapeHTML(text){
-
-  return text
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
 /* ================= COPY ================= */
 
 async function copyMessage(index){
@@ -1345,20 +1556,24 @@ async function copyMessage(index){
   const text =
     messagesData[index]?.text || "";
 
-  await navigator.clipboard.writeText(text);
+  try{
 
-  toast("Copied");
+    await navigator.clipboard.writeText(text);
+
+    toast("Copied");
+
+  }catch{
+
+    toast("Copy failed");
+
+  }
 
 }
 
 
 /* ================= LIKE ================= */
 
-function likeMessage(index){
-
-  messagesData[index].liked = true;
-
-  saveMessages();
+function likeMessage(){
 
   toast("Thanks for your feedback");
 
@@ -1367,13 +1582,9 @@ function likeMessage(index){
 
 /* ================= DISLIKE ================= */
 
-function dislikeMessage(index){
+function dislikeMessage(){
 
-  messagesData[index].disliked = true;
-
-  saveMessages();
-
-  toast("Feedback saved");
+  toast("Thanks for your feedback");
 
 }
 
@@ -1387,16 +1598,28 @@ async function shareMessage(index){
 
   if(navigator.share){
 
-    await navigator.share({
-      title:"RG Creator AI",
-      text:text
-    });
+    try{
+
+      await navigator.share({
+        title:"RG Creator AI",
+        text:text
+      });
+
+    }catch{}
 
   }else{
 
-    await navigator.clipboard.writeText(text);
+    try{
 
-    toast("Response copied");
+      await navigator.clipboard.writeText(text);
+
+      toast("Response copied");
+
+    }catch{
+
+      toast("Share unavailable");
+
+    }
 
   }
 
@@ -1407,13 +1630,22 @@ async function shareMessage(index){
 
 async function regenerateMessage(index){
 
-  if(!lastUserMessage){
+  let userText =
+    lastUserMessage;
 
-    for(let i=index-1;i>=0;i--){
+  if(!userText){
 
-      if(messagesData[i].role==="user"){
+    for(
+      let i=index-1;
+      i>=0;
+      i--
+    ){
 
-        lastUserMessage =
+      if(
+        messagesData[i].role === "user"
+      ){
+
+        userText =
           messagesData[i].text;
 
         break;
@@ -1424,41 +1656,53 @@ async function regenerateMessage(index){
 
   }
 
-  if(!lastUserMessage)
+  if(!userText){
+
+    toast("No user message found");
+
     return;
+
+  }
 
   messagesData[index].text =
     "Regenerating...";
-
-  saveMessages();
 
   renderMessages();
 
   try{
 
     const response =
-      await fetch("/api/chat",{
+      await fetch(
+        "/api/chat",
+        {
+          method:"POST",
 
-        method:"POST",
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
 
-        headers:{
-          "Content-Type":"application/json"
-        },
-
-        body:JSON.stringify({
-          message:lastUserMessage
-        })
-
-      });
+          body:
+            JSON.stringify({
+              message:userText
+            })
+        }
+      );
 
     const data =
       await response.json();
 
-    if(!response.ok || !data.ok)
+    if(
+      !response.ok ||
+      !data.ok
+    ){
+
       throw new Error(
         data.error ||
         "Request failed"
       );
+
+    }
 
     messagesData[index].text =
       data.reply;
@@ -1470,7 +1714,11 @@ async function regenerateMessage(index){
   }catch(error){
 
     messagesData[index].text =
-      "Unable to regenerate response.";
+      "Unable to regenerate response.\n\n" +
+      (
+        error.message ||
+        "Server error"
+      );
 
     saveMessages();
 
@@ -1481,28 +1729,30 @@ async function regenerateMessage(index){
 }
 
 
-/* ================= MORE AI MESSAGE ================= */
+/* ================= AI MORE ================= */
 
 function moreMessage(index){
 
   const choice =
     prompt(
-      "Choose:\n\n" +
+      "Choose an option:\n\n" +
       "1 = Read aloud\n" +
       "2 = Copy\n" +
       "3 = Delete\n" +
       "4 = Save"
     );
 
-  if(choice==="1"){
+  if(choice === "1"){
 
-    speak(messagesData[index].text);
+    speak(
+      messagesData[index].text
+    );
 
-  }else if(choice==="2"){
+  }else if(choice === "2"){
 
     copyMessage(index);
 
-  }else if(choice==="3"){
+  }else if(choice === "3"){
 
     messagesData.splice(index,1);
 
@@ -1510,10 +1760,12 @@ function moreMessage(index){
 
     renderMessages();
 
-  }else if(choice==="4"){
+    toast("Response deleted");
+
+  }else if(choice === "4"){
 
     localStorage.setItem(
-      "rg_saved_"+Date.now(),
+      "rg_saved_" + Date.now(),
       messagesData[index].text
     );
 
@@ -1528,9 +1780,13 @@ function moreMessage(index){
 
 function speak(text){
 
-  if(!("speechSynthesis" in window)){
+  if(
+    !("speechSynthesis" in window)
+  ){
 
-    toast("Read aloud not supported");
+    toast(
+      "Read aloud not supported"
+    );
 
     return;
 
@@ -1560,6 +1816,69 @@ function toggleTopMenu(){
 
 }
 
+function closeTopMenu(){
+
+  document
+    .getElementById("topMenu")
+    .classList.remove("open");
+
+}
+
+
+/* ================= COMMON MORE ACTIONS ================= */
+
+function showHelp(){
+
+  toast(
+    "Use + for Image, Camera, Video, File or PDF. Use 🎤 for voice input."
+  );
+
+}
+
+
+function showFeedback(){
+
+  const feedback =
+    prompt(
+      "Tell us your feedback:"
+    );
+
+  if(
+    feedback &&
+    feedback.trim()
+  ){
+
+    toast(
+      "Thanks for your feedback"
+    );
+
+  }
+
+}
+
+
+function showAbout(){
+
+  openModal(
+    "About RG Creator AI",
+    `
+      <div class="modal-text">
+        RG Creator AI is your AI-powered
+        creative workspace for chat, content,
+        coding, images and creator tools.
+      </div>
+
+      <button
+        class="modal-button"
+        onclick="hideModal()"
+      >
+        Close
+      </button>
+    `
+  );
+
+}
+
 
 /* ================= SHARE CONVERSATION ================= */
 
@@ -1567,129 +1886,59 @@ async function shareConversation(){
 
   const text =
     messagesData
-      .map(m =>
-        (m.role==="user"
-          ? "You: "
-          : "RG Creator AI: ") +
-        m.text
+      .map(
+        function(m){
+
+          return (
+            m.role === "user"
+              ? "You: "
+              : "RG Creator AI: "
+          ) + m.text;
+
+        }
       )
       .join("\n\n");
 
+
   if(!text){
 
-    toast("No conversation to share");
+    toast(
+      "No conversation to share"
+    );
 
     return;
 
   }
+
 
   if(navigator.share){
 
-    await navigator.share({
-      title:chatName,
-      text:text
-    });
+    try{
+
+      await navigator.share({
+        title:chatName,
+        text:text
+      });
+
+    }catch{}
 
   }else{
 
-    await navigator.clipboard.writeText(text);
+    try{
 
-    toast("Conversation copied");
+      await navigator.clipboard.writeText(text);
+
+      toast(
+        "Conversation copied"
+      );
+
+    }catch{
+
+      toast("Share unavailable");
+
+    }
 
   }
-
-}
-
-
-/* ================= PIN ================= */
-
-function pinChat(){
-
-  pinned = !pinned;
-
-  localStorage.setItem(
-    "rg_pinned",
-    pinned
-  );
-
-  toast(
-    pinned
-      ? "Chat pinned"
-      : "Chat unpinned"
-  );
-
-}
-
-
-/* ================= RENAME ================= */
-
-function renameChat(){
-
-  const name =
-    prompt(
-      "Enter chat name:",
-      chatName
-    );
-
-  if(!name || !name.trim())
-    return;
-
-  chatName =
-    name.trim();
-
-  localStorage.setItem(
-    "rg_chat_name",
-    chatName
-  );
-
-  document
-    .getElementById("chatTitle")
-    .textContent =
-    chatName;
-
-  renderHistory();
-
-  toast("Chat renamed");
-
-}
-
-
-/* ================= DOWNLOAD ================= */
-
-function downloadConversation(){
-
-  const text =
-    messagesData
-      .map(m =>
-        (m.role==="user"
-          ? "You:\n"
-          : "RG Creator AI:\n") +
-        m.text
-      )
-      .join("\n\n----------------\n\n");
-
-  const blob =
-    new Blob(
-      [text],
-      {type:"text/plain"}
-    );
-
-  const url =
-    URL.createObjectURL(blob);
-
-  const a =
-    document.createElement("a");
-
-  a.href = url;
-
-  a.download =
-    "RG-Creator-AI-Chat.txt";
-
-  a.click();
-
-  URL.revokeObjectURL(url);
-
-  toast("Conversation downloaded");
 
 }
 
@@ -1699,21 +1948,42 @@ function downloadConversation(){
 function deleteConversation(){
 
   if(
+    !messagesData.length
+  ){
+
+    toast(
+      "There is no conversation to delete"
+    );
+
+    return;
+
+  }
+
+
+  if(
     !confirm(
       "Delete this conversation?"
     )
-  )
+  ){
+
     return;
+
+  }
+
 
   messagesData = [];
 
-  saveMessages();
+  localStorage.removeItem(
+    "rg_messages"
+  );
 
   renderMessages();
 
   renderHistory();
 
-  toast("Conversation deleted");
+  toast(
+    "Conversation deleted"
+  );
 
 }
 
@@ -1731,6 +2001,7 @@ function openSidebar(){
     .classList.add("show");
 
 }
+
 
 function closeSidebar(){
 
@@ -1751,10 +2022,10 @@ function newChat(){
 
   messagesData = [];
 
+  lastUserMessage = "";
+
   chatName =
     "New Chat";
-
-  lastUserMessage = "";
 
   localStorage.removeItem(
     "rg_messages"
@@ -1796,7 +2067,9 @@ function renderHistory(
 ){
 
   const history =
-    document.getElementById("history");
+    document.getElementById(
+      "history"
+    );
 
   const matches =
     filter.toLowerCase();
@@ -1823,7 +2096,7 @@ function renderHistory(
 
       <button
         class="history-more"
-        onclick="event.stopPropagation(); renameChat()"
+        onclick="event.stopPropagation();renameCurrentChat()"
       >
         ⋯
       </button>
@@ -1852,6 +2125,43 @@ function searchChats(){
 }
 
 
+function renameCurrentChat(){
+
+  const name =
+    prompt(
+      "Enter chat name:",
+      chatName
+    );
+
+  if(
+    !name ||
+    !name.trim()
+  ){
+
+    return;
+
+  }
+
+  chatName =
+    name.trim();
+
+  localStorage.setItem(
+    "rg_chat_name",
+    chatName
+  );
+
+  document
+    .getElementById("chatTitle")
+    .textContent =
+    chatName;
+
+  renderHistory();
+
+  toast("Chat renamed");
+
+}
+
+
 /* ================= VOICE ================= */
 
 function startVoice(){
@@ -1870,6 +2180,7 @@ function startVoice(){
 
   }
 
+
   const recognition =
     new Recognition();
 
@@ -1886,22 +2197,28 @@ function startVoice(){
 
     };
 
+
   recognition.onresult =
     function(event){
 
       input.value =
-        event.results[0][0].transcript;
+        event.results[0][0]
+          .transcript;
 
       autoResize();
 
     };
 
+
   recognition.onerror =
     function(){
 
-      toast("Voice input failed");
+      toast(
+        "Voice input failed"
+      );
 
     };
+
 
   recognition.start();
 
@@ -1949,7 +2266,175 @@ function autoResize(){
 }
 
 
-/* ================= ICON HELPERS ================= */
+/* ================= HOME → CHAT ================= */
+
+function loadHomeMessage(){
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const message =
+    params.get("message");
+
+  if(
+    !message
+  ){
+
+    return;
+
+  }
+
+  input.value =
+    message;
+
+  autoResize();
+
+  window.history.replaceState(
+    {},
+    document.title,
+    window.location.pathname
+  );
+
+}
+
+
+/* ================= SETTINGS ================= */
+
+function openSettings(){
+
+  openModal(
+    "Settings",
+    `
+      <div class="modal-text">
+        Manage your RG Creator AI preferences.
+      </div>
+
+      <button
+        class="modal-button"
+        onclick="toast('Appearance settings will be connected next.')"
+      >
+        🌙 Appearance
+      </button>
+
+      <button
+        class="modal-button"
+        onclick="toast('Chat settings will be connected next.')"
+      >
+        💬 Chat Settings
+      </button>
+
+      <button
+        class="modal-button"
+        onclick="toast('Privacy settings will be connected next.')"
+      >
+        🔒 Privacy & Data
+      </button>
+    `
+  );
+
+}
+
+
+/* ================= LOGIN / SIGNUP ================= */
+
+function openLogin(){
+
+  openModal(
+    "Log in / Sign up",
+    `
+      <div class="modal-text">
+        Sign in to sync your chats and creator
+        workspace across devices.
+      </div>
+
+      <button
+        class="modal-button primary"
+        onclick="toast('Google authentication will be connected next.')"
+      >
+        Continue with Google
+      </button>
+
+      <input
+        class="modal-input"
+        type="email"
+        placeholder="Email address"
+      >
+
+      <input
+        class="modal-input"
+        type="password"
+        placeholder="Password"
+      >
+
+      <button
+        class="modal-button"
+        onclick="toast('Login backend will be connected next.')"
+      >
+        Log in
+      </button>
+
+      <button
+        class="modal-button"
+        onclick="toast('Signup backend will be connected next.')"
+      >
+        Create account
+      </button>
+    `
+  );
+
+}
+
+
+/* ================= MODAL ================= */
+
+function openModal(
+  title,
+  body
+){
+
+  document
+    .getElementById("modalTitle")
+    .textContent =
+    title;
+
+  document
+    .getElementById("modalBody")
+    .innerHTML =
+    body;
+
+  document
+    .getElementById("modalBackdrop")
+    .classList.add("show");
+
+}
+
+
+function hideModal(){
+
+  document
+    .getElementById("modalBackdrop")
+    .classList.remove("show");
+
+}
+
+
+function closeModal(event){
+
+  if(
+    event.target.id ===
+    "modalBackdrop"
+  ){
+
+    hideModal();
+
+  }
+
+}
+
+
+/* ================= ICONS ================= */
 
 function iconCopy(){
 
@@ -1962,6 +2447,7 @@ function iconCopy(){
 
 }
 
+
 function iconLike(){
 
   return `
@@ -1972,6 +2458,7 @@ function iconLike(){
   `;
 
 }
+
 
 function iconDislike(){
 
@@ -1984,6 +2471,7 @@ function iconDislike(){
 
 }
 
+
 function iconShare(){
 
   return `
@@ -1995,6 +2483,7 @@ function iconShare(){
   `;
 
 }
+
 
 function iconRefresh(){
 
@@ -2009,6 +2498,7 @@ function iconRefresh(){
 
 }
 
+
 function iconMore(){
 
   return `
@@ -2022,6 +2512,20 @@ function iconMore(){
 }
 
 
+/* ================= SECURITY ================= */
+
+function escapeHTML(text){
+
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
 /* ================= OUTSIDE CLICK ================= */
 
 document.addEventListener(
@@ -2029,10 +2533,14 @@ document.addEventListener(
   function(event){
 
     const plus =
-      document.querySelector(".plus-wrap");
+      document.querySelector(
+        ".plus-wrap"
+      );
 
     const plusMenu =
-      document.getElementById("plusMenu");
+      document.getElementById(
+        "plusMenu"
+      );
 
     if(
       plusMenu.classList.contains("open") &&
@@ -2043,8 +2551,11 @@ document.addEventListener(
 
     }
 
+
     const topMenu =
-      document.getElementById("topMenu");
+      document.getElementById(
+        "topMenu"
+      );
 
     if(
       topMenu.classList.contains("open") &&
@@ -2058,6 +2569,11 @@ document.addEventListener(
 
   }
 );
+
+
+/* ================= START ================= */
+
+loadHomeMessage();
 
 </script>
 
