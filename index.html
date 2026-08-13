@@ -24,7 +24,8 @@
   --accent:#ff3030;
 }
 
-html,body{
+html,
+body{
   width:100%;
   height:100%;
   background:#000;
@@ -103,10 +104,10 @@ button{
 }
 
 .icon-btn{
-  width:44px;
-  height:44px;
+  width:42px;
+  height:42px;
   border:0;
-  border-radius:13px;
+  border-radius:12px;
   background:transparent;
   color:#fff;
   display:flex;
@@ -119,8 +120,8 @@ button{
 }
 
 .icon{
-  width:22px;
-  height:22px;
+  width:21px;
+  height:21px;
   fill:none;
   stroke:currentColor;
   stroke-width:1.8;
@@ -137,39 +138,7 @@ button{
   font-weight:600;
 }
 
-/* ================= PROFILE ================= */
-
-.profile-btn{
-  width:46px;
-  height:46px;
-  border:0;
-  border-radius:50%;
-  overflow:hidden;
-  background:#242424;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:19px;
-  font-weight:700;
-  flex-shrink:0;
-}
-
-.profile-btn img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.profile-letter{
-  width:100%;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-/* ================= MORE ================= */
+/* ================= TOP MORE ================= */
 
 .more-menu{
   position:absolute;
@@ -241,6 +210,7 @@ button{
   width:min(760px,100%);
   margin:13vh auto 0;
   text-align:center;
+  transition:.2s;
 }
 
 .welcome-logo{
@@ -290,14 +260,28 @@ button{
   align-items:center;
   gap:9px;
   text-align:left;
+  transition:.18s;
 }
 
 .quick-action:hover{
   background:#191919;
+  border-color:#383838;
 }
 
 .quick-icon{
   font-size:20px;
+}
+
+.quick-text strong{
+  display:block;
+  font-size:13px;
+}
+
+.quick-text span{
+  display:block;
+  margin-top:3px;
+  color:#707070;
+  font-size:10px;
 }
 
 /* ================= MESSAGE ================= */
@@ -309,8 +293,7 @@ button{
 
 .user-message{
   display:flex;
-  flex-direction:column;
-  align-items:flex-end;
+  justify-content:flex-end;
 }
 
 .user-bubble{
@@ -335,22 +318,16 @@ button{
   overflow-wrap:anywhere;
 }
 
-/* ================= MESSAGE ACTIONS ================= */
-
 .message-actions{
-  margin-top:7px;
+  margin-top:8px;
   display:flex;
   align-items:center;
   gap:2px;
 }
 
-.user-actions{
-  justify-content:flex-end;
-}
-
 .action-btn{
-  width:38px;
-  height:38px;
+  width:36px;
+  height:36px;
   border:0;
   background:transparent;
   color:#858585;
@@ -358,12 +335,6 @@ button{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:16px;
-}
-
-.action-btn .icon{
-  width:19px;
-  height:19px;
 }
 
 .action-btn:hover{
@@ -424,14 +395,12 @@ button{
 .composer-right{
   display:flex;
   align-items:center;
-  gap:5px;
+  gap:3px;
 }
 
-/* BIGGER + AND VOICE */
-
 .circle-btn{
-  width:48px;
-  height:48px;
+  width:40px;
+  height:40px;
   border:0;
   border-radius:50%;
   background:transparent;
@@ -446,20 +415,9 @@ button{
   color:#fff;
 }
 
-.circle-btn .icon{
-  width:26px;
-  height:26px;
-  stroke-width:2;
-}
-
-.voice-icon{
-  font-size:25px;
-  line-height:1;
-}
-
 .send-btn{
-  width:44px;
-  height:44px;
+  width:42px;
+  height:42px;
   border:0;
   border-radius:50%;
   background:#fff;
@@ -467,11 +425,6 @@ button{
   display:flex;
   align-items:center;
   justify-content:center;
-}
-
-.send-btn .icon{
-  width:22px;
-  height:22px;
 }
 
 .send-btn:hover{
@@ -487,8 +440,8 @@ button{
 .plus-menu{
   position:absolute;
   left:0;
-  bottom:55px;
-  width:225px;
+  bottom:49px;
+  width:215px;
   padding:7px;
   border:1px solid #333;
   background:#1a1a1a;
@@ -503,7 +456,7 @@ button{
 
 .plus-item{
   width:100%;
-  height:46px;
+  height:44px;
   border:0;
   background:transparent;
   color:#fff;
@@ -535,22 +488,6 @@ button{
 
 .attachment.show{
   display:flex;
-}
-
-.attachment-name{
-  flex:1;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.remove-attachment{
-  width:25px;
-  height:25px;
-  border:0;
-  border-radius:50%;
-  background:#303030;
-  color:#aaa;
 }
 
 /* ================= SIDEBAR ================= */
@@ -599,7 +536,7 @@ button{
 }
 
 .new-chat{
-  height:46px;
+  height:45px;
   margin:12px;
   border:1px solid #303030;
   background:#191919;
@@ -612,6 +549,10 @@ button{
   font-size:14px;
 }
 
+.new-chat:hover{
+  background:#222;
+}
+
 .search{
   width:calc(100% - 24px);
   height:42px;
@@ -622,27 +563,6 @@ button{
   outline:none;
   background:#171717;
   color:#fff;
-}
-
-/* PROJECTS BETWEEN SEARCH AND HISTORY */
-
-.project-btn{
-  width:calc(100% - 24px);
-  height:45px;
-  margin:0 12px 10px;
-  border:1px solid #2b2b2b;
-  border-radius:12px;
-  background:#181818;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:0 12px;
-  text-align:left;
-}
-
-.project-btn:hover{
-  background:#222;
 }
 
 .history{
@@ -704,7 +624,7 @@ button{
 
 .sidebar-bottom-btn{
   width:100%;
-  min-height:48px;
+  min-height:46px;
   border:0;
   background:transparent;
   color:#fff;
@@ -719,38 +639,6 @@ button{
 
 .sidebar-bottom-btn:hover{
   background:#202020;
-}
-
-/* ================= PROJECT MODAL ================= */
-
-.project-list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  margin-bottom:12px;
-}
-
-.project-row{
-  padding:12px;
-  border:1px solid #292929;
-  border-radius:12px;
-  background:#171717;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.project-row span{
-  flex:1;
-}
-
-.project-delete{
-  width:32px;
-  height:32px;
-  border:0;
-  border-radius:9px;
-  background:#242424;
-  color:#aaa;
 }
 
 /* ================= MODAL ================= */
@@ -824,26 +712,6 @@ button{
   border:0;
 }
 
-.profile-large{
-  width:82px;
-  height:82px;
-  margin:0 auto 14px;
-  border-radius:50%;
-  overflow:hidden;
-  background:#292929;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-  font-weight:700;
-}
-
-.profile-large img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
 /* ================= TOAST ================= */
 
 .toast{
@@ -885,7 +753,7 @@ button{
   }
 
   .messages{
-    padding-bottom:155px;
+    padding-bottom:150px;
   }
 
   .user-bubble{
@@ -893,27 +761,9 @@ button{
   }
 
   .input-area{
-    padding-bottom:10px;
+    padding-bottom:11px;
   }
 
-  .circle-btn{
-    width:50px;
-    height:50px;
-  }
-
-  .circle-btn .icon{
-    width:27px;
-    height:27px;
-  }
-
-  .voice-icon{
-    font-size:26px;
-  }
-
-  .profile-btn{
-    width:48px;
-    height:48px;
-  }
 }
 </style>
 </head>
@@ -949,12 +799,15 @@ button{
   <div class="header-right">
 
     <button
-      class="profile-btn"
-      id="profileButton"
-      onclick="openProfile()"
-      aria-label="Profile"
+      class="icon-btn"
+      onclick="toggleMore()"
+      aria-label="More"
     >
-      <span class="profile-letter">G</span>
+      <svg class="icon" viewBox="0 0 24 24">
+        <circle cx="5" cy="12" r="1"/>
+        <circle cx="12" cy="12" r="1"/>
+        <circle cx="19" cy="12" r="1"/>
+      </svg>
     </button>
 
   </div>
@@ -962,7 +815,7 @@ button{
 </header>
 
 
-<!-- ================= MORE MENU ================= -->
+<!-- ================= MORE ================= -->
 
 <div
   class="more-menu"
@@ -973,42 +826,48 @@ button{
     class="more-item"
     onclick="shareConversation()"
   >
-    🔗 Share
+    🔗
+    Share
   </button>
 
   <button
     class="more-item"
     onclick="openSidebar()"
   >
-    💬 Chat History
+    💬
+    Chat History
   </button>
 
   <button
     class="more-item"
     onclick="showHelp()"
   >
-    ❓ Help
+    ❓
+    Help
   </button>
 
   <button
     class="more-item"
     onclick="showFeedback()"
   >
-    💡 Feedback
+    💡
+    Feedback
   </button>
 
   <button
     class="more-item"
     onclick="showAbout()"
   >
-    ℹ️ About
+    ℹ️
+    About
   </button>
 
   <button
     class="more-item"
     onclick="deleteConversation()"
   >
-    🗑️ Delete
+    🗑️
+    Delete
   </button>
 
 </div>
@@ -1022,6 +881,8 @@ button{
     class="messages"
     id="messages"
   >
+
+    <!-- EMPTY HOME STATE -->
 
     <section
       class="welcome"
@@ -1040,6 +901,7 @@ button{
         Ask anything, create content or build something.
       </p>
 
+
       <div class="quick-actions">
 
         <button
@@ -1047,58 +909,69 @@ button{
           onclick="openTool('Image.html')"
         >
           <span class="quick-icon">🖼️</span>
-          <span>
+          <span class="quick-text">
             <strong>AI Image</strong>
+            <span>Create images</span>
           </span>
         </button>
+
 
         <button
           class="quick-action"
           onclick="openTool('writer.html')"
         >
           <span class="quick-icon">✍️</span>
-          <span>
+          <span class="quick-text">
             <strong>Content Writer</strong>
+            <span>Write content</span>
           </span>
         </button>
+
 
         <button
           class="quick-action"
           onclick="openTool('Code.html')"
         >
           <span class="quick-icon">💻</span>
-          <span>
+          <span class="quick-text">
             <strong>Code Generator</strong>
+            <span>Build & fix code</span>
           </span>
         </button>
+
 
         <button
           class="quick-action"
           onclick="openTool('youtube.html')"
         >
           <span class="quick-icon">▶️</span>
-          <span>
+          <span class="quick-text">
             <strong>YouTube</strong>
+            <span>Creator tools</span>
           </span>
         </button>
+
 
         <button
           class="quick-action"
           onclick="openTool('Instagram.html')"
         >
           <span class="quick-icon">📸</span>
-          <span>
+          <span class="quick-text">
             <strong>Instagram</strong>
+            <span>Reels & captions</span>
           </span>
         </button>
+
 
         <button
           class="quick-action"
           onclick="focusInput()"
         >
           <span class="quick-icon">💬</span>
-          <span>
+          <span class="quick-text">
             <strong>AI Chat</strong>
+            <span>Ask anything</span>
           </span>
         </button>
 
@@ -1119,19 +992,8 @@ button{
         class="attachment"
         id="attachment"
       >
-        <span>📎</span>
-
-        <span
-          class="attachment-name"
-          id="attachmentName"
-        ></span>
-
-        <button
-          class="remove-attachment"
-          onclick="clearAttachment()"
-        >
-          ×
-        </button>
+        📎
+        <span id="attachmentName"></span>
       </div>
 
 
@@ -1152,17 +1014,11 @@ button{
               class="circle-btn"
               onclick="togglePlus()"
               aria-label="Attach"
-              title="Attach"
             >
-
-              <svg
-                class="icon"
-                viewBox="0 0 24 24"
-              >
+              <svg class="icon" viewBox="0 0 24 24">
                 <path d="M12 5v14"/>
                 <path d="M5 12h14"/>
               </svg>
-
             </button>
 
 
@@ -1175,35 +1031,40 @@ button{
                 class="plus-item"
                 onclick="pick('imageInput')"
               >
-                🖼️ Image
+                🖼️
+                Image
               </button>
 
               <button
                 class="plus-item"
                 onclick="pick('cameraInput')"
               >
-                📷 Camera
+                📷
+                Camera
               </button>
 
               <button
                 class="plus-item"
                 onclick="pick('videoInput')"
               >
-                🎥 Video
+                🎥
+                Video
               </button>
 
               <button
                 class="plus-item"
                 onclick="pick('fileInput')"
               >
-                📄 File
+                📄
+                File
               </button>
 
               <button
                 class="plus-item"
                 onclick="pick('pdfInput')"
               >
-                📕 PDF
+                📕
+                PDF
               </button>
 
             </div>
@@ -1215,9 +1076,8 @@ button{
             class="circle-btn"
             onclick="startVoice()"
             aria-label="Voice"
-            title="Voice message"
           >
-            <span class="voice-icon">🎤</span>
+            🎤
           </button>
 
         </div>
@@ -1230,15 +1090,10 @@ button{
             onclick="sendMessage()"
             aria-label="Send"
           >
-
-            <svg
-              class="icon"
-              viewBox="0 0 24 24"
-            >
+            <svg class="icon" viewBox="0 0 24 24">
               <path d="M5 12h14"/>
               <path d="m13 6 6 6-6 6"/>
             </svg>
-
           </button>
 
         </div>
@@ -1295,14 +1150,6 @@ button{
   onchange="handleFile(this)"
 >
 
-<input
-  id="profileInput"
-  type="file"
-  accept="image/*"
-  hidden
-  onchange="handleProfileImage(this)"
->
-
 
 <!-- ================= SIDEBAR ================= -->
 
@@ -1338,7 +1185,8 @@ button{
     class="new-chat"
     onclick="newChat()"
   >
-    ＋ New Chat
+    ＋
+    New Chat
   </button>
 
 
@@ -1350,22 +1198,15 @@ button{
   >
 
 
-  <!-- PROJECTS BETWEEN SEARCH AND HISTORY -->
-
-  <button
-    class="project-btn"
-    onclick="openProjects()"
-  >
-    📁
-    Projects
-  </button>
-
-
   <div
     class="history"
     id="history"
-  ></div>
+  >
 
+  </div>
+
+
+  <!-- MAIN MENU TOOLS — EACH ONLY ONCE -->
 
   <div class="history-label">
     Tools
@@ -1431,7 +1272,7 @@ button{
   </div>
 
 
-  <!-- NORMAL MENU BOTTOM -->
+  <!-- BOTTOM NORMAL MENU -->
 
   <div class="sidebar-bottom">
 
@@ -1439,18 +1280,17 @@ button{
       class="sidebar-bottom-btn"
       onclick="openSettings()"
     >
-      ⚙️ Settings
+      ⚙️
+      Settings
     </button>
 
 
     <button
       class="sidebar-bottom-btn"
-      onclick="openProfile()"
+      onclick="openLogin()"
     >
       👤
-      <span id="sidebarProfileText">
-        Log in / Sign up
-      </span>
+      Log in / Sign up
     </button>
 
   </div>
@@ -1502,8 +1342,11 @@ button{
 <script>
 
 /* =====================================================
-   RG CREATOR AI
+   RG CREATOR AI — MAIN HOME + CHAT
 ===================================================== */
+
+
+/* ================= STATE ================= */
 
 let conversation =
   JSON.parse(
@@ -1513,13 +1356,6 @@ let conversation =
   );
 
 let currentAttachment = null;
-
-let projects =
-  JSON.parse(
-    localStorage.getItem(
-      "rg_creator_projects"
-    ) || "[]"
-  );
 
 
 /* ================= ELEMENTS ================= */
@@ -1537,9 +1373,10 @@ const welcome =
 /* ================= INIT ================= */
 
 renderConversation();
+
 renderHistory();
+
 autoResize();
-loadProfile();
 
 
 /* ================= TOAST ================= */
@@ -1549,7 +1386,8 @@ function toast(text){
   const el =
     document.getElementById("toast");
 
-  el.textContent = text;
+  el.textContent =
+    text;
 
   el.classList.add("show");
 
@@ -1559,6 +1397,7 @@ function toast(text){
     },
     2200
   );
+
 }
 
 
@@ -1590,13 +1429,15 @@ input.addEventListener(
 
 function autoResize(){
 
-  input.style.height = "auto";
+  input.style.height =
+    "auto";
 
   input.style.height =
     Math.min(
       input.scrollHeight,
       150
     ) + "px";
+
 }
 
 
@@ -1646,44 +1487,25 @@ function handleFile(el){
     !el.files ||
     !el.files.length
   ){
-
     return;
-
   }
 
   currentAttachment =
     el.files[0];
 
   document
-    .getElementById(
-      "attachmentName"
-    )
+    .getElementById("attachmentName")
     .textContent =
     currentAttachment.name;
 
   document
-    .getElementById(
-      "attachment"
-    )
+    .getElementById("attachment")
     .classList.add("show");
 
   toast(
     "Attached: " +
     currentAttachment.name
   );
-
-}
-
-
-function clearAttachment(){
-
-  currentAttachment = null;
-
-  document
-    .getElementById(
-      "attachment"
-    )
-    .classList.remove("show");
 
 }
 
@@ -1695,47 +1517,29 @@ async function sendMessage(){
   const text =
     input.value.trim();
 
-  if(
-    !text &&
-    !currentAttachment
-  ){
+  if(!text){
+
+    if(currentAttachment){
+
+      toast(
+        "Write something about the attachment."
+      );
+
+    }
 
     return;
 
   }
 
 
-  let finalMessage = text;
-
-
-  if(currentAttachment){
-
-    finalMessage +=
-      (
-        finalMessage
-          ? "\n\n"
-          : ""
-      ) +
-      "[Attached file: " +
-      currentAttachment.name +
-      "]";
-
-  }
-
-
   addMessage(
     "user",
-    finalMessage
+    text
   );
-
 
   input.value = "";
 
   autoResize();
-
-
-  const attachmentToSend =
-    currentAttachment;
 
   clearAttachment();
 
@@ -1750,18 +1554,16 @@ async function sendMessage(){
   try{
 
     const history =
-      conversation
-        .slice(0,thinkingIndex - 1)
-        .map(
-          function(item){
+      conversation.map(
+        function(item){
 
-            return {
-              role:item.role,
-              content:item.content
-            };
+          return {
+            role:item.role,
+            content:item.content
+          };
 
-          }
-        );
+        }
+      );
 
 
     const response =
@@ -1777,16 +1579,9 @@ async function sendMessage(){
 
           body:
             JSON.stringify({
-
-              message:
-                finalMessage,
-
-              history:
-                history
-
+              message:text,
+              history:history
             })
-
-          }
         }
       );
 
@@ -1818,13 +1613,11 @@ async function sendMessage(){
 
     updateMessage(
       thinkingIndex,
-
       "Sorry, I couldn't complete that request.\n\n" +
       (
         error.message ||
         "Server error"
       )
-
     );
 
   }
@@ -1840,15 +1633,10 @@ function addMessage(
 ){
 
   conversation.push({
-
     role:role,
-
     content:content,
-
     time:Date.now()
-
   });
-
 
   saveConversation();
 
@@ -1867,15 +1655,11 @@ function updateMessage(
   if(
     !conversation[index]
   ){
-
     return;
-
   }
-
 
   conversation[index].content =
     content;
-
 
   saveConversation();
 
@@ -1888,9 +1672,7 @@ function saveConversation(){
 
   localStorage.setItem(
     "rg_creator_conversation",
-    JSON.stringify(
-      conversation
-    )
+    JSON.stringify(conversation)
   );
 
 }
@@ -1938,31 +1720,9 @@ function renderConversation(){
       ){
 
         wrapper.innerHTML = `
-
           <div class="user-bubble">
             ${escapeHTML(item.content)}
           </div>
-
-          <div class="message-actions user-actions">
-
-            <button
-              class="action-btn"
-              onclick="copyUser(${index})"
-              title="Copy"
-            >
-              ${copyIcon()}
-            </button>
-
-            <button
-              class="action-btn"
-              onclick="editUser(${index})"
-              title="Edit"
-            >
-              ✏️
-            </button>
-
-          </div>
-
         `;
 
       }else{
@@ -2024,7 +1784,6 @@ function renderConversation(){
             </button>
 
           </div>
-
         `;
 
       }
@@ -2054,60 +1813,14 @@ function renderConversation(){
 
 function formatAI(text){
 
-  return escapeHTML(text);
-
-}
-
-
-/* ================= COPY USER ================= */
-
-async function copyUser(index){
-
-  try{
-
-    await navigator.clipboard.writeText(
-      conversation[index].content
-    );
-
-    toast("Copied");
-
-  }catch{
-
-    toast("Copy failed");
-
-  }
-
-}
-
-
-/* ================= EDIT USER ================= */
-
-function editUser(index){
-
-  const oldText =
-    conversation[index].content;
-
-  input.value = oldText;
-
-  autoResize();
-
-  input.focus();
-
-  conversation.splice(
-    index,
-    1
+  return escapeHTML(
+    text
   );
 
-  saveConversation();
-
-  renderConversation();
-
-  toast("Edit your message");
-
 }
 
 
-/* ================= COPY AI ================= */
+/* ================= COPY ================= */
 
 async function copyAI(index){
 
@@ -2148,7 +1861,6 @@ async function shareAI(index){
   const text =
     conversation[index].content;
 
-
   if(
     navigator.share
   ){
@@ -2156,11 +1868,8 @@ async function shareAI(index){
     try{
 
       await navigator.share({
-
         title:"RG Creator AI",
-
         text:text
-
       });
 
     }catch{}
@@ -2213,11 +1922,8 @@ async function shareConversation(){
     try{
 
       await navigator.share({
-
         title:"RG Creator AI",
-
         text:text
-
       });
 
     }catch{}
@@ -2253,7 +1959,6 @@ async function regenerate(index){
 
   let userMessage = "";
 
-
   for(
     let i=index-1;
     i>=0;
@@ -2288,7 +1993,6 @@ async function regenerate(index){
   conversation[index].content =
     "Regenerating...";
 
-
   saveConversation();
 
   renderConversation();
@@ -2303,11 +2007,8 @@ async function regenerate(index){
           function(item){
 
             return {
-
               role:item.role,
-
               content:item.content
-
             };
 
           }
@@ -2318,7 +2019,6 @@ async function regenerate(index){
       await fetch(
         "/api/chat",
         {
-
           method:"POST",
 
           headers:{
@@ -2328,13 +2028,9 @@ async function regenerate(index){
 
           body:
             JSON.stringify({
-
               message:userMessage,
-
               history:history
-
             })
-
         }
       );
 
@@ -2359,7 +2055,6 @@ async function regenerate(index){
     conversation[index].content =
       data.reply;
 
-
     saveConversation();
 
     renderConversation();
@@ -2373,7 +2068,6 @@ async function regenerate(index){
         error.message ||
         "Server error"
       );
-
 
     saveConversation();
 
@@ -2453,18 +2147,14 @@ function readAloud(text){
 
   }
 
-
   speechSynthesis.cancel();
-
 
   const speech =
     new SpeechSynthesisUtterance(
       text
     );
 
-
   speech.rate = 1;
-
 
   speechSynthesis.speak(
     speech
@@ -2578,7 +2268,6 @@ function renderHistory(){
       "history"
     );
 
-
   const search =
     document
       .getElementById(
@@ -2596,7 +2285,6 @@ function renderHistory(){
   ){
 
     box.innerHTML = `
-
       <div class="history-label">
         Recent
       </div>
@@ -2610,7 +2298,6 @@ function renderHistory(){
       >
         No chats yet
       </div>
-
     `;
 
     return;
@@ -2621,9 +2308,7 @@ function renderHistory(){
   const firstUser =
     conversation.find(
       function(item){
-
         return item.role === "user";
-
       }
     );
 
@@ -2684,9 +2369,7 @@ function renameChat(){
   const firstUser =
     conversation.find(
       function(item){
-
         return item.role === "user";
-
       }
     );
 
@@ -2719,173 +2402,10 @@ function renameChat(){
     name.trim()
   );
 
-
   renderHistory();
 
   toast(
     "Chat renamed"
-  );
-
-}
-
-
-/* ================= PROJECTS ================= */
-
-function saveProjects(){
-
-  localStorage.setItem(
-    "rg_creator_projects",
-    JSON.stringify(
-      projects
-    )
-  );
-
-}
-
-
-function openProjects(){
-
-  closeSidebar();
-
-  let html = `
-
-    <div class="modal-text">
-      Save important ideas, plans and project notes here.
-    </div>
-
-    <div class="project-list">
-
-  `;
-
-
-  if(!projects.length){
-
-    html += `
-
-      <div class="modal-text">
-        No projects yet.
-      </div>
-
-    `;
-
-  }else{
-
-    projects.forEach(
-      function(project,index){
-
-        html += `
-
-          <div class="project-row">
-
-            <span>
-              📁
-              ${escapeHTML(project.name)}
-            </span>
-
-            <button
-              class="project-delete"
-              onclick="deleteProject(${index})"
-            >
-              🗑️
-            </button>
-
-          </div>
-
-        `;
-
-      }
-    );
-
-  }
-
-
-  html += `
-
-    </div>
-
-    <button
-      class="modal-btn primary"
-      onclick="createProject()"
-    >
-      ＋ Create Project
-    </button>
-
-  `;
-
-
-  openModal(
-    "Projects",
-    html
-  );
-
-}
-
-
-function createProject(){
-
-  const name =
-    prompt(
-      "Project name:"
-    );
-
-
-  if(
-    !name ||
-    !name.trim()
-  ){
-
-    return;
-
-  }
-
-
-  projects.push({
-
-    name:name.trim(),
-
-    created:Date.now(),
-
-    notes:[]
-
-  });
-
-
-  saveProjects();
-
-  openProjects();
-
-  toast(
-    "Project created"
-  );
-
-}
-
-
-function deleteProject(index){
-
-  if(
-    !confirm(
-      "Delete this project?"
-    )
-  ){
-
-    return;
-
-  }
-
-
-  projects.splice(
-    index,
-    1
-  );
-
-
-  saveProjects();
-
-  openProjects();
-
-  toast(
-    "Project deleted"
   );
 
 }
@@ -2917,7 +2437,6 @@ function startVoice(){
 
   recognition.lang =
     "en-IN";
-
 
   recognition.interimResults =
     false;
@@ -2962,182 +2481,28 @@ function startVoice(){
 }
 
 
-/* ================= PROFILE ================= */
+/* ================= ATTACHMENT CLEAR ================= */
 
-function loadProfile(){
+function clearAttachment(){
 
-  const image =
-    localStorage.getItem(
-      "rg_profile_image"
-    );
+  currentAttachment =
+    null;
 
-
-  if(image){
-
-    setProfileImage(
-      image
-    );
-
-  }
+  document
+    .getElementById(
+      "attachment"
+    )
+    .classList.remove("show");
 
 }
 
 
-function setProfileImage(src){
+/* ================= TOOLS ================= */
 
-  const button =
-    document.getElementById(
-      "profileButton"
-    );
+function openTool(file){
 
-
-  button.innerHTML = `
-
-    <img
-      src="${src}"
-      alt="Profile"
-    >
-
-  `;
-
-}
-
-
-function handleProfileImage(el){
-
-  if(
-    !el.files ||
-    !el.files.length
-  ){
-
-    return;
-
-  }
-
-
-  const file =
-    el.files[0];
-
-
-  const reader =
-    new FileReader();
-
-
-  reader.onload =
-    function(){
-
-      localStorage.setItem(
-        "rg_profile_image",
-        reader.result
-      );
-
-
-      setProfileImage(
-        reader.result
-      );
-
-
-      openProfile();
-
-      toast(
-        "Profile image updated"
-      );
-
-    };
-
-
-  reader.readAsDataURL(
-    file
-  );
-
-}
-
-
-function openProfile(){
-
-  closeSidebar();
-
-  const image =
-    localStorage.getItem(
-      "rg_profile_image"
-    );
-
-
-  const profileHTML = image
-
-    ? `
-
-      <div class="profile-large">
-
-        <img
-          src="${image}"
-          alt="Profile"
-        >
-
-      </div>
-
-    `
-
-    : `
-
-      <div class="profile-large">
-        G
-      </div>
-
-    `;
-
-
-  openModal(
-    "Profile",
-    `
-
-      ${profileHTML}
-
-      <div class="modal-text">
-        Log in or create an account to sync your chats and projects.
-      </div>
-
-      <button
-        class="modal-btn primary"
-        onclick="loginGoogle()"
-      >
-        Continue with Google
-      </button>
-
-      <button
-        class="modal-btn"
-        onclick="loginEmail()"
-      >
-        Continue with Email
-      </button>
-
-      <button
-        class="modal-btn"
-        onclick="document.getElementById('profileInput').click()"
-      >
-        🖼️ Change Profile Image
-      </button>
-
-    `
-  );
-
-}
-
-
-function loginGoogle(){
-
-  toast(
-    "Google login will be connected in authentication setup."
-  );
-
-}
-
-
-function loginEmail(){
-
-  toast(
-    "Email login will be connected in authentication setup."
-  );
+  window.location.href =
+    file;
 
 }
 
@@ -3149,7 +2514,6 @@ function openSettings(){
   openModal(
     "Settings",
     `
-
       <div class="modal-text">
         Manage your RG Creator AI settings.
       </div>
@@ -3180,7 +2544,50 @@ function openSettings(){
       >
         🔒 Privacy & Data
       </button>
+    `
+  );
 
+}
+
+
+/* ================= LOGIN ================= */
+
+function openLogin(){
+
+  openModal(
+    "Log in / Sign up",
+    `
+      <div class="modal-text">
+        Log in to sync your chats and creator
+        workspace across devices.
+      </div>
+
+      <button
+        class="modal-btn primary"
+        onclick="
+          toast('Google login will be connected in the authentication step');
+        "
+      >
+        Continue with Google
+      </button>
+
+      <button
+        class="modal-btn"
+        onclick="
+          toast('Email login will be connected in the authentication step');
+        "
+      >
+        Continue with Email
+      </button>
+
+      <button
+        class="modal-btn"
+        onclick="
+          toast('Create account will be connected in the authentication step');
+        "
+      >
+        Create account
+      </button>
     `
   );
 
@@ -3196,24 +2603,13 @@ function showHelp(){
   openModal(
     "Help",
     `
-
       <div class="modal-text">
-
         Use the message box to chat with RG Creator AI.
-
         <br><br>
-
         Use + to attach an image, camera photo,
         video, file or PDF.
-
         <br><br>
-
         Use 🎤 for voice input.
-
-        <br><br>
-
-        Use Copy or Edit below your messages.
-
       </div>
 
       <button
@@ -3222,7 +2618,6 @@ function showHelp(){
       >
         Close
       </button>
-
     `
   );
 
@@ -3235,12 +2630,10 @@ function showFeedback(){
 
   closeMore();
 
-
   const value =
     prompt(
       "Tell us your feedback:"
     );
-
 
   if(
     value &&
@@ -3262,17 +2655,13 @@ function showAbout(){
 
   closeMore();
 
-
   openModal(
     "About RG Creator AI",
     `
-
       <div class="modal-text">
-
         RG Creator AI is an AI-powered creative
         workspace for chat, images, writing, coding,
         YouTube and Instagram tools.
-
       </div>
 
       <button
@@ -3281,7 +2670,6 @@ function showAbout(){
       >
         Close
       </button>
-
     `
   );
 
@@ -3326,14 +2714,12 @@ function openModal(
     .textContent =
     title;
 
-
   document
     .getElementById(
       "modalBody"
     )
     .innerHTML =
     html;
-
 
   document
     .getElementById(
@@ -3369,41 +2755,15 @@ function closeModal(event){
 }
 
 
-/* ================= TOOLS ================= */
-
-function openTool(file){
-
-  window.location.href =
-    file;
-
-}
-
-
 /* ================= ICONS ================= */
 
 function copyIcon(){
 
   return `
-
-    <svg
-      class="icon"
-      viewBox="0 0 24 24"
-    >
-
-      <rect
-        x="8"
-        y="8"
-        width="11"
-        height="11"
-        rx="2"
-      />
-
-      <path
-        d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"
-      />
-
+    <svg class="icon" viewBox="0 0 24 24">
+      <rect x="8" y="8" width="11" height="11" rx="2"/>
+      <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>
     </svg>
-
   `;
 
 }
@@ -3412,20 +2772,11 @@ function copyIcon(){
 function shareIcon(){
 
   return `
-
-    <svg
-      class="icon"
-      viewBox="0 0 24 24"
-    >
-
+    <svg class="icon" viewBox="0 0 24 24">
       <path d="M12 15V3"/>
-
       <path d="m7 8 5-5 5 5"/>
-
       <path d="M5 12v8h14v-8"/>
-
     </svg>
-
   `;
 
 }
@@ -3434,30 +2785,12 @@ function shareIcon(){
 function refreshIcon(){
 
   return `
-
-    <svg
-      class="icon"
-      viewBox="0 0 24 24"
-    >
-
-      <path
-        d="M20 11a8 8 0 0 0-14-4L4 9"
-      />
-
-      <path
-        d="M4 4v5h5"
-      />
-
-      <path
-        d="M4 13a8 8 0 0 0 14 4l2-2"
-      />
-
-      <path
-        d="M20 20v-5h-5"
-      />
-
+    <svg class="icon" viewBox="0 0 24 24">
+      <path d="M20 11a8 8 0 0 0-14-4L4 9"/>
+      <path d="M4 4v5h5"/>
+      <path d="M4 13a8 8 0 0 0 14 4l2-2"/>
+      <path d="M20 20v-5h-5"/>
     </svg>
-
   `;
 
 }
@@ -3466,32 +2799,11 @@ function refreshIcon(){
 function moreIcon(){
 
   return `
-
-    <svg
-      class="icon"
-      viewBox="0 0 24 24"
-    >
-
-      <circle
-        cx="5"
-        cy="12"
-        r="1"
-      />
-
-      <circle
-        cx="12"
-        cy="12"
-        r="1"
-      />
-
-      <circle
-        cx="19"
-        cy="12"
-        r="1"
-      />
-
+    <svg class="icon" viewBox="0 0 24 24">
+      <circle cx="5" cy="12" r="1"/>
+      <circle cx="12" cy="12" r="1"/>
+      <circle cx="19" cy="12" r="1"/>
     </svg>
-
   `;
 
 }
@@ -3502,31 +2814,11 @@ function moreIcon(){
 function escapeHTML(value){
 
   return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
@@ -3566,6 +2858,7 @@ document.addEventListener(
 
     if(
       more.classList.contains("open") &&
+      !event.target.closest(".header-right") &&
       !event.target.closest(".more-menu")
     ){
 
