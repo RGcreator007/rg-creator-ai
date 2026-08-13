@@ -239,51 +239,6 @@ button{
   font-size:14px;
 }
 
-/* ================= QUICK ACTIONS ================= */
-
-.quick-actions{
-  width:min(760px,100%);
-  margin:28px auto 0;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:9px;
-}
-
-.quick-action{
-  min-height:58px;
-  padding:10px;
-  border:1px solid #252525;
-  background:#101010;
-  color:#fff;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  gap:9px;
-  text-align:left;
-  transition:.18s;
-}
-
-.quick-action:hover{
-  background:#191919;
-  border-color:#383838;
-}
-
-.quick-icon{
-  font-size:20px;
-}
-
-.quick-text strong{
-  display:block;
-  font-size:13px;
-}
-
-.quick-text span{
-  display:block;
-  margin-top:3px;
-  color:#707070;
-  font-size:10px;
-}
-
 /* ================= MESSAGE ================= */
 
 .message{
@@ -399,8 +354,9 @@ button{
 }
 
 .circle-btn{
-  width:40px;
-  height:40px;
+  width:46px;
+  height:46px;
+  min-width:46px;
   border:0;
   border-radius:50%;
   background:transparent;
@@ -413,6 +369,15 @@ button{
 .circle-btn:hover{
   background:#252525;
   color:#fff;
+}
+
+.circle-btn .icon{
+  width:24px;
+  height:24px;
+}
+
+.voice-btn{
+  font-size:22px;
 }
 
 .send-btn{
@@ -440,8 +405,8 @@ button{
 .plus-menu{
   position:absolute;
   left:0;
-  bottom:49px;
-  width:215px;
+  bottom:52px;
+  width:230px;
   padding:7px;
   border:1px solid #333;
   background:#1a1a1a;
@@ -456,7 +421,7 @@ button{
 
 .plus-item{
   width:100%;
-  height:44px;
+  height:46px;
   border:0;
   background:transparent;
   color:#fff;
@@ -466,6 +431,7 @@ button{
   gap:11px;
   padding:0 11px;
   text-align:left;
+  font-size:14px;
 }
 
 .plus-item:hover{
@@ -475,11 +441,12 @@ button{
 /* ================= ATTACHMENT ================= */
 
 .attachment{
+  position:relative;
   display:none;
   align-items:center;
   gap:8px;
   margin-bottom:8px;
-  padding:8px 10px;
+  padding:8px 42px 8px 10px;
   border-radius:11px;
   background:#202020;
   color:#bbb;
@@ -488,6 +455,19 @@ button{
 
 .attachment.show{
   display:flex;
+}
+
+.attachment-close{
+  position:absolute;
+  right:7px;
+  top:50%;
+  transform:translateY(-50%);
+  width:28px;
+  height:28px;
+  border:0;
+  border-radius:50%;
+  background:#303030;
+  color:#fff;
 }
 
 /* ================= SIDEBAR ================= */
@@ -565,6 +545,59 @@ button{
   color:#fff;
 }
 
+/* ================= PROJECTS ================= */
+
+.projects-btn{
+  width:calc(100% - 24px);
+  height:44px;
+  margin:0 12px 8px;
+  border:0;
+  background:transparent;
+  color:#fff;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:0 10px;
+  text-align:left;
+  font-size:14px;
+}
+
+.projects-btn:hover{
+  background:#202020;
+}
+
+.project-list{
+  display:none;
+  padding:0 12px 8px;
+}
+
+.project-list.open{
+  display:block;
+}
+
+.project-item{
+  width:100%;
+  min-height:40px;
+  border:0;
+  background:transparent;
+  color:#bbb;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:0 10px;
+  text-align:left;
+  font-size:12px;
+}
+
+.project-item:hover{
+  background:#202020;
+  color:#fff;
+}
+
+/* ================= HISTORY ================= */
+
 .history{
   flex:1;
   overflow-y:auto;
@@ -614,7 +647,7 @@ button{
   color:#fff;
 }
 
-/* NORMAL MENU BOTTOM */
+/* ================= SIDEBAR BOTTOM ================= */
 
 .sidebar-bottom{
   margin-top:auto;
@@ -639,6 +672,115 @@ button{
 
 .sidebar-bottom-btn:hover{
   background:#202020;
+}
+
+/* ================= PROFILE ================= */
+
+.profile-row{
+  width:100%;
+  min-height:52px;
+  border:0;
+  background:transparent;
+  color:#fff;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:6px 10px;
+  text-align:left;
+}
+
+.profile-row:hover{
+  background:#202020;
+}
+
+.profile-avatar{
+  width:40px;
+  height:40px;
+  min-width:40px;
+  border-radius:50%;
+  background:#2a2a2a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  font-size:17px;
+  font-weight:700;
+}
+
+.profile-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.profile-info{
+  min-width:0;
+  flex:1;
+}
+
+.profile-name{
+  display:block;
+  font-size:14px;
+  font-weight:600;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.profile-sub{
+  display:block;
+  margin-top:2px;
+  color:#777;
+  font-size:11px;
+}
+
+/* ================= USER MESSAGE ACTIONS ================= */
+
+.user-actions{
+  width:100%;
+  display:flex;
+  justify-content:flex-end;
+  gap:2px;
+  margin-top:5px;
+}
+
+.user-action-btn{
+  width:36px;
+  height:34px;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#777;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+}
+
+.user-action-btn:hover{
+  background:#181818;
+  color:#fff;
+}
+
+/* ================= PROJECT MODAL ================= */
+
+.project-input{
+  width:100%;
+  min-height:45px;
+  margin-top:8px;
+  padding:10px 12px;
+  border:1px solid #303030;
+  border-radius:11px;
+  outline:none;
+  background:#181818;
+  color:#fff;
+  font-family:inherit;
+}
+
+.project-textarea{
+  min-height:120px;
+  resize:vertical;
 }
 
 /* ================= MODAL ================= */
@@ -740,10 +882,6 @@ button{
 
 @media(max-width:600px){
 
-  .quick-actions{
-    grid-template-columns:repeat(2,1fr);
-  }
-
   .welcome{
     margin-top:12vh;
   }
@@ -764,7 +902,23 @@ button{
     padding-bottom:11px;
   }
 
+  .circle-btn{
+    width:48px;
+    height:48px;
+    min-width:48px;
+  }
+
+  .circle-btn .icon{
+    width:25px;
+    height:25px;
+  }
+
+  .voice-btn{
+    font-size:23px;
+  }
+
 }
+
 </style>
 </head>
 
@@ -840,6 +994,14 @@ button{
 
   <button
     class="more-item"
+    onclick="openSidebar(); toggleProjects();"
+  >
+    📁
+    Projects
+  </button>
+
+  <button
+    class="more-item"
     onclick="showHelp()"
   >
     ❓
@@ -882,8 +1044,6 @@ button{
     id="messages"
   >
 
-    <!-- EMPTY HOME STATE -->
-
     <section
       class="welcome"
       id="welcome"
@@ -900,82 +1060,6 @@ button{
       <p>
         Ask anything, create content or build something.
       </p>
-
-
-      <div class="quick-actions">
-
-        <button
-          class="quick-action"
-          onclick="openTool('Image.html')"
-        >
-          <span class="quick-icon">🖼️</span>
-          <span class="quick-text">
-            <strong>AI Image</strong>
-            <span>Create images</span>
-          </span>
-        </button>
-
-
-        <button
-          class="quick-action"
-          onclick="openTool('writer.html')"
-        >
-          <span class="quick-icon">✍️</span>
-          <span class="quick-text">
-            <strong>Content Writer</strong>
-            <span>Write content</span>
-          </span>
-        </button>
-
-
-        <button
-          class="quick-action"
-          onclick="openTool('Code.html')"
-        >
-          <span class="quick-icon">💻</span>
-          <span class="quick-text">
-            <strong>Code Generator</strong>
-            <span>Build & fix code</span>
-          </span>
-        </button>
-
-
-        <button
-          class="quick-action"
-          onclick="openTool('youtube.html')"
-        >
-          <span class="quick-icon">▶️</span>
-          <span class="quick-text">
-            <strong>YouTube</strong>
-            <span>Creator tools</span>
-          </span>
-        </button>
-
-
-        <button
-          class="quick-action"
-          onclick="openTool('Instagram.html')"
-        >
-          <span class="quick-icon">📸</span>
-          <span class="quick-text">
-            <strong>Instagram</strong>
-            <span>Reels & captions</span>
-          </span>
-        </button>
-
-
-        <button
-          class="quick-action"
-          onclick="focusInput()"
-        >
-          <span class="quick-icon">💬</span>
-          <span class="quick-text">
-            <strong>AI Chat</strong>
-            <span>Ask anything</span>
-          </span>
-        </button>
-
-      </div>
 
     </section>
 
@@ -994,6 +1078,15 @@ button{
       >
         📎
         <span id="attachmentName"></span>
+
+        <button
+          class="attachment-close"
+          onclick="clearAttachment()"
+          aria-label="Remove attachment"
+        >
+          ×
+        </button>
+
       </div>
 
 
@@ -1015,10 +1108,15 @@ button{
               onclick="togglePlus()"
               aria-label="Attach"
             >
-              <svg class="icon" viewBox="0 0 24 24">
+
+              <svg
+                class="icon"
+                viewBox="0 0 24 24"
+              >
                 <path d="M12 5v14"/>
                 <path d="M5 12h14"/>
               </svg>
+
             </button>
 
 
@@ -1073,9 +1171,10 @@ button{
 
 
           <button
-            class="circle-btn"
+            class="circle-btn voice-btn"
             onclick="startVoice()"
             aria-label="Voice"
+            title="Voice message"
           >
             🎤
           </button>
@@ -1090,10 +1189,15 @@ button{
             onclick="sendMessage()"
             aria-label="Send"
           >
-            <svg class="icon" viewBox="0 0 24 24">
+
+            <svg
+              class="icon"
+              viewBox="0 0 24 24"
+            >
               <path d="M5 12h14"/>
               <path d="m13 6 6 6-6 6"/>
             </svg>
+
           </button>
 
         </div>
@@ -1137,7 +1241,7 @@ button{
 <input
   id="fileInput"
   type="file"
-  accept=".txt,.doc,.docx,.csv,.json,.html,.css,.js,.py,.java,.php"
+  accept=".txt,.md,.doc,.docx,.csv,.json,.html,.css,.js,.py,.java,.php,.xml,.sql,.zip,.xlsx,.xls,.ppt,.pptx"
   hidden
   onchange="handleFile(this)"
 >
@@ -1198,15 +1302,32 @@ button{
   >
 
 
+  <!-- ================= PROJECTS ================= -->
+
+  <button
+    class="projects-btn"
+    onclick="toggleProjects()"
+  >
+    📁
+    <span>Projects</span>
+  </button>
+
+
+  <div
+    class="project-list"
+    id="projectList"
+  ></div>
+
+
+  <!-- ================= CHAT HISTORY ================= -->
+
   <div
     class="history"
     id="history"
-  >
-
-  </div>
+  ></div>
 
 
-  <!-- MAIN MENU TOOLS — EACH ONLY ONCE -->
+  <!-- ================= TOOLS ================= -->
 
   <div class="history-label">
     Tools
@@ -1220,9 +1341,11 @@ button{
       onclick="openTool('Image.html')"
     >
       <span>🖼️</span>
+
       <span class="history-name">
         AI Image
       </span>
+
     </div>
 
 
@@ -1231,9 +1354,11 @@ button{
       onclick="openTool('writer.html')"
     >
       <span>✍️</span>
+
       <span class="history-name">
         Content Writer
       </span>
+
     </div>
 
 
@@ -1242,9 +1367,11 @@ button{
       onclick="openTool('Code.html')"
     >
       <span>💻</span>
+
       <span class="history-name">
         Code Generator
       </span>
+
     </div>
 
 
@@ -1253,9 +1380,11 @@ button{
       onclick="openTool('youtube.html')"
     >
       <span>▶️</span>
+
       <span class="history-name">
         YouTube Tools
       </span>
+
     </div>
 
 
@@ -1264,15 +1393,17 @@ button{
       onclick="openTool('Instagram.html')"
     >
       <span>📸</span>
+
       <span class="history-name">
         Instagram Tools
       </span>
+
     </div>
 
   </div>
 
 
-  <!-- BOTTOM NORMAL MENU -->
+  <!-- ================= BOTTOM NORMAL MENU ================= -->
 
   <div class="sidebar-bottom">
 
@@ -1286,11 +1417,37 @@ button{
 
 
     <button
-      class="sidebar-bottom-btn"
+      class="profile-row"
       onclick="openLogin()"
+      aria-label="Profile and login"
     >
-      👤
-      Log in / Sign up
+
+      <div
+        class="profile-avatar"
+        id="sidebarProfileAvatar"
+      >
+        👤
+      </div>
+
+
+      <div class="profile-info">
+
+        <span
+          class="profile-name"
+          id="sidebarProfileName"
+        >
+          Log in / Sign up
+        </span>
+
+        <span
+          class="profile-sub"
+          id="sidebarProfileSub"
+        >
+          Sync your chats
+        </span>
+
+      </div>
+
     </button>
 
   </div>
@@ -1376,6 +1533,10 @@ renderConversation();
 
 renderHistory();
 
+renderProjects();
+
+loadProfile();
+
 autoResize();
 
 
@@ -1407,6 +1568,7 @@ input.addEventListener(
   "input",
   autoResize
 );
+
 
 input.addEventListener(
   "keydown",
@@ -1487,7 +1649,9 @@ function handleFile(el){
     !el.files ||
     !el.files.length
   ){
+
     return;
+
   }
 
   currentAttachment =
@@ -1505,6 +1669,69 @@ function handleFile(el){
   toast(
     "Attached: " +
     currentAttachment.name
+  );
+
+}
+
+
+function fileToPayload(file){
+
+  return new Promise(
+    function(resolve,reject){
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        function(){
+
+          const result =
+            String(
+              reader.result || ""
+            );
+
+          const comma =
+            result.indexOf(",");
+
+          resolve({
+
+            name:file.name,
+
+            type:
+              file.type ||
+              "application/octet-stream",
+
+            size:file.size,
+
+            data:
+              comma >= 0
+                ? result.slice(
+                    comma + 1
+                  )
+                : result
+
+          });
+
+        };
+
+
+      reader.onerror =
+        function(){
+
+          reject(
+            new Error(
+              "Could not read the attachment."
+            )
+          );
+
+        };
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
   );
 
 }
@@ -1532,10 +1759,37 @@ async function sendMessage(){
   }
 
 
+  let attachment = null;
+
+
+  try{
+
+    if(currentAttachment){
+
+      attachment =
+        await fileToPayload(
+          currentAttachment
+        );
+
+    }
+
+  }catch(error){
+
+    toast(
+      "Could not read the attachment"
+    );
+
+    return;
+
+  }
+
+
   addMessage(
     "user",
-    text
+    text,
+    attachment
   );
+
 
   input.value = "";
 
@@ -1554,22 +1808,48 @@ async function sendMessage(){
   try{
 
     const history =
-      conversation.map(
-        function(item){
+      conversation
+        .slice(
+          0,
+          thinkingIndex
+        )
+        .map(
+          function(item){
 
-          return {
-            role:item.role,
-            content:item.content
-          };
+            return {
 
-        }
-      );
+              role:item.role,
+
+              content:item.content
+
+            };
+
+          }
+        );
+
+
+    const body = {
+
+      message:text,
+
+      history:history
+
+    };
+
+
+    if(attachment){
+
+      body.attachment =
+        attachment;
+
+    }
 
 
     const response =
       await fetch(
         "/api/chat",
         {
+
           method:"POST",
 
           headers:{
@@ -1578,10 +1858,10 @@ async function sendMessage(){
           },
 
           body:
-            JSON.stringify({
-              message:text,
-              history:history
-            })
+            JSON.stringify(
+              body
+            )
+
         }
       );
 
@@ -1612,12 +1892,15 @@ async function sendMessage(){
   }catch(error){
 
     updateMessage(
+
       thinkingIndex,
+
       "Sorry, I couldn't complete that request.\n\n" +
       (
         error.message ||
         "Server error"
       )
+
     );
 
   }
@@ -1629,18 +1912,27 @@ async function sendMessage(){
 
 function addMessage(
   role,
-  content
+  content,
+  attachment = null
 ){
 
   conversation.push({
+
     role:role,
+
     content:content,
+
+    attachment:attachment,
+
     time:Date.now()
+
   });
+
 
   saveConversation();
 
   renderConversation();
+
 
   return conversation.length - 1;
 
@@ -1655,11 +1947,15 @@ function updateMessage(
   if(
     !conversation[index]
   ){
+
     return;
+
   }
+
 
   conversation[index].content =
     content;
+
 
   saveConversation();
 
@@ -1671,8 +1967,13 @@ function updateMessage(
 function saveConversation(){
 
   localStorage.setItem(
+
     "rg_creator_conversation",
-    JSON.stringify(conversation)
+
+    JSON.stringify(
+      conversation
+    )
+
   );
 
 }
@@ -1694,7 +1995,8 @@ function renderConversation(){
   }
 
 
-  messages.innerHTML = "";
+  messages.innerHTML =
+    "";
 
 
   conversation.forEach(
@@ -1720,9 +2022,63 @@ function renderConversation(){
       ){
 
         wrapper.innerHTML = `
-          <div class="user-bubble">
-            ${escapeHTML(item.content)}
+
+          <div style="width:100%;">
+
+            <div class="user-bubble">
+
+              ${escapeHTML(
+                item.content
+              )}
+
+            </div>
+
+
+            ${
+              item.attachment
+                ? `
+                  <div
+                    style="
+                      margin-top:6px;
+                      color:#777;
+                      font-size:11px;
+                      text-align:right;
+                    "
+                  >
+                    📎
+                    ${escapeHTML(
+                      item.attachment.name ||
+                      "Attachment"
+                    )}
+                  </div>
+                `
+                : ""
+            }
+
+
+            <div class="user-actions">
+
+              <button
+                class="user-action-btn"
+                onclick="copyUser(${index})"
+                title="Copy"
+              >
+                ${copyIcon()}
+              </button>
+
+
+              <button
+                class="user-action-btn"
+                onclick="editUser(${index})"
+                title="Edit"
+              >
+                ✏️
+              </button>
+
+            </div>
+
           </div>
+
         `;
 
       }else{
@@ -1730,8 +2086,13 @@ function renderConversation(){
         wrapper.innerHTML = `
 
           <div class="ai-content">
-            ${formatAI(item.content)}
+
+            ${formatAI(
+              item.content
+            )}
+
           </div>
+
 
           <div class="message-actions">
 
@@ -1743,6 +2104,7 @@ function renderConversation(){
               ${copyIcon()}
             </button>
 
+
             <button
               class="action-btn"
               onclick="feedback('like')"
@@ -1750,6 +2112,7 @@ function renderConversation(){
             >
               👍
             </button>
+
 
             <button
               class="action-btn"
@@ -1759,6 +2122,7 @@ function renderConversation(){
               👎
             </button>
 
+
             <button
               class="action-btn"
               onclick="shareAI(${index})"
@@ -1767,6 +2131,7 @@ function renderConversation(){
               ${shareIcon()}
             </button>
 
+
             <button
               class="action-btn"
               onclick="regenerate(${index})"
@@ -1774,6 +2139,7 @@ function renderConversation(){
             >
               ${refreshIcon()}
             </button>
+
 
             <button
               class="action-btn"
@@ -1784,6 +2150,7 @@ function renderConversation(){
             </button>
 
           </div>
+
         `;
 
       }
@@ -1827,16 +2194,113 @@ async function copyAI(index){
   try{
 
     await navigator.clipboard.writeText(
-      conversation[index].content
+
+      conversation[index]
+        .content
+
     );
 
-    toast("Copied");
+    toast(
+      "Copied"
+    );
 
   }catch{
 
-    toast("Copy failed");
+    toast(
+      "Copy failed"
+    );
 
   }
+
+}
+
+
+async function copyUser(index){
+
+  if(
+    !conversation[index]
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    await navigator.clipboard.writeText(
+
+      conversation[index]
+        .content
+
+    );
+
+    toast(
+      "Copied"
+    );
+
+  }catch{
+
+    toast(
+      "Copy failed"
+    );
+
+  }
+
+}
+
+
+function editUser(index){
+
+  if(
+    !conversation[index]
+  ){
+
+    return;
+
+  }
+
+
+  input.value =
+    conversation[index]
+      .content;
+
+
+  autoResize();
+
+  input.focus();
+
+
+  if(
+    conversation[index + 1] &&
+    conversation[index + 1]
+      .role === "assistant"
+  ){
+
+    conversation.splice(
+      index,
+      2
+    );
+
+  }else{
+
+    conversation.splice(
+      index,
+      1
+    );
+
+  }
+
+
+  saveConversation();
+
+  renderConversation();
+
+  renderHistory();
+
+  toast(
+    "Message ready to edit"
+  );
 
 }
 
@@ -1846,9 +2310,13 @@ async function copyAI(index){
 function feedback(type){
 
   toast(
+
     type === "like"
+
       ? "Thanks for your feedback 👍"
+
       : "Thanks for your feedback"
+
   );
 
 }
@@ -1859,7 +2327,9 @@ function feedback(type){
 async function shareAI(index){
 
   const text =
-    conversation[index].content;
+    conversation[index]
+      .content;
+
 
   if(
     navigator.share
@@ -1868,15 +2338,21 @@ async function shareAI(index){
     try{
 
       await navigator.share({
-        title:"RG Creator AI",
+
+        title:
+          "RG Creator AI",
+
         text:text
+
       });
 
     }catch{}
 
   }else{
 
-    await copyAI(index);
+    await copyAI(
+      index
+    );
 
   }
 
@@ -1904,15 +2380,21 @@ async function shareConversation(){
         function(item){
 
           return (
+
             item.role === "user"
+
               ? "You: "
+
               : "RG Creator AI: "
+
           ) +
           item.content;
 
         }
       )
-      .join("\n\n");
+      .join(
+        "\n\n"
+      );
 
 
   if(
@@ -1922,8 +2404,12 @@ async function shareConversation(){
     try{
 
       await navigator.share({
-        title:"RG Creator AI",
+
+        title:
+          "RG Creator AI",
+
         text:text
+
       });
 
     }catch{}
@@ -1957,7 +2443,9 @@ async function shareConversation(){
 
 async function regenerate(index){
 
-  let userMessage = "";
+  let userMessage =
+    "";
+
 
   for(
     let i=index-1;
@@ -1966,11 +2454,13 @@ async function regenerate(index){
   ){
 
     if(
-      conversation[i].role === "user"
+      conversation[i].role ===
+      "user"
     ){
 
       userMessage =
-        conversation[i].content;
+        conversation[i]
+          .content;
 
       break;
 
@@ -1993,6 +2483,7 @@ async function regenerate(index){
   conversation[index].content =
     "Regenerating...";
 
+
   saveConversation();
 
   renderConversation();
@@ -2002,13 +2493,19 @@ async function regenerate(index){
 
     const history =
       conversation
-        .slice(0,index)
+        .slice(
+          0,
+          index
+        )
         .map(
           function(item){
 
             return {
+
               role:item.role,
+
               content:item.content
+
             };
 
           }
@@ -2019,6 +2516,7 @@ async function regenerate(index){
       await fetch(
         "/api/chat",
         {
+
           method:"POST",
 
           headers:{
@@ -2028,9 +2526,15 @@ async function regenerate(index){
 
           body:
             JSON.stringify({
-              message:userMessage,
-              history:history
+
+              message:
+                userMessage,
+
+              history:
+                history
+
             })
+
         }
       );
 
@@ -2045,8 +2549,10 @@ async function regenerate(index){
     ){
 
       throw new Error(
+
         data.error ||
         "Regeneration failed"
+
       );
 
     }
@@ -2054,6 +2560,7 @@ async function regenerate(index){
 
     conversation[index].content =
       data.reply;
+
 
     saveConversation();
 
@@ -2063,11 +2570,14 @@ async function regenerate(index){
   }catch(error){
 
     conversation[index].content =
+
       "Unable to regenerate response.\n\n" +
+
       (
         error.message ||
         "Server error"
       );
+
 
     saveConversation();
 
@@ -2084,25 +2594,36 @@ function aiMore(index){
 
   const option =
     prompt(
+
       "Choose:\n\n" +
+
       "1 = Read aloud\n" +
+
       "2 = Copy\n" +
+
       "3 = Delete response\n" +
+
       "4 = Save"
+
     );
 
 
   if(option === "1"){
 
     readAloud(
-      conversation[index].content
+      conversation[index]
+        .content
     );
 
-  }else if(option === "2"){
+  }else if(
+    option === "2"
+  ){
 
     copyAI(index);
 
-  }else if(option === "3"){
+  }else if(
+    option === "3"
+  ){
 
     conversation.splice(
       index,
@@ -2117,14 +2638,23 @@ function aiMore(index){
       "Response deleted"
     );
 
-  }else if(option === "4"){
+  }else if(
+    option === "4"
+  ){
 
     localStorage.setItem(
-      "rg_saved_" + Date.now(),
-      conversation[index].content
+
+      "rg_saved_" +
+      Date.now(),
+
+      conversation[index]
+        .content
+
     );
 
-    toast("Saved");
+    toast(
+      "Saved"
+    );
 
   }
 
@@ -2147,14 +2677,19 @@ function readAloud(text){
 
   }
 
+
   speechSynthesis.cancel();
+
 
   const speech =
     new SpeechSynthesisUtterance(
       text
     );
 
-  speech.rate = 1;
+
+  speech.rate =
+    1;
+
 
   speechSynthesis.speak(
     speech
@@ -2168,6 +2703,8 @@ function readAloud(text){
 function newChat(){
 
   conversation = [];
+
+  clearAttachment();
 
   saveConversation();
 
@@ -2268,6 +2805,7 @@ function renderHistory(){
       "history"
     );
 
+
   const search =
     document
       .getElementById(
@@ -2277,7 +2815,8 @@ function renderHistory(){
       .toLowerCase();
 
 
-  box.innerHTML = "";
+  box.innerHTML =
+    "";
 
 
   if(
@@ -2285,6 +2824,7 @@ function renderHistory(){
   ){
 
     box.innerHTML = `
+
       <div class="history-label">
         Recent
       </div>
@@ -2298,6 +2838,7 @@ function renderHistory(){
       >
         No chats yet
       </div>
+
     `;
 
     return;
@@ -2308,15 +2849,30 @@ function renderHistory(){
   const firstUser =
     conversation.find(
       function(item){
-        return item.role === "user";
+
+        return item.role ===
+          "user";
+
       }
     );
 
 
+  const savedTitle =
+    localStorage.getItem(
+      "rg_chat_title"
+    );
+
+
   const title =
-    firstUser
-      ? firstUser.content.slice(0,45)
-      : "New Chat";
+    savedTitle ||
+    (
+      firstUser
+        ? firstUser.content.slice(
+            0,
+            45
+          )
+        : "New Chat"
+    );
 
 
   if(
@@ -2336,16 +2892,21 @@ function renderHistory(){
       Today
     </div>
 
+
     <div
       class="history-item"
       onclick="closeSidebar()"
     >
 
-      <span>💬</span>
+      <span>
+        💬
+      </span>
+
 
       <span class="history-name">
         ${escapeHTML(title)}
       </span>
+
 
       <button
         class="history-more"
@@ -2369,15 +2930,27 @@ function renameChat(){
   const firstUser =
     conversation.find(
       function(item){
-        return item.role === "user";
+
+        return item.role ===
+          "user";
+
       }
     );
 
 
   const oldName =
-    firstUser
-      ? firstUser.content.slice(0,45)
-      : "New Chat";
+    localStorage.getItem(
+      "rg_chat_title"
+    ) ||
+
+    (
+      firstUser
+        ? firstUser.content.slice(
+            0,
+            45
+          )
+        : "New Chat"
+    );
 
 
   const name =
@@ -2398,14 +2971,408 @@ function renameChat(){
 
 
   localStorage.setItem(
+
     "rg_chat_title",
+
     name.trim()
+
   );
+
 
   renderHistory();
 
+
   toast(
     "Chat renamed"
+  );
+
+}
+
+
+/* ================= PROJECTS ================= */
+
+function getProjects(){
+
+  try{
+
+    return JSON.parse(
+
+      localStorage.getItem(
+        "rg_creator_projects"
+      ) || "[]"
+
+    );
+
+  }catch{
+
+    return [];
+
+  }
+
+}
+
+
+function saveProjects(
+  projects
+){
+
+  localStorage.setItem(
+
+    "rg_creator_projects",
+
+    JSON.stringify(
+      projects
+    )
+
+  );
+
+}
+
+
+function toggleProjects(){
+
+  const list =
+    document.getElementById(
+      "projectList"
+    );
+
+
+  if(!list){
+
+    return;
+
+  }
+
+
+  list.classList.toggle(
+    "open"
+  );
+
+
+  if(
+    list.classList.contains(
+      "open"
+    )
+  ){
+
+    renderProjects();
+
+  }
+
+}
+
+
+function renderProjects(){
+
+  const list =
+    document.getElementById(
+      "projectList"
+    );
+
+
+  if(!list){
+
+    return;
+
+  }
+
+
+  const projects =
+    getProjects();
+
+
+  list.innerHTML =
+    "";
+
+
+  projects.forEach(
+
+    function(
+      project,
+      index
+    ){
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.className =
+        "project-item";
+
+
+      button.innerHTML = `
+
+        📁
+
+        <span
+          style="flex:1;"
+        >
+          ${escapeHTML(
+            project.name
+          )}
+        </span>
+
+      `;
+
+
+      button.onclick =
+        function(){
+
+          openProject(
+            index
+          );
+
+        };
+
+
+      list.appendChild(
+        button
+      );
+
+    }
+
+  );
+
+
+  const create =
+    document.createElement(
+      "button"
+    );
+
+
+  create.className =
+    "project-item";
+
+
+  create.innerHTML =
+    "＋ Create project";
+
+
+  create.onclick =
+    createProject;
+
+
+  list.appendChild(
+    create
+  );
+
+}
+
+
+function createProject(){
+
+  const name =
+    prompt(
+      "Project name:"
+    );
+
+
+  if(
+    !name ||
+    !name.trim()
+  ){
+
+    return;
+
+  }
+
+
+  const projects =
+    getProjects();
+
+
+  projects.push({
+
+    id:
+      Date.now(),
+
+    name:
+      name.trim(),
+
+    notes:
+      "",
+
+    createdAt:
+      Date.now()
+
+  });
+
+
+  saveProjects(
+    projects
+  );
+
+
+  renderProjects();
+
+
+  document
+    .getElementById(
+      "projectList"
+    )
+    ?.classList.add(
+      "open"
+    );
+
+
+  toast(
+    "Project created"
+  );
+
+}
+
+
+function openProject(index){
+
+  const project =
+    getProjects()[index];
+
+
+  if(!project){
+
+    return;
+
+  }
+
+
+  openModal(
+
+    project.name,
+
+    `
+
+      <div class="modal-text">
+
+        Save notes and important information
+        for this project.
+
+      </div>
+
+
+      <textarea
+        class="project-input project-textarea"
+        id="projectNotes"
+        placeholder="Project notes..."
+      >${escapeHTML(
+        project.notes || ""
+      )}</textarea>
+
+
+      <button
+        class="modal-btn primary"
+        onclick="
+          saveProjectNotes(${index})
+        "
+      >
+        Save Project
+      </button>
+
+
+      <button
+        class="modal-btn"
+        onclick="
+          deleteProject(${index})
+        "
+      >
+        Delete Project
+      </button>
+
+    `
+
+  );
+
+}
+
+
+function saveProjectNotes(index){
+
+  const projects =
+    getProjects();
+
+
+  const notes =
+    document.getElementById(
+      "projectNotes"
+    );
+
+
+  if(
+    !projects[index] ||
+    !notes
+  ){
+
+    return;
+
+  }
+
+
+  projects[index].notes =
+    notes.value;
+
+
+  saveProjects(
+    projects
+  );
+
+
+  hideModal();
+
+  renderProjects();
+
+
+  toast(
+    "Project saved"
+  );
+
+}
+
+
+function deleteProject(index){
+
+  const projects =
+    getProjects();
+
+
+  if(
+    !projects[index]
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !confirm(
+      "Delete this project?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  projects.splice(
+    index,
+    1
+  );
+
+
+  saveProjects(
+    projects
+  );
+
+
+  hideModal();
+
+  renderProjects();
+
+
+  toast(
+    "Project deleted"
   );
 
 }
@@ -2438,6 +3405,7 @@ function startVoice(){
   recognition.lang =
     "en-IN";
 
+
   recognition.interimResults =
     false;
 
@@ -2458,6 +3426,7 @@ function startVoice(){
       input.value =
         event.results[0][0]
           .transcript;
+
 
       autoResize();
 
@@ -2488,11 +3457,22 @@ function clearAttachment(){
   currentAttachment =
     null;
 
+
   document
     .getElementById(
       "attachment"
     )
-    .classList.remove("show");
+    .classList.remove(
+      "show"
+    );
+
+
+  document
+    .getElementById(
+      "attachmentName"
+    )
+    .textContent =
+    "";
 
 }
 
@@ -2512,40 +3492,309 @@ function openTool(file){
 function openSettings(){
 
   openModal(
+
     "Settings",
+
     `
+
       <div class="modal-text">
+
         Manage your RG Creator AI settings.
+
       </div>
+
 
       <button
         class="modal-btn"
         onclick="
-          toast('Appearance settings coming next');
+          toast(
+            'Appearance settings coming next'
+          );
         "
       >
         🌙 Appearance
       </button>
 
+
       <button
         class="modal-btn"
         onclick="
-          toast('Chat settings coming next');
+          toast(
+            'Chat settings coming next'
+          );
         "
       >
         💬 Chat Settings
       </button>
 
+
       <button
         class="modal-btn"
         onclick="
-          toast('Privacy settings coming next');
+          toast(
+            'Privacy settings coming next'
+          );
         "
       >
         🔒 Privacy & Data
       </button>
+
     `
+
   );
+
+}
+
+
+/* ================= PROFILE ================= */
+
+function getProfile(){
+
+  try{
+
+    return JSON.parse(
+
+      localStorage.getItem(
+        "rg_creator_profile"
+      ) || "null"
+
+    );
+
+  }catch{
+
+    return null;
+
+  }
+
+}
+
+
+function loadProfile(){
+
+  const profile =
+    getProfile();
+
+
+  const avatar =
+    document.getElementById(
+      "sidebarProfileAvatar"
+    );
+
+
+  const name =
+    document.getElementById(
+      "sidebarProfileName"
+    );
+
+
+  const sub =
+    document.getElementById(
+      "sidebarProfileSub"
+    );
+
+
+  if(
+    !avatar ||
+    !name ||
+    !sub
+  ){
+
+    return;
+
+  }
+
+
+  if(profile){
+
+    avatar.innerHTML =
+
+      profile.image
+
+        ? `
+          <img
+            src="${profile.image}"
+            alt="Profile"
+          >
+        `
+
+        : "👤";
+
+
+    name.textContent =
+      profile.name ||
+      "User";
+
+
+    sub.textContent =
+      profile.email ||
+      "Account";
+
+  }else{
+
+    avatar.textContent =
+      "👤";
+
+
+    name.textContent =
+      "Log in / Sign up";
+
+
+    sub.textContent =
+      "Sync your chats";
+
+  }
+
+}
+
+
+function saveLocalProfile(){
+
+  const old =
+    getProfile() ||
+    {};
+
+
+  const name =
+    prompt(
+      "Your name:",
+      old.name || ""
+    );
+
+
+  if(
+    !name ||
+    !name.trim()
+  ){
+
+    return;
+
+  }
+
+
+  const email =
+    prompt(
+      "Your email:",
+      old.email || ""
+    ) || "";
+
+
+  localStorage.setItem(
+
+    "rg_creator_profile",
+
+    JSON.stringify({
+
+      name:
+        name.trim(),
+
+      email:
+        email.trim(),
+
+      image:
+        old.image || ""
+
+    })
+
+  );
+
+
+  loadProfile();
+
+
+  toast(
+    "Profile saved"
+  );
+
+}
+
+
+function chooseProfileImage(){
+
+  const el =
+    document.createElement(
+      "input"
+    );
+
+
+  el.type =
+    "file";
+
+
+  el.accept =
+    "image/*";
+
+
+  el.onchange =
+    function(){
+
+      const file =
+        el.files?.[0];
+
+
+      if(!file){
+
+        return;
+
+      }
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function(){
+
+          const old =
+            getProfile() ||
+            {};
+
+
+          localStorage.setItem(
+
+            "rg_creator_profile",
+
+            JSON.stringify({
+
+              name:
+                old.name ||
+                "User",
+
+              email:
+                old.email ||
+                "",
+
+              image:
+                String(
+                  reader.result ||
+                  ""
+                )
+
+            })
+
+          );
+
+
+          loadProfile();
+
+          hideModal();
+
+
+          toast(
+            "Profile image updated"
+          );
+
+        };
+
+
+      reader.readAsDataURL(
+        file
+      );
+
+    };
+
+
+  el.click();
 
 }
 
@@ -2554,41 +3803,170 @@ function openSettings(){
 
 function openLogin(){
 
+  const profile =
+    getProfile();
+
+
+  if(profile){
+
+    openModal(
+
+      "Profile",
+
+      `
+
+        <div
+          style="
+            text-align:center;
+          "
+        >
+
+          <div
+            class="profile-avatar"
+            style="
+              margin:0 auto 12px;
+              width:72px;
+              height:72px;
+              min-width:72px;
+              font-size:26px;
+            "
+          >
+
+            ${
+              profile.image
+
+                ? `
+                  <img
+                    src="${profile.image}"
+                    alt="Profile"
+                  >
+                `
+
+                : "👤"
+            }
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="modal-text"
+          style="
+            text-align:center;
+          "
+        >
+
+          ${escapeHTML(
+            profile.name ||
+            "User"
+          )}
+
+          ${
+            profile.email
+
+              ? `
+                <br>
+                ${escapeHTML(
+                  profile.email
+                )}
+              `
+
+              : ""
+          }
+
+        </div>
+
+
+        <button
+          class="modal-btn primary"
+          onclick="
+            chooseProfileImage()
+          "
+        >
+          🖼️ Change profile image
+        </button>
+
+
+        <button
+          class="modal-btn"
+          onclick="
+            saveLocalProfile();
+            hideModal();
+          "
+        >
+          ✏️ Edit profile
+        </button>
+
+
+        <button
+          class="modal-btn"
+          onclick="
+            localStorage.removeItem(
+              'rg_creator_profile'
+            );
+            loadProfile();
+            hideModal();
+            toast(
+              'Logged out on this device'
+            );
+          "
+        >
+          Log out
+        </button>
+
+      `
+
+    );
+
+
+    return;
+
+  }
+
+
   openModal(
+
     "Log in / Sign up",
+
     `
+
       <div class="modal-text">
-        Log in to sync your chats and creator
-        workspace across devices.
+
+        Real Google/Email authentication
+        will be connected in the API/auth
+        step.
+
+        <br><br>
+
+        For now, create your local profile
+        so the sidebar profile UI is ready.
+
       </div>
+
 
       <button
         class="modal-btn primary"
         onclick="
-          toast('Google login will be connected in the authentication step');
+          saveLocalProfile();
+          hideModal();
         "
       >
-        Continue with Google
+        Continue
       </button>
+
 
       <button
         class="modal-btn"
         onclick="
-          toast('Email login will be connected in the authentication step');
+          hideModal()
         "
       >
-        Continue with Email
+        Cancel
       </button>
 
-      <button
-        class="modal-btn"
-        onclick="
-          toast('Create account will be connected in the authentication step');
-        "
-      >
-        Create account
-      </button>
     `
+
   );
 
 }
@@ -2600,25 +3978,46 @@ function showHelp(){
 
   closeMore();
 
+
   openModal(
+
     "Help",
+
     `
+
       <div class="modal-text">
-        Use the message box to chat with RG Creator AI.
+
+        Use the message box to chat
+        with RG Creator AI.
+
         <br><br>
-        Use + to attach an image, camera photo,
-        video, file or PDF.
+
+        Use + to attach an image,
+        camera photo, video, file or PDF.
+
         <br><br>
+
         Use 🎤 for voice input.
+
+        <br><br>
+
+        Use Projects to save your
+        project notes.
+
       </div>
+
 
       <button
         class="modal-btn"
-        onclick="hideModal()"
+        onclick="
+          hideModal()
+        "
       >
         Close
       </button>
+
     `
+
   );
 
 }
@@ -2630,10 +4029,12 @@ function showFeedback(){
 
   closeMore();
 
+
   const value =
     prompt(
       "Tell us your feedback:"
     );
+
 
   if(
     value &&
@@ -2655,22 +4056,34 @@ function showAbout(){
 
   closeMore();
 
+
   openModal(
+
     "About RG Creator AI",
+
     `
+
       <div class="modal-text">
-        RG Creator AI is an AI-powered creative
-        workspace for chat, images, writing, coding,
+
+        RG Creator AI is an AI-powered
+        creative workspace for chat,
+        images, writing, coding,
         YouTube and Instagram tools.
+
       </div>
+
 
       <button
         class="modal-btn"
-        onclick="hideModal()"
+        onclick="
+          hideModal()
+        "
       >
         Close
       </button>
+
     `
+
   );
 
 }
@@ -2684,7 +4097,9 @@ function toggleMore(){
     .getElementById(
       "moreMenu"
     )
-    .classList.toggle("open");
+    .classList.toggle(
+      "open"
+    );
 
 }
 
@@ -2695,7 +4110,9 @@ function closeMore(){
     .getElementById(
       "moreMenu"
     )
-    .classList.remove("open");
+    .classList.remove(
+      "open"
+    );
 
 }
 
@@ -2714,6 +4131,7 @@ function openModal(
     .textContent =
     title;
 
+
   document
     .getElementById(
       "modalBody"
@@ -2721,11 +4139,14 @@ function openModal(
     .innerHTML =
     html;
 
+
   document
     .getElementById(
       "modalBackdrop"
     )
-    .classList.add("show");
+    .classList.add(
+      "show"
+    );
 
 }
 
@@ -2736,7 +4157,9 @@ function hideModal(){
     .getElementById(
       "modalBackdrop"
     )
-    .classList.remove("show");
+    .classList.remove(
+      "show"
+    );
 
 }
 
@@ -2760,10 +4183,34 @@ function closeModal(event){
 function copyIcon(){
 
   return `
-    <svg class="icon" viewBox="0 0 24 24">
-      <rect x="8" y="8" width="11" height="11" rx="2"/>
-      <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>
+
+    <svg
+      class="icon"
+      viewBox="0 0 24 24"
+    >
+
+      <rect
+        x="8"
+        y="8"
+        width="11"
+        height="11"
+        rx="2"
+      />
+
+      <path
+        d="
+          M16 8V6
+          a2 2 0 0 0-2-2
+          H6
+          a2 2 0 0 0-2 2
+          v8
+          a2 2 0 0 0 2 2
+          h2
+        "
+      />
+
     </svg>
+
   `;
 
 }
@@ -2772,11 +4219,26 @@ function copyIcon(){
 function shareIcon(){
 
   return `
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="M12 15V3"/>
-      <path d="m7 8 5-5 5 5"/>
-      <path d="M5 12v8h14v-8"/>
+
+    <svg
+      class="icon"
+      viewBox="0 0 24 24"
+    >
+
+      <path
+        d="M12 15V3"
+      />
+
+      <path
+        d="m7 8 5-5 5 5"
+      />
+
+      <path
+        d="M5 12v8h14v-8"
+      />
+
     </svg>
+
   `;
 
 }
@@ -2785,12 +4247,38 @@ function shareIcon(){
 function refreshIcon(){
 
   return `
-    <svg class="icon" viewBox="0 0 24 24">
-      <path d="M20 11a8 8 0 0 0-14-4L4 9"/>
-      <path d="M4 4v5h5"/>
-      <path d="M4 13a8 8 0 0 0 14 4l2-2"/>
-      <path d="M20 20v-5h-5"/>
+
+    <svg
+      class="icon"
+      viewBox="0 0 24 24"
+    >
+
+      <path
+        d="
+          M20 11
+          a8 8 0 0 0-14-4
+          L4 9
+        "
+      />
+
+      <path
+        d="M4 4v5h5"
+      />
+
+      <path
+        d="
+          M4 13
+          a8 8 0 0 0 14 4
+          l2-2
+        "
+      />
+
+      <path
+        d="M20 20v-5h-5"
+      />
+
     </svg>
+
   `;
 
 }
@@ -2799,11 +4287,32 @@ function refreshIcon(){
 function moreIcon(){
 
   return `
-    <svg class="icon" viewBox="0 0 24 24">
-      <circle cx="5" cy="12" r="1"/>
-      <circle cx="12" cy="12" r="1"/>
-      <circle cx="19" cy="12" r="1"/>
+
+    <svg
+      class="icon"
+      viewBox="0 0 24 24"
+    >
+
+      <circle
+        cx="5"
+        cy="12"
+        r="1"
+      />
+
+      <circle
+        cx="12"
+        cy="12"
+        r="1"
+      />
+
+      <circle
+        cx="19"
+        cy="12"
+        r="1"
+      />
+
     </svg>
+
   `;
 
 }
@@ -2814,11 +4323,31 @@ function moreIcon(){
 function escapeHTML(value){
 
   return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
@@ -2826,13 +4355,16 @@ function escapeHTML(value){
 /* ================= OUTSIDE CLICK ================= */
 
 document.addEventListener(
+
   "click",
+
   function(event){
 
     const plus =
       document.querySelector(
         ".plus-wrap"
       );
+
 
     const plusMenu =
       document.getElementById(
@@ -2841,8 +4373,12 @@ document.addEventListener(
 
 
     if(
-      plusMenu.classList.contains("open") &&
-      !plus.contains(event.target)
+      plusMenu.classList.contains(
+        "open"
+      ) &&
+      !plus.contains(
+        event.target
+      )
     ){
 
       closePlus();
@@ -2857,9 +4393,15 @@ document.addEventListener(
 
 
     if(
-      more.classList.contains("open") &&
-      !event.target.closest(".header-right") &&
-      !event.target.closest(".more-menu")
+      more.classList.contains(
+        "open"
+      ) &&
+      !event.target.closest(
+        ".header-right"
+      ) &&
+      !event.target.closest(
+        ".more-menu"
+      )
     ){
 
       closeMore();
@@ -2867,6 +4409,7 @@ document.addEventListener(
     }
 
   }
+
 );
 
 </script>
