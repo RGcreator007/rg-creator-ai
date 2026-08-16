@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="theme-color" content="#000000">
 <title>RG Creator AI</title>
 
@@ -15,43 +15,48 @@
 
 :root{
   --bg:#000;
-  --panel:#111;
-  --panel2:#181818;
-  --panel3:#222;
+  --surface:#111;
+  --surface2:#181818;
+  --surface3:#222;
   --border:#2b2b2b;
   --text:#fff;
-  --muted:#858585;
-  --danger:#ff4545;
+  --muted:#8a8a8a;
+  --accent:#ff3030;
 }
 
-html,body{
+html,
+body{
   width:100%;
   height:100%;
   background:#000;
   color:#fff;
-  overflow:hidden;
   font-family:
     "Söhne",
-    Inter,
+    "Inter",
     "Segoe UI",
     "Helvetica Neue",
     Arial,
     sans-serif;
+  overflow:hidden;
 }
 
 button,
 input,
-textarea{
+textarea,
+select{
   font-family:inherit;
 }
 
-code,
 pre,
+code,
+.code,
+.code-block,
+.code-output,
 .technical-text{
   font-family:
     "Söhne Mono",
-    Consolas,
-    Monaco,
+    "Consolas",
+    "Monaco",
     monospace;
 }
 
@@ -76,16 +81,15 @@ button{
 
 .header{
   height:62px;
-  width:100%;
+  position:relative;
+  z-index:30;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 12px;
-  position:relative;
-  z-index:40;
-  background:rgba(0,0,0,.96);
+  padding:0 13px;
+  background:rgba(0,0,0,.94);
   border-bottom:1px solid #171717;
-  backdrop-filter:blur(14px);
+  backdrop-filter:blur(16px);
 }
 
 .header-left,
@@ -126,7 +130,7 @@ button{
 }
 
 .logo-title{
-  max-width:65vw;
+  max-width:58vw;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
@@ -134,314 +138,7 @@ button{
   font-weight:600;
 }
 
-/* ================= MAIN ================= */
-
-.main{
-  height:calc(100% - 62px);
-  position:relative;
-  display:flex;
-  flex-direction:column;
-}
-
-.messages{
-  flex:1;
-  overflow-y:auto;
-  padding:20px 14px 160px;
-  scroll-behavior:smooth;
-}
-
-.messages::-webkit-scrollbar{
-  width:5px;
-}
-
-.messages::-webkit-scrollbar-thumb{
-  background:#292929;
-  border-radius:20px;
-}
-
-/* ================= WELCOME ================= */
-
-.welcome{
-  width:min(760px,100%);
-  margin:13vh auto 0;
-  text-align:center;
-}
-
-.welcome-logo{
-  width:58px;
-  height:58px;
-  margin:auto;
-  border-radius:18px;
-  background:#fff;
-  color:#000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
-  font-weight:800;
-}
-
-.welcome h1{
-  margin-top:18px;
-  font-size:28px;
-  letter-spacing:-.7px;
-}
-
-.welcome p{
-  margin-top:8px;
-  color:#777;
-  font-size:14px;
-}
-
-/* ================= MESSAGE ================= */
-
-.message{
-  width:min(760px,100%);
-  margin:0 auto 28px;
-}
-
-.user-message{
-  display:flex;
-  justify-content:flex-end;
-}
-
-.user-bubble{
-  max-width:85%;
-  padding:12px 15px;
-  border-radius:20px 20px 5px 20px;
-  background:#252525;
-  color:#fff;
-  font-size:15px;
-  line-height:1.55;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-}
-
-.ai-message{
-  font-size:15px;
-  line-height:1.7;
-}
-
-.ai-content{
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-}
-
-.message-actions{
-  display:flex;
-  align-items:center;
-  gap:2px;
-  margin-top:8px;
-}
-
-.action-btn,
-.user-action-btn{
-  width:36px;
-  height:34px;
-  border:0;
-  border-radius:9px;
-  background:transparent;
-  color:#777;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.action-btn:hover,
-.user-action-btn:hover{
-  background:#181818;
-  color:#fff;
-}
-
-.user-actions{
-  width:100%;
-  display:flex;
-  justify-content:flex-end;
-  gap:2px;
-  margin-top:5px;
-}
-
-/* ================= COMPOSER ================= */
-
-.input-area{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  z-index:30;
-  padding:9px 11px 16px;
-  background:linear-gradient(
-    transparent,
-    #000 27%
-  );
-}
-
-.composer{
-  width:min(760px,100%);
-  margin:auto;
-  background:#151515;
-  border:1px solid #303030;
-  border-radius:24px;
-  padding:10px;
-  box-shadow:0 -10px 40px rgba(0,0,0,.5);
-}
-
-.composer textarea{
-  width:100%;
-  min-height:45px;
-  max-height:150px;
-  resize:none;
-  outline:none;
-  border:0;
-  background:transparent;
-  color:#fff;
-  padding:7px 8px;
-  font-size:15px;
-  line-height:1.5;
-}
-
-.composer textarea::placeholder{
-  color:#707070;
-}
-
-.composer-bottom{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.composer-left,
-.composer-right{
-  display:flex;
-  align-items:center;
-  gap:3px;
-}
-
-.plus-wrap{
-  position:relative;
-}
-
-.circle-btn{
-  width:48px;
-  height:48px;
-  min-width:48px;
-  border:0;
-  border-radius:50%;
-  background:transparent;
-  color:#aaa;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.circle-btn:hover{
-  background:#252525;
-  color:#fff;
-}
-
-.circle-btn .icon{
-  width:26px;
-  height:26px;
-}
-
-.voice-btn{
-  font-size:23px;
-}
-
-.send-btn{
-  width:44px;
-  height:44px;
-  border:0;
-  border-radius:50%;
-  background:#fff;
-  color:#000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.send-btn .icon{
-  width:23px;
-  height:23px;
-}
-
-/* ================= PLUS MENU ================= */
-
-.plus-menu{
-  position:absolute;
-  left:0;
-  bottom:56px;
-  width:245px;
-  padding:7px;
-  border:1px solid #333;
-  border-radius:17px;
-  background:#1a1a1a;
-  box-shadow:0 20px 55px rgba(0,0,0,.75);
-  display:none;
-}
-
-.plus-menu.open{
-  display:block;
-}
-
-.plus-item{
-  width:100%;
-  min-height:46px;
-  border:0;
-  border-radius:11px;
-  background:transparent;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  gap:11px;
-  padding:0 11px;
-  text-align:left;
-  font-size:14px;
-}
-
-.plus-item:hover{
-  background:#292929;
-}
-
-.think-status{
-  margin-left:auto;
-  color:#777;
-  font-size:11px;
-}
-
-/* ================= ATTACHMENT ================= */
-
-.attachment{
-  position:relative;
-  display:none;
-  align-items:center;
-  gap:8px;
-  margin-bottom:8px;
-  padding:8px 42px 8px 10px;
-  border-radius:11px;
-  background:#202020;
-  color:#bbb;
-  font-size:12px;
-}
-
-.attachment.show{
-  display:flex;
-}
-
-.attachment-close{
-  position:absolute;
-  right:7px;
-  top:50%;
-  transform:translateY(-50%);
-  width:28px;
-  height:28px;
-  border:0;
-  border-radius:50%;
-  background:#303030;
-  color:#fff;
-}
-
-/* ================= MORE MENU ================= */
+/* ================= TOP MORE ================= */
 
 .more-menu{
   position:absolute;
@@ -478,6 +175,348 @@ button{
 
 .more-item:hover{
   background:#292929;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+  height:calc(100% - 62px);
+  position:relative;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ================= MESSAGES ================= */
+
+.messages{
+  flex:1;
+  overflow-y:auto;
+  padding:20px 14px 160px;
+  scroll-behavior:smooth;
+}
+
+.messages::-webkit-scrollbar{
+  width:5px;
+}
+
+.messages::-webkit-scrollbar-thumb{
+  background:#292929;
+  border-radius:20px;
+}
+
+/* ================= WELCOME ================= */
+
+.welcome{
+  width:min(760px,100%);
+  margin:13vh auto 0;
+  text-align:center;
+  transition:.2s;
+}
+
+.welcome-logo{
+  width:58px;
+  height:58px;
+  margin:auto;
+  border-radius:18px;
+  background:#fff;
+  color:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:18px;
+}
+
+.welcome h1{
+  margin-top:18px;
+  font-size:28px;
+  letter-spacing:-.8px;
+}
+
+.welcome p{
+  margin-top:8px;
+  color:#777;
+  font-size:14px;
+}
+
+/* ================= QUICK ACTIONS ================= */
+
+.quick-actions{
+  width:min(760px,100%);
+  margin:28px auto 0;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+}
+
+.quick-action{
+  min-height:58px;
+  padding:10px;
+  border:1px solid #252525;
+  background:#101010;
+  color:#fff;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  text-align:left;
+  transition:.18s;
+}
+
+.quick-action:hover{
+  background:#191919;
+  border-color:#383838;
+}
+
+.quick-icon{
+  font-size:20px;
+}
+
+.quick-text strong{
+  display:block;
+  font-size:13px;
+}
+
+.quick-text span{
+  display:block;
+  margin-top:3px;
+  color:#707070;
+  font-size:10px;
+}
+
+/* ================= MESSAGE ================= */
+
+.message{
+  width:min(760px,100%);
+  margin:0 auto 27px;
+}
+
+.user-message{
+  display:flex;
+  justify-content:flex-end;
+}
+
+.user-bubble{
+  max-width:84%;
+  padding:12px 15px;
+  border-radius:20px 20px 5px 20px;
+  background:#252525;
+  color:#fff;
+  font-size:15px;
+  line-height:1.55;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.ai-message{
+  font-size:15px;
+  line-height:1.7;
+}
+
+.ai-content{
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.message-actions{
+  margin-top:8px;
+  display:flex;
+  align-items:center;
+  gap:2px;
+}
+
+.action-btn{
+  width:36px;
+  height:36px;
+  border:0;
+  background:transparent;
+  color:#858585;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.action-btn:hover{
+  background:#181818;
+  color:#fff;
+}
+
+/* ================= COMPOSER ================= */
+
+.input-area{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:25;
+  padding:9px 11px 16px;
+  background:linear-gradient(
+    transparent,
+    #000 26%
+  );
+}
+
+.composer{
+  width:min(760px,100%);
+  margin:auto;
+  background:#151515;
+  border:1px solid #303030;
+  border-radius:24px;
+  padding:10px;
+  box-shadow:0 -10px 40px rgba(0,0,0,.5);
+}
+
+.composer textarea{
+  width:100%;
+  min-height:45px;
+  max-height:150px;
+  padding:7px 8px;
+  resize:none;
+  outline:none;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:15px;
+  line-height:1.5;
+}
+
+.composer textarea::placeholder{
+  color:#707070;
+}
+
+.composer-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.composer-left,
+.composer-right{
+  display:flex;
+  align-items:center;
+  gap:3px;
+}
+
+.circle-btn{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#aaa;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.circle-btn:hover{
+  background:#252525;
+  color:#fff;
+}
+
+.send-btn{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  color:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.send-btn:hover{
+  transform:scale(1.04);
+}
+
+/* ================= PLUS MENU ================= */
+
+.plus-wrap{
+  position:relative;
+}
+
+.plus-menu{
+  position:absolute;
+  left:0;
+  bottom:49px;
+  width:215px;
+  padding:7px;
+  border:1px solid #333;
+  background:#1a1a1a;
+  border-radius:17px;
+  box-shadow:0 18px 55px rgba(0,0,0,.7);
+  display:none;
+}
+
+.plus-menu.open{
+  display:block;
+}
+
+.plus-item{
+  width:100%;
+  height:44px;
+  border:0;
+  background:transparent;
+  color:#fff;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:0 11px;
+  text-align:left;
+}
+
+.plus-item:hover{
+  background:#292929;
+}
+
+/* ================= ATTACHMENT ================= */
+
+.attachment{
+  display:none;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+  padding:8px 10px;
+  border-radius:11px;
+  background:#202020;
+  color:#bbb;
+  font-size:12px;
+}
+
+.attachment.show{
+  display:flex;
+}
+
+.attachment-preview{
+  width:44px;
+  height:44px;
+  object-fit:cover;
+  border-radius:8px;
+  display:none;
+  flex:none;
+}
+
+.attachment-remove{
+  margin-left:auto;
+  border:0;
+  background:transparent;
+  color:#aaa;
+  font-size:22px;
+  line-height:1;
+  cursor:pointer;
+  padding:2px 6px;
+}
+
+.message-image{
+  display:block;
+  width:min(320px,100%);
+  max-height:360px;
+  object-fit:contain;
+  border-radius:14px;
+  margin-bottom:8px;
 }
 
 /* ================= SIDEBAR ================= */
@@ -543,59 +582,6 @@ button{
   background:#222;
 }
 
-/* ================= PROJECTS ================= */
-
-.projects-btn{
-  width:calc(100% - 24px);
-  height:44px;
-  margin:0 12px 8px;
-  border:0;
-  background:transparent;
-  color:#fff;
-  border-radius:11px;
-  display:flex;
-  align-items:center;
-  gap:9px;
-  padding:0 10px;
-  text-align:left;
-  font-size:14px;
-}
-
-.projects-btn:hover{
-  background:#202020;
-}
-
-.project-list{
-  display:none;
-  padding:0 12px 8px;
-}
-
-.project-list.open{
-  display:block;
-}
-
-.project-item{
-  width:100%;
-  min-height:40px;
-  border:0;
-  background:transparent;
-  color:#bbb;
-  border-radius:9px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:0 10px;
-  text-align:left;
-  font-size:12px;
-}
-
-.project-item:hover{
-  background:#202020;
-  color:#fff;
-}
-
-/* ================= SEARCH ================= */
-
 .search{
   width:calc(100% - 24px);
   height:42px;
@@ -607,8 +593,6 @@ button{
   background:#171717;
   color:#fff;
 }
-
-/* ================= HISTORY ================= */
 
 .history{
   flex:1;
@@ -659,7 +643,7 @@ button{
   color:#fff;
 }
 
-/* ================= SIDEBAR BOTTOM ================= */
+/* NORMAL MENU BOTTOM */
 
 .sidebar-bottom{
   margin-top:auto;
@@ -686,67 +670,6 @@ button{
   background:#202020;
 }
 
-/* ================= PROFILE ================= */
-
-.profile-row{
-  width:100%;
-  min-height:58px;
-  border:0;
-  background:transparent;
-  color:#fff;
-  border-radius:12px;
-  display:flex;
-  align-items:center;
-  gap:11px;
-  padding:7px 10px;
-  text-align:left;
-}
-
-.profile-row:hover{
-  background:#202020;
-}
-
-.profile-avatar{
-  width:44px;
-  height:44px;
-  min-width:44px;
-  border-radius:50%;
-  background:#292929;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  font-size:18px;
-  font-weight:700;
-}
-
-.profile-avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.profile-info{
-  min-width:0;
-  flex:1;
-}
-
-.profile-name{
-  display:block;
-  font-size:14px;
-  font-weight:600;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.profile-sub{
-  display:block;
-  margin-top:2px;
-  color:#777;
-  font-size:11px;
-}
-
 /* ================= MODAL ================= */
 
 .modal-backdrop{
@@ -765,57 +688,78 @@ button{
 }
 
 .modal{
-  width:min(430px,100%);
+  width:min(520px,100%);
   max-height:85vh;
   overflow:auto;
-  padding:18px;
-  border:1px solid #333;
-  border-radius:20px;
-  background:#111;
+  background:#151515;
+  border:1px solid #303030;
+  border-radius:19px;
+  box-shadow:0 25px 70px rgba(0,0,0,.8);
 }
 
 .modal-head{
+  min-height:58px;
+  padding:0 14px 0 18px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:15px;
+  border-bottom:1px solid #292929;
 }
 
 .modal-head h2{
-  font-size:20px;
+  font-size:16px;
 }
 
 .modal-close{
-  width:36px;
-  height:36px;
+  width:38px;
+  height:38px;
   border:0;
-  border-radius:50%;
-  background:#202020;
-  color:#fff;
-  font-size:20px;
+  border-radius:10px;
+  background:transparent;
+  color:#aaa;
+  font-size:24px;
 }
 
-.modal-text{
-  color:#999;
-  font-size:14px;
+.modal-close:hover{
+  background:#242424;
+  color:#fff;
+}
+
+#modalBody{
+  padding:18px;
+  color:#ccc;
   line-height:1.6;
-  margin-bottom:15px;
+  font-size:14px;
 }
 
-.modal-btn{
+#modalBody input,
+#modalBody textarea,
+#modalBody select{
   width:100%;
-  min-height:45px;
-  margin-top:8px;
-  border:1px solid #303030;
-  border-radius:11px;
-  background:#181818;
+  padding:11px;
+  margin-top:7px;
+  border:1px solid #333;
+  border-radius:10px;
+  outline:none;
+  background:#0e0e0e;
   color:#fff;
 }
 
-.modal-btn.primary{
+#modalBody label{
+  display:block;
+  margin-top:13px;
+  color:#aaa;
+}
+
+.modal-primary{
+  width:100%;
+  min-height:43px;
+  margin-top:15px;
+  border:0;
+  border-radius:11px;
   background:#fff;
   color:#000;
-  border:0;
+  font-weight:600;
 }
 
 /* ================= TOAST ================= */
@@ -823,17 +767,17 @@ button{
 .toast{
   position:fixed;
   left:50%;
-  bottom:95px;
-  z-index:600;
-  transform:translate(-50%,10px);
-  padding:10px 15px;
-  border:1px solid #333;
-  border-radius:12px;
-  background:#222;
-  color:#fff;
-  font-size:12px;
+  bottom:90px;
+  z-index:900;
+  transform:translate(-50%,20px);
   opacity:0;
   pointer-events:none;
+  padding:10px 14px;
+  background:#242424;
+  border:1px solid #3a3a3a;
+  border-radius:11px;
+  color:#fff;
+  font-size:12px;
   transition:.2s;
 }
 
@@ -844,47 +788,75 @@ button{
 
 /* ================= MOBILE ================= */
 
-@media(max-width:600px){
+@media(max-width:620px){
+
+  .header{
+    height:58px;
+  }
+
+  .main{
+    height:calc(100% - 58px);
+  }
 
   .welcome{
-    margin-top:12vh;
+    margin-top:10vh;
   }
 
   .welcome h1{
-    font-size:25px;
-  }
-
-  .messages{
-    padding-bottom:150px;
-  }
-
-  .user-bubble{
-    max-width:89%;
-  }
-
-  .circle-btn{
-    width:49px;
-    height:49px;
-    min-width:49px;
-  }
-
-  .circle-btn .icon{
-    width:27px;
-    height:27px;
-  }
-
-  .voice-btn{
     font-size:24px;
   }
 
+  .quick-actions{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .quick-action{
+    min-height:54px;
+  }
+
+  .user-bubble{
+    max-width:90%;
+  }
+
+  .messages{
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  .composer{
+    border-radius:21px;
+  }
+
+}
+
+
+/* ================= LOGO ================= */
+
+.brand-logo{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  object-fit:cover;
+  display:block;
+}
+
+.welcome-brand-logo{
+  width:72px;
+  height:72px;
+  margin:auto;
+  border-radius:20px;
+  object-fit:cover;
+  display:block;
 }
 
 </style>
 </head>
 
+
 <body>
 
 <div class="app">
+
 
 <!-- ================= HEADER ================= -->
 
@@ -904,11 +876,21 @@ button{
       </svg>
     </button>
 
+
+    <img
+      class="brand-logo"
+      src="assets/rg-logo.jpg"
+      alt="RG Creator AI"
+      onerror="this.style.display='none'"
+    >
+
+
     <div class="logo-title">
       RG Creator AI
     </div>
 
   </div>
+
 
   <div class="header-right">
 
@@ -918,9 +900,9 @@ button{
       aria-label="More"
     >
       <svg class="icon" viewBox="0 0 24 24">
-        <circle cx="5" cy="12" r="1"/>
-        <circle cx="12" cy="12" r="1"/>
-        <circle cx="19" cy="12" r="1"/>
+        <circle cx="5" cy="12" r="1.2"/>
+        <circle cx="12" cy="12" r="1.2"/>
+        <circle cx="19" cy="12" r="1.2"/>
       </svg>
     </button>
 
@@ -929,7 +911,7 @@ button{
 </header>
 
 
-<!-- ================= MORE ================= -->
+<!-- ================= MORE MENU ================= -->
 
 <div
   class="more-menu"
@@ -950,14 +932,6 @@ button{
   >
     💬
     Chat History
-  </button>
-
-  <button
-    class="more-item"
-    onclick="openSidebar();toggleProjects();"
-  >
-    📁
-    Projects
   </button>
 
   <button
@@ -1009,9 +983,12 @@ button{
       id="welcome"
     >
 
-      <div class="welcome-logo">
-        RG
-      </div>
+      <img
+        class="welcome-brand-logo"
+        src="assets/rg-logo.jpg"
+        alt="RG Creator AI"
+        onerror="this.style.display='none'"
+      >
 
       <h1>
         How can I help you?
@@ -1021,12 +998,88 @@ button{
         Ask anything, create content or build something.
       </p>
 
+
+      <div class="quick-actions">
+
+        <button
+          class="quick-action"
+          onclick="openTool('Image.html')"
+        >
+          <span class="quick-icon">🖼️</span>
+          <span class="quick-text">
+            <strong>AI Image</strong>
+            <span>Create images</span>
+          </span>
+        </button>
+
+
+        <button
+          class="quick-action"
+          onclick="openTool('writer.html')"
+        >
+          <span class="quick-icon">✍️</span>
+          <span class="quick-text">
+            <strong>Content Writer</strong>
+            <span>Write content</span>
+          </span>
+        </button>
+
+
+        <button
+          class="quick-action"
+          onclick="openTool('Code.html')"
+        >
+          <span class="quick-icon">💻</span>
+          <span class="quick-text">
+            <strong>Code Generator</strong>
+            <span>Build & fix code</span>
+          </span>
+        </button>
+
+
+        <button
+          class="quick-action"
+          onclick="openTool('youtube.html')"
+        >
+          <span class="quick-icon">▶️</span>
+          <span class="quick-text">
+            <strong>YouTube</strong>
+            <span>Creator tools</span>
+          </span>
+        </button>
+
+
+        <button
+          class="quick-action"
+          onclick="openTool('Instagram.html')"
+        >
+          <span class="quick-icon">📸</span>
+          <span class="quick-text">
+            <strong>Instagram</strong>
+            <span>Reels & captions</span>
+          </span>
+        </button>
+
+
+        <button
+          class="quick-action"
+          onclick="focusInput()"
+        >
+          <span class="quick-icon">💬</span>
+          <span class="quick-text">
+            <strong>AI Chat</strong>
+            <span>Ask anything</span>
+          </span>
+        </button>
+
+      </div>
+
     </section>
 
   </div>
 
 
-  <!-- ================= COMPOSER ================= -->
+  <!-- ================= INPUT ================= -->
 
   <div class="input-area">
 
@@ -1036,18 +1089,22 @@ button{
         class="attachment"
         id="attachment"
       >
-
-        📎
+        <img
+          id="attachmentPreview"
+          class="attachment-preview"
+          alt="Selected image"
+        >
 
         <span id="attachmentName"></span>
 
         <button
-          class="attachment-close"
+          type="button"
+          class="attachment-remove"
           onclick="clearAttachment()"
+          aria-label="Remove attachment"
         >
           ×
         </button>
-
       </div>
 
 
@@ -1067,21 +1124,14 @@ button{
             <button
               class="circle-btn"
               onclick="togglePlus()"
-              aria-label="Add"
+              aria-label="Attach"
             >
-
-              <svg
-                class="icon"
-                viewBox="0 0 24 24"
-              >
+              <svg class="icon" viewBox="0 0 24 24">
                 <path d="M12 5v14"/>
                 <path d="M5 12h14"/>
               </svg>
-
             </button>
 
-
-            <!-- ================= PLUS MENU ================= -->
 
             <div
               class="plus-menu"
@@ -1096,7 +1146,6 @@ button{
                 Image
               </button>
 
-
               <button
                 class="plus-item"
                 onclick="pick('cameraInput')"
@@ -1104,7 +1153,6 @@ button{
                 📷
                 Camera
               </button>
-
 
               <button
                 class="plus-item"
@@ -1114,7 +1162,6 @@ button{
                 Video
               </button>
 
-
               <button
                 class="plus-item"
                 onclick="pick('fileInput')"
@@ -1122,7 +1169,6 @@ button{
                 📄
                 File
               </button>
-
 
               <button
                 class="plus-item"
@@ -1132,41 +1178,15 @@ button{
                 PDF
               </button>
 
-
-              <!-- THINK -->
-
-              <button
-                class="plus-item"
-                onclick="toggleThinkMode()"
-              >
-
-                🧠
-
-                <span>
-                  Think
-                </span>
-
-                <span
-                  class="think-status"
-                  id="thinkStatus"
-                >
-                  Off
-                </span>
-
-              </button>
-
             </div>
 
           </div>
 
 
-          <!-- VOICE -->
-
           <button
-            class="circle-btn voice-btn"
+            class="circle-btn"
             onclick="startVoice()"
-            aria-label="Voice message"
-            title="Voice message"
+            aria-label="Voice"
           >
             🎤
           </button>
@@ -1181,15 +1201,10 @@ button{
             onclick="sendMessage()"
             aria-label="Send"
           >
-
-            <svg
-              class="icon"
-              viewBox="0 0 24 24"
-            >
+            <svg class="icon" viewBox="0 0 24 24">
               <path d="M5 12h14"/>
               <path d="m13 6 6 6-6 6"/>
             </svg>
-
           </button>
 
         </div>
@@ -1203,7 +1218,7 @@ button{
 </main>
 
 
-<!-- ================= INPUT FILES ================= -->
+<!-- ================= FILE INPUTS ================= -->
 
 <input
   id="imageInput"
@@ -1233,7 +1248,7 @@ button{
 <input
   id="fileInput"
   type="file"
-  accept=".txt,.md,.doc,.docx,.csv,.json,.html,.css,.js,.py,.java,.php,.xml,.sql,.zip,.xlsx,.xls,.ppt,.pptx"
+  accept=".txt,.doc,.docx,.csv,.json,.html,.css,.js,.py,.java,.php"
   hidden
   onchange="handleFile(this)"
 >
@@ -1277,8 +1292,6 @@ button{
   </div>
 
 
-  <!-- NEW CHAT -->
-
   <button
     class="new-chat"
     onclick="newChat()"
@@ -1288,25 +1301,6 @@ button{
   </button>
 
 
-  <!-- PROJECTS -->
-
-  <button
-    class="projects-btn"
-    onclick="toggleProjects()"
-  >
-    📁
-    Projects
-  </button>
-
-
-  <div
-    class="project-list"
-    id="projectList"
-  ></div>
-
-
-  <!-- SEARCH -->
-
   <input
     class="search"
     id="historySearch"
@@ -1315,15 +1309,13 @@ button{
   >
 
 
-  <!-- HISTORY -->
-
   <div
     class="history"
     id="history"
-  ></div>
+  >
 
+  </div>
 
-  <!-- TOOLS -->
 
   <div class="history-label">
     Tools
@@ -1336,7 +1328,7 @@ button{
       class="history-item"
       onclick="openTool('Image.html')"
     >
-      🖼️
+      <span>🖼️</span>
       <span class="history-name">
         AI Image
       </span>
@@ -1347,7 +1339,7 @@ button{
       class="history-item"
       onclick="openTool('writer.html')"
     >
-      ✍️
+      <span>✍️</span>
       <span class="history-name">
         Content Writer
       </span>
@@ -1358,7 +1350,7 @@ button{
       class="history-item"
       onclick="openTool('Code.html')"
     >
-      💻
+      <span>💻</span>
       <span class="history-name">
         Code Generator
       </span>
@@ -1369,7 +1361,7 @@ button{
       class="history-item"
       onclick="openTool('youtube.html')"
     >
-      ▶️
+      <span>▶️</span>
       <span class="history-name">
         YouTube Tools
       </span>
@@ -1380,7 +1372,7 @@ button{
       class="history-item"
       onclick="openTool('Instagram.html')"
     >
-      📸
+      <span>📸</span>
       <span class="history-name">
         Instagram Tools
       </span>
@@ -1388,8 +1380,6 @@ button{
 
   </div>
 
-
-  <!-- BOTTOM NORMAL MENU -->
 
   <div class="sidebar-bottom">
 
@@ -1402,39 +1392,12 @@ button{
     </button>
 
 
-    <!-- PROFILE ONLY HERE -->
-
     <button
-      class="profile-row"
+      class="sidebar-bottom-btn"
       onclick="openLogin()"
     >
-
-      <div
-        class="profile-avatar"
-        id="sidebarProfileAvatar"
-      >
-        👤
-      </div>
-
-
-      <div class="profile-info">
-
-        <span
-          class="profile-name"
-          id="sidebarProfileName"
-        >
-          Log in / Sign up
-        </span>
-
-        <span
-          class="profile-sub"
-          id="sidebarProfileSub"
-        >
-          Sync your chats
-        </span>
-
-      </div>
-
+      👤
+      Log in / Sign up
     </button>
 
   </div>
@@ -1485,9 +1448,9 @@ button{
 
 <script>
 
-/* =========================================================
-   RG CREATOR AI
-========================================================= */
+/* =====================================================
+   RG CREATOR AI — MAIN HOME + CHAT
+===================================================== */
 
 
 /* ================= STATE ================= */
@@ -1499,37 +1462,19 @@ let conversation =
     ) || "[]"
   );
 
-
-let currentAttachment =
-  null;
-
-
-/*
-  Think is OFF by default.
-*/
-
-let thinkMode =
-  localStorage.getItem(
-    "rg_think_mode"
-  ) === "true";
+let currentAttachment = null;
 
 
 /* ================= ELEMENTS ================= */
 
 const input =
-  document.getElementById(
-    "input"
-  );
+  document.getElementById("input");
 
 const messages =
-  document.getElementById(
-    "messages"
-  );
+  document.getElementById("messages");
 
 const welcome =
-  document.getElementById(
-    "welcome"
-  );
+  document.getElementById("welcome");
 
 
 /* ================= INIT ================= */
@@ -1537,12 +1482,6 @@ const welcome =
 renderConversation();
 
 renderHistory();
-
-renderProjects();
-
-loadProfile();
-
-updateThinkUI();
 
 autoResize();
 
@@ -1552,24 +1491,16 @@ autoResize();
 function toast(text){
 
   const el =
-    document.getElementById(
-      "toast"
-    );
+    document.getElementById("toast");
 
   el.textContent =
     text;
 
-  el.classList.add(
-    "show"
-  );
+  el.classList.add("show");
 
   setTimeout(
-    () => {
-
-      el.classList.remove(
-        "show"
-      );
-
+    function(){
+      el.classList.remove("show");
     },
     2200
   );
@@ -1583,7 +1514,6 @@ input.addEventListener(
   "input",
   autoResize
 );
-
 
 input.addEventListener(
   "keydown",
@@ -1618,17 +1548,20 @@ function autoResize(){
 }
 
 
+function focusInput(){
+
+  input.focus();
+
+}
+
+
 /* ================= PLUS ================= */
 
 function togglePlus(){
 
   document
-    .getElementById(
-      "plusMenu"
-    )
-    .classList.toggle(
-      "open"
-    );
+    .getElementById("plusMenu")
+    .classList.toggle("open");
 
 }
 
@@ -1636,94 +1569,68 @@ function togglePlus(){
 function closePlus(){
 
   document
-    .getElementById(
-      "plusMenu"
-    )
-    .classList.remove(
-      "open"
-    );
-
-}
-
-
-/* ================= THINK ================= */
-
-function toggleThinkMode(){
-
-  thinkMode =
-    !thinkMode;
-
-
-  localStorage.setItem(
-    "rg_think_mode",
-    String(thinkMode)
-  );
-
-
-  updateThinkUI();
-
-
-  toast(
-    thinkMode
-      ? "Think mode enabled"
-      : "Think mode disabled"
-  );
-
-}
-
-
-function updateThinkUI(){
-
-  const status =
-    document.getElementById(
-      "thinkStatus"
-    );
-
-
-  if(!status){
-    return;
-  }
-
-
-  status.textContent =
-    thinkMode
-      ? "On"
-      : "Off";
-
-
-  status.style.color =
-    thinkMode
-      ? "#fff"
-      : "#777";
-
-}
-
-
-/* ================= FILE PICKER ================= */
-
-function pick(id){
-
-  closePlus();
-
-  const element =
-    document.getElementById(
-      id
-    );
-
-  if(element){
-    element.click();
-  }
+    .getElementById("plusMenu")
+    .classList.remove("open");
 
 }
 
 
 /* ================= FILE ================= */
 
-function handleFile(element){
+function pick(id){
+
+  closePlus();
+
+  document
+    .getElementById(id)
+    .click();
+
+}
+
+
+function fileToDataURL(file){
+
+  return new Promise(
+    function(resolve,reject){
+
+      const reader =
+        new FileReader();
+
+      reader.onload =
+        function(){
+
+          resolve(
+            reader.result
+          );
+
+        };
+
+      reader.onerror =
+        function(){
+
+          reject(
+            new Error(
+              "Unable to read file"
+            )
+          );
+
+        };
+
+      reader.readAsDataURL(
+        file
+      );
+
+    }
+  );
+
+}
+
+
+async function handleFile(el){
 
   if(
-    !element.files ||
-    !element.files.length
+    !el.files ||
+    !el.files.length
   ){
 
     return;
@@ -1732,124 +1639,77 @@ function handleFile(element){
 
 
   currentAttachment =
-    element.files[0];
+    el.files[0];
 
 
-  document
-    .getElementById(
+  const box =
+    document.getElementById(
+      "attachment"
+    );
+
+  const name =
+    document.getElementById(
       "attachmentName"
-    )
-    .textContent =
+    );
+
+  const preview =
+    document.getElementById(
+      "attachmentPreview"
+    );
+
+
+  name.textContent =
     currentAttachment.name;
 
 
-  document
-    .getElementById(
-      "attachment"
+  if(
+    currentAttachment.type &&
+    currentAttachment.type.startsWith(
+      "image/"
     )
-    .classList.add(
-      "show"
+  ){
+
+    try{
+
+      preview.src =
+        await fileToDataURL(
+          currentAttachment
+        );
+
+      preview.style.display =
+        "block";
+
+    }catch(error){
+
+      preview.removeAttribute(
+        "src"
+      );
+
+      preview.style.display =
+        "none";
+
+    }
+
+  }else{
+
+    preview.removeAttribute(
+      "src"
     );
+
+    preview.style.display =
+      "none";
+
+  }
+
+
+  box.classList.add(
+    "show"
+  );
 
 
   toast(
     "Attached: " +
     currentAttachment.name
-  );
-
-}
-
-
-function clearAttachment(){
-
-  currentAttachment =
-    null;
-
-
-  document
-    .getElementById(
-      "attachment"
-    )
-    .classList.remove(
-      "show"
-    );
-
-
-  document
-    .getElementById(
-      "attachmentName"
-    )
-    .textContent =
-    "";
-
-}
-
-
-/* ================= FILE BASE64 ================= */
-
-function fileToPayload(file){
-
-  return new Promise(
-    function(resolve,reject){
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload =
-        function(){
-
-          const result =
-            String(
-              reader.result || ""
-            );
-
-
-          const comma =
-            result.indexOf(",");
-
-
-          resolve({
-
-            name:
-              file.name,
-
-            type:
-              file.type ||
-              "application/octet-stream",
-
-            size:
-              file.size,
-
-            data:
-              comma >= 0
-                ? result.slice(
-                    comma + 1
-                  )
-                : result
-
-          });
-
-        };
-
-
-      reader.onerror =
-        function(){
-
-          reject(
-            new Error(
-              "Could not read attachment"
-            )
-          );
-
-        };
-
-
-      reader.readAsDataURL(
-        file
-      );
-
-    }
   );
 
 }
@@ -1862,10 +1722,13 @@ async function sendMessage(){
   const text =
     input.value.trim();
 
+  const attachment =
+    currentAttachment;
+
 
   if(
     !text &&
-    !currentAttachment
+    !attachment
   ){
 
     return;
@@ -1873,41 +1736,47 @@ async function sendMessage(){
   }
 
 
-  let attachment =
+  let imageData =
     null;
 
 
-  try{
+  if(
+    attachment &&
+    attachment.type &&
+    attachment.type.startsWith(
+      "image/"
+    )
+  ){
 
-    if(currentAttachment){
+    try{
 
-      attachment =
-        await fileToPayload(
-          currentAttachment
+      imageData =
+        await fileToDataURL(
+          attachment
         );
 
+    }catch(error){
+
+      toast(
+        "Image could not be read"
+      );
+
+      return;
+
     }
-
-  }catch(error){
-
-    toast(
-      "Could not read attachment"
-    );
-
-    return;
 
   }
 
 
-  const messageText =
+  const userText =
     text ||
-    "Please analyze the attached file.";
+    "Please analyze this image.";
 
 
   addMessage(
     "user",
-    messageText,
-    attachment
+    text,
+    imageData
   );
 
 
@@ -1930,54 +1799,27 @@ async function sendMessage(){
 
     const history =
       conversation
-
         .slice(
           0,
           thinkingIndex
         )
-
         .map(
-          item => ({
+          function(item){
 
-            role:
-              item.role,
+            return {
+              role:item.role,
+              content:item.content
+            };
 
-            content:
-              item.content
-
-          })
+          }
         );
-
-
-    const requestBody = {
-
-      message:
-        messageText,
-
-      history:
-        history,
-
-      thinkMode:
-        thinkMode
-
-    };
-
-
-    if(attachment){
-
-      requestBody.attachment =
-        attachment;
-
-    }
 
 
     const response =
       await fetch(
         "/api/chat",
         {
-
-          method:
-            "POST",
+          method:"POST",
 
           headers:{
             "Content-Type":
@@ -1985,10 +1827,29 @@ async function sendMessage(){
           },
 
           body:
-            JSON.stringify(
-              requestBody
-            )
+            JSON.stringify({
 
+              message:
+                userText,
+
+              history:
+                history,
+
+              images:
+                imageData
+                  ? [
+                      {
+                        mimeType:
+                          attachment.type,
+
+                        data:
+                          imageData
+                            .split(",")[1]
+                      }
+                    ]
+                  : []
+
+            })
         }
       );
 
@@ -2019,7 +1880,6 @@ async function sendMessage(){
   }catch(error){
 
     updateMessage(
-
       thinkingIndex,
 
       "Sorry, I couldn't complete that request.\n\n" +
@@ -2027,7 +1887,6 @@ async function sendMessage(){
         error.message ||
         "Server error"
       )
-
     );
 
   }
@@ -2035,12 +1894,12 @@ async function sendMessage(){
 }
 
 
-/* ================= ADD MESSAGE ================= */
+/* ================= CONVERSATION ================= */
 
 function addMessage(
   role,
   content,
-  attachment = null
+  image = null
 ){
 
   conversation.push({
@@ -2051,8 +1910,8 @@ function addMessage(
     content:
       content,
 
-    attachment:
-      attachment,
+    image:
+      image,
 
     time:
       Date.now()
@@ -2064,12 +1923,11 @@ function addMessage(
 
   renderConversation();
 
+
   return conversation.length - 1;
 
 }
 
-
-/* ================= UPDATE ================= */
 
 function updateMessage(
   index,
@@ -2096,18 +1954,13 @@ function updateMessage(
 }
 
 
-/* ================= SAVE ================= */
-
 function saveConversation(){
 
   localStorage.setItem(
-
     "rg_creator_conversation",
-
     JSON.stringify(
       conversation
     )
-
   );
 
 }
@@ -2157,59 +2010,31 @@ function renderConversation(){
 
         wrapper.innerHTML = `
 
-          <div style="width:100%;">
-
-            <div class="user-bubble">
-
-              ${escapeHTML(
-                item.content
-              )}
-
-            </div>
-
+          <div class="user-bubble">
 
             ${
-              item.attachment
+              item.image
                 ? `
-                  <div
-                    style="
-                      margin-top:6px;
-                      color:#777;
-                      font-size:11px;
-                      text-align:right;
-                    "
+                  <img
+                    class="message-image"
+                    src="${item.image}"
+                    alt="Uploaded image"
                   >
-                    📎
+                `
+                : ""
+            }
+
+            ${
+              item.content
+                ? `
+                  <div>
                     ${escapeHTML(
-                      item.attachment.name ||
-                      "Attachment"
+                      item.content
                     )}
                   </div>
                 `
                 : ""
             }
-
-
-            <div class="user-actions">
-
-              <button
-                class="user-action-btn"
-                onclick="copyUser(${index})"
-                title="Copy"
-              >
-                ${copyIcon()}
-              </button>
-
-
-              <button
-                class="user-action-btn"
-                onclick="editUser(${index})"
-                title="Edit"
-              >
-                ✏️
-              </button>
-
-            </div>
 
           </div>
 
@@ -2220,13 +2045,8 @@ function renderConversation(){
         wrapper.innerHTML = `
 
           <div class="ai-content">
-
-            ${escapeHTML(
-              item.content
-            )}
-
+            ${formatAI(item.content)}
           </div>
-
 
           <div class="message-actions">
 
@@ -2238,7 +2058,6 @@ function renderConversation(){
               ${copyIcon()}
             </button>
 
-
             <button
               class="action-btn"
               onclick="feedback('like')"
@@ -2246,7 +2065,6 @@ function renderConversation(){
             >
               👍
             </button>
-
 
             <button
               class="action-btn"
@@ -2256,7 +2074,6 @@ function renderConversation(){
               👎
             </button>
 
-
             <button
               class="action-btn"
               onclick="shareAI(${index})"
@@ -2265,7 +2082,6 @@ function renderConversation(){
               ${shareIcon()}
             </button>
 
-
             <button
               class="action-btn"
               onclick="regenerate(${index})"
@@ -2273,7 +2089,6 @@ function renderConversation(){
             >
               ${refreshIcon()}
             </button>
-
 
             <button
               class="action-btn"
@@ -2299,12 +2114,23 @@ function renderConversation(){
 
 
   requestAnimationFrame(
-    () => {
+    function(){
 
       messages.scrollTop =
         messages.scrollHeight;
 
     }
+  );
+
+}
+
+
+/* ================= AI FORMAT ================= */
+
+function formatAI(text){
+
+  return escapeHTML(
+    text
   );
 
 }
@@ -2320,88 +2146,17 @@ async function copyAI(index){
       conversation[index].content
     );
 
-    toast("Copied");
+    toast(
+      "Copied"
+    );
 
   }catch{
 
-    toast("Copy failed");
-
-  }
-
-}
-
-
-async function copyUser(index){
-
-  try{
-
-    await navigator.clipboard.writeText(
-      conversation[index].content
-    );
-
-    toast("Copied");
-
-  }catch{
-
-    toast("Copy failed");
-
-  }
-
-}
-
-
-/* ================= EDIT ================= */
-
-function editUser(index){
-
-  if(
-    !conversation[index]
-  ){
-
-    return;
-
-  }
-
-
-  input.value =
-    conversation[index].content;
-
-
-  autoResize();
-
-  input.focus();
-
-
-  if(
-    conversation[index + 1] &&
-    conversation[index + 1].role ===
-      "assistant"
-  ){
-
-    conversation.splice(
-      index,
-      2
-    );
-
-  }else{
-
-    conversation.splice(
-      index,
-      1
+    toast(
+      "Copy failed"
     );
 
   }
-
-
-  saveConversation();
-
-  renderConversation();
-
-  renderHistory();
-
-  toast(
-    "Message ready to edit"
-  );
 
 }
 
@@ -2412,7 +2167,7 @@ function feedback(type){
 
   toast(
     type === "like"
-      ? "Thanks for your feedback"
+      ? "Thanks for your feedback 👍"
       : "Thanks for your feedback"
   );
 
@@ -2423,105 +2178,21 @@ function feedback(type){
 
 async function shareAI(index){
 
-  const text =
-    conversation[index].content;
+  try{
 
+    await navigator.share({
 
-  if(
-    navigator.share
-  ){
+      title:
+        "RG Creator AI",
 
-    try{
+      text:
+        conversation[index].content
 
-      await navigator.share({
+    });
 
-        title:
-          "RG Creator AI",
+  }catch{
 
-        text:
-          text
-
-      });
-
-    }catch{}
-
-  }else{
-
-    await copyAI(index);
-
-  }
-
-}
-
-
-async function shareConversation(){
-
-  if(
-    !conversation.length
-  ){
-
-    toast(
-      "No conversation to share"
-    );
-
-    return;
-
-  }
-
-
-  const text =
-    conversation
-      .map(
-        item =>
-          (
-            item.role === "user"
-              ? "You: "
-              : "RG Creator AI: "
-          ) +
-          item.content
-      )
-      .join(
-        "\n\n"
-      );
-
-
-  if(
-    navigator.share
-  ){
-
-    try{
-
-      await navigator.share({
-
-        title:
-          "RG Creator AI",
-
-        text:
-          text
-
-      });
-
-    }catch{}
-
-  }else{
-
-    try{
-
-      await navigator.clipboard.writeText(
-        text
-      );
-
-      toast(
-        "Conversation copied"
-      );
-
-    }catch{
-
-      toast(
-        "Share unavailable"
-      );
-
-    }
+    copyAI(index);
 
   }
 
@@ -2532,35 +2203,35 @@ async function shareConversation(){
 
 async function regenerate(index){
 
-  let userMessage =
-    "";
-
-
-  for(
-    let i = index - 1;
-    i >= 0;
-    i--
+  if(
+    !conversation[index]
   ){
 
-    if(
-      conversation[i].role ===
-      "user"
-    ){
-
-      userMessage =
-        conversation[i].content;
-
-      break;
-
-    }
+    return;
 
   }
 
 
-  if(!userMessage){
+  let userIndex =
+    index - 1;
+
+
+  while(
+    userIndex >= 0 &&
+    conversation[userIndex].role !== "user"
+  ){
+
+    userIndex--;
+
+  }
+
+
+  if(
+    userIndex < 0
+  ){
 
     toast(
-      "No previous message found"
+      "No previous user message found"
     );
 
     return;
@@ -2568,8 +2239,12 @@ async function regenerate(index){
   }
 
 
+  const userMessage =
+    conversation[userIndex].content;
+
+
   conversation[index].content =
-    "Thinking...";
+    "Regenerating...";
 
 
   saveConversation();
@@ -2586,15 +2261,14 @@ async function regenerate(index){
           index
         )
         .map(
-          item => ({
+          function(item){
 
-            role:
-              item.role,
+            return {
+              role:item.role,
+              content:item.content
+            };
 
-            content:
-              item.content
-
-          })
+          }
         );
 
 
@@ -2602,9 +2276,7 @@ async function regenerate(index){
       await fetch(
         "/api/chat",
         {
-
-          method:
-            "POST",
+          method:"POST",
 
           headers:{
             "Content-Type":
@@ -2618,13 +2290,11 @@ async function regenerate(index){
                 userMessage,
 
               history:
-                history,
-
-              thinkMode:
-                thinkMode
+                history
 
             })
 
+          }
         }
       );
 
@@ -2646,128 +2316,25 @@ async function regenerate(index){
     }
 
 
-    conversation[index].content =
-      data.reply;
-
-
-    saveConversation();
-
-    renderConversation();
+    updateMessage(
+      index,
+      data.reply
+    );
 
 
   }catch(error){
 
-    conversation[index].content =
-      "Unable to regenerate response.\n\n" +
+    updateMessage(
+      index,
+
+      "Sorry, regeneration failed.\n\n" +
       (
         error.message ||
         "Server error"
-      );
-
-
-    saveConversation();
-
-    renderConversation();
-
-  }
-
-}
-
-
-/* ================= AI MORE ================= */
-
-function aiMore(index){
-
-  const option =
-    prompt(
-      "1 = Read aloud\n2 = Copy\n3 = Delete response\n4 = Save"
-    );
-
-
-  if(option === "1"){
-
-    readAloud(
-      conversation[index].content
+      )
     );
 
   }
-
-  else if(option === "2"){
-
-    copyAI(index);
-
-  }
-
-  else if(option === "3"){
-
-    conversation.splice(
-      index,
-      1
-    );
-
-    saveConversation();
-
-    renderConversation();
-
-    toast(
-      "Response deleted"
-    );
-
-  }
-
-  else if(option === "4"){
-
-    localStorage.setItem(
-
-      "rg_saved_" +
-      Date.now(),
-
-      conversation[index].content
-
-    );
-
-    toast(
-      "Saved"
-    );
-
-  }
-
-}
-
-
-/* ================= READ ALOUD ================= */
-
-function readAloud(text){
-
-  if(
-    !window.speechSynthesis
-  ){
-
-    toast(
-      "Read aloud is not supported"
-    );
-
-    return;
-
-  }
-
-
-  speechSynthesis.cancel();
-
-
-  const speech =
-    new SpeechSynthesisUtterance(
-      text
-    );
-
-
-  speech.rate =
-    1;
-
-
-  speechSynthesis.speak(
-    speech
-  );
 
 }
 
@@ -2779,76 +2346,165 @@ function newChat(){
   conversation =
     [];
 
-
-  localStorage.removeItem(
-    "rg_chat_title"
-  );
-
-
-  clearAttachment();
-
   saveConversation();
 
   renderConversation();
 
-  renderHistory();
-
   closeSidebar();
 
-  toast(
-    "New chat started"
-  );
+  focusInput();
 
 }
 
 
-/* ================= DELETE ================= */
+/* ================= HISTORY ================= */
 
-function deleteConversation(){
+function renderHistory(){
+
+  const history =
+    document.getElementById(
+      "history"
+    );
+
+  if(!history){
+
+    return;
+
+  }
+
+
+  const search =
+    (
+      document.getElementById(
+        "historySearch"
+      )?.value ||
+      ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+  history.innerHTML =
+    "";
+
 
   if(
     !conversation.length
   ){
 
-    toast(
-      "No conversation to delete"
-    );
+    history.innerHTML = `
+      <div
+        style="
+          padding:20px 10px;
+          color:#666;
+          font-size:12px;
+          text-align:center;
+        "
+      >
+        No chats yet
+      </div>
+    `;
 
     return;
 
   }
 
 
-  if(
-    !confirm(
-      "Delete this conversation?"
-    )
-  ){
-
-    return;
-
-  }
+  const seen =
+    new Set();
 
 
-  conversation =
-    [];
+  conversation.forEach(
+    function(item){
+
+      if(
+        item.role !== "user"
+      ){
+
+        return;
+
+      }
 
 
-  localStorage.removeItem(
-    "rg_chat_title"
-  );
+      const title =
+        (
+          item.content ||
+          "Image conversation"
+        )
+        .replace(
+          /\s+/g,
+          " "
+        )
+        .trim();
 
 
-  saveConversation();
+      if(
+        seen.has(title)
+      ){
 
-  renderConversation();
+        return;
 
-  renderHistory();
+      }
 
-  closeMore();
 
-  toast(
-    "Conversation deleted"
+      seen.add(title);
+
+
+      if(
+        search &&
+        !title
+          .toLowerCase()
+          .includes(search)
+      ){
+
+        return;
+
+      }
+
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+
+      row.className =
+        "history-item";
+
+
+      row.innerHTML = `
+
+        <span>💬</span>
+
+        <span class="history-name">
+          ${escapeHTML(title)}
+        </span>
+
+        <button
+          class="history-more"
+          onclick="event.stopPropagation();"
+        >
+          ⋮
+        </button>
+
+      `;
+
+
+      row.onclick =
+        function(){
+
+          closeSidebar();
+
+          renderConversation();
+
+        };
+
+
+      history.appendChild(
+        row
+      );
+
+    }
   );
 
 }
@@ -2858,9 +2514,6 @@ function deleteConversation(){
 
 function openSidebar(){
 
-  closeMore();
-
-
   document
     .getElementById(
       "sidebar"
@@ -2869,7 +2522,6 @@ function openSidebar(){
       "open"
     );
 
-
   document
     .getElementById(
       "overlay"
@@ -2877,6 +2529,8 @@ function openSidebar(){
     .classList.add(
       "show"
     );
+
+  closeMore();
 
 }
 
@@ -2891,7 +2545,6 @@ function closeSidebar(){
       "open"
     );
 
-
   document
     .getElementById(
       "overlay"
@@ -2899,1242 +2552,6 @@ function closeSidebar(){
     .classList.remove(
       "show"
     );
-
-}
-
-
-/* ================= HISTORY ================= */
-
-function renderHistory(){
-
-  const box =
-    document.getElementById(
-      "history"
-    );
-
-
-  const search =
-    document
-      .getElementById(
-        "historySearch"
-      )
-      .value
-      .toLowerCase();
-
-
-  box.innerHTML =
-    "";
-
-
-  if(
-    !conversation.length
-  ){
-
-    box.innerHTML = `
-
-      <div class="history-label">
-        Recent
-      </div>
-
-      <div
-        style="
-          padding:12px 8px;
-          color:#666;
-          font-size:12px;
-        "
-      >
-        No chats yet
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  const firstUser =
-    conversation.find(
-      item =>
-        item.role === "user"
-    );
-
-
-  const savedTitle =
-    localStorage.getItem(
-      "rg_chat_title"
-    );
-
-
-  const title =
-    savedTitle ||
-    (
-      firstUser
-        ? firstUser.content.slice(
-            0,
-            45
-          )
-        : "New Chat"
-    );
-
-
-  if(
-    !title
-      .toLowerCase()
-      .includes(search)
-  ){
-
-    return;
-
-  }
-
-
-  box.innerHTML = `
-
-    <div class="history-label">
-      Today
-    </div>
-
-
-    <div
-      class="history-item"
-      onclick="closeSidebar()"
-    >
-
-      💬
-
-      <span class="history-name">
-        ${escapeHTML(title)}
-      </span>
-
-
-      <button
-        class="history-more"
-        onclick="
-          event.stopPropagation();
-          renameChat();
-        "
-      >
-        ⋯
-      </button>
-
-    </div>
-
-  `;
-
-}
-
-
-function renameChat(){
-
-  const firstUser =
-    conversation.find(
-      item =>
-        item.role === "user"
-    );
-
-
-  const oldName =
-    localStorage.getItem(
-      "rg_chat_title"
-    ) ||
-    (
-      firstUser
-        ? firstUser.content.slice(
-            0,
-            45
-          )
-        : "New Chat"
-    );
-
-
-  const name =
-    prompt(
-      "Chat name:",
-      oldName
-    );
-
-
-  if(
-    !name ||
-    !name.trim()
-  ){
-
-    return;
-
-  }
-
-
-  localStorage.setItem(
-    "rg_chat_title",
-    name.trim()
-  );
-
-
-  renderHistory();
-
-}
-
-
-/* ================= PROJECTS ================= */
-
-function getProjects(){
-
-  try{
-
-    return JSON.parse(
-
-      localStorage.getItem(
-        "rg_creator_projects"
-      ) || "[]"
-
-    );
-
-  }catch{
-
-    return [];
-
-  }
-
-}
-
-
-function saveProjects(projects){
-
-  localStorage.setItem(
-
-    "rg_creator_projects",
-
-    JSON.stringify(
-      projects
-    )
-
-  );
-
-}
-
-
-function toggleProjects(){
-
-  const list =
-    document.getElementById(
-      "projectList"
-    );
-
-
-  if(!list){
-    return;
-  }
-
-
-  list.classList.toggle(
-    "open"
-  );
-
-
-  if(
-    list.classList.contains(
-      "open"
-    )
-  ){
-
-    renderProjects();
-
-  }
-
-}
-
-
-function renderProjects(){
-
-  const list =
-    document.getElementById(
-      "projectList"
-    );
-
-
-  if(!list){
-    return;
-  }
-
-
-  const projects =
-    getProjects();
-
-
-  list.innerHTML =
-    "";
-
-
-  projects.forEach(
-    function(project,index){
-
-      const button =
-        document.createElement(
-          "button"
-        );
-
-
-      button.className =
-        "project-item";
-
-
-      button.innerHTML = `
-
-        📁
-
-        <span style="flex:1;">
-          ${escapeHTML(
-            project.name
-          )}
-        </span>
-
-      `;
-
-
-      button.onclick =
-        function(){
-
-          openProject(index);
-
-        };
-
-
-      list.appendChild(
-        button
-      );
-
-    }
-  );
-
-
-  const create =
-    document.createElement(
-      "button"
-    );
-
-
-  create.className =
-    "project-item";
-
-
-  create.innerHTML =
-    "＋ Create project";
-
-
-  create.onclick =
-    createProject;
-
-
-  list.appendChild(
-    create
-  );
-
-}
-
-
-function createProject(){
-
-  const name =
-    prompt(
-      "Project name:"
-    );
-
-
-  if(
-    !name ||
-    !name.trim()
-  ){
-
-    return;
-
-  }
-
-
-  const projects =
-    getProjects();
-
-
-  projects.push({
-
-    id:
-      Date.now(),
-
-    name:
-      name.trim(),
-
-    notes:
-      "",
-
-    createdAt:
-      Date.now()
-
-  });
-
-
-  saveProjects(
-    projects
-  );
-
-
-  renderProjects();
-
-
-  document
-    .getElementById(
-      "projectList"
-    )
-    ?.classList.add(
-      "open"
-    );
-
-
-  toast(
-    "Project created"
-  );
-
-}
-
-
-function openProject(index){
-
-  const project =
-    getProjects()[index];
-
-
-  if(!project){
-    return;
-  }
-
-
-  openModal(
-
-    project.name,
-
-    `
-
-      <div class="modal-text">
-        Save important notes for this project.
-      </div>
-
-
-      <textarea
-        id="projectNotes"
-        style="
-          width:100%;
-          min-height:130px;
-          padding:10px;
-          border:1px solid #303030;
-          border-radius:11px;
-          background:#181818;
-          color:#fff;
-          outline:none;
-          resize:vertical;
-          font-family:inherit;
-        "
-        placeholder="Project notes..."
-      >${escapeHTML(
-        project.notes || ""
-      )}</textarea>
-
-
-      <button
-        class="modal-btn primary"
-        onclick="saveProjectNotes(${index})"
-      >
-        Save Project
-      </button>
-
-
-      <button
-        class="modal-btn"
-        onclick="deleteProject(${index})"
-      >
-        Delete Project
-      </button>
-
-    `
-
-  );
-
-}
-
-
-function saveProjectNotes(index){
-
-  const projects =
-    getProjects();
-
-
-  const notes =
-    document.getElementById(
-      "projectNotes"
-    );
-
-
-  if(
-    !projects[index] ||
-    !notes
-  ){
-
-    return;
-
-  }
-
-
-  projects[index].notes =
-    notes.value;
-
-
-  saveProjects(
-    projects
-  );
-
-
-  hideModal();
-
-  toast(
-    "Project saved"
-  );
-
-}
-
-
-function deleteProject(index){
-
-  const projects =
-    getProjects();
-
-
-  if(
-    !projects[index]
-  ){
-
-    return;
-
-  }
-
-
-  if(
-    !confirm(
-      "Delete this project?"
-    )
-  ){
-
-    return;
-
-  }
-
-
-  projects.splice(
-    index,
-    1
-  );
-
-
-  saveProjects(
-    projects
-  );
-
-
-  hideModal();
-
-  renderProjects();
-
-  toast(
-    "Project deleted"
-  );
-
-}
-
-
-/* ================= VOICE ================= */
-
-function startVoice(){
-
-  const Recognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
-
-
-  if(!Recognition){
-
-    toast(
-      "Voice input is not supported"
-    );
-
-    return;
-
-  }
-
-
-  const recognition =
-    new Recognition();
-
-
-  recognition.lang =
-    "en-IN";
-
-
-  recognition.interimResults =
-    false;
-
-
-  recognition.onstart =
-    function(){
-
-      toast(
-        "Listening..."
-      );
-
-    };
-
-
-  recognition.onresult =
-    function(event){
-
-      input.value =
-        event.results[0][0]
-          .transcript;
-
-
-      autoResize();
-
-      input.focus();
-
-    };
-
-
-  recognition.onerror =
-    function(){
-
-      toast(
-        "Voice input failed"
-      );
-
-    };
-
-
-  recognition.start();
-
-}
-
-
-/* ================= TOOLS ================= */
-
-function openTool(file){
-
-  window.location.href =
-    file;
-
-}
-
-
-/* ================= SETTINGS ================= */
-
-function openSettings(){
-
-  openModal(
-
-    "Settings",
-
-    `
-
-      <div class="modal-text">
-        Manage your RG Creator AI settings.
-      </div>
-
-
-      <button
-        class="modal-btn"
-        onclick="
-          toggleThinkMode();
-          hideModal();
-        "
-      >
-        🧠 Think Mode
-        —
-        ${thinkMode ? "On" : "Off"}
-      </button>
-
-
-      <button
-        class="modal-btn"
-        onclick="
-          toast('Appearance settings coming next');
-        "
-      >
-        Appearance
-      </button>
-
-
-      <button
-        class="modal-btn"
-        onclick="
-          toast('Privacy settings coming next');
-        "
-      >
-        Privacy & Data
-      </button>
-
-    `
-
-  );
-
-}
-
-
-/* ================= PROFILE ================= */
-
-function getProfile(){
-
-  try{
-
-    return JSON.parse(
-
-      localStorage.getItem(
-        "rg_creator_profile"
-      ) || "null"
-
-    );
-
-  }catch{
-
-    return null;
-
-  }
-
-}
-
-
-function loadProfile(){
-
-  const profile =
-    getProfile();
-
-
-  const avatar =
-    document.getElementById(
-      "sidebarProfileAvatar"
-    );
-
-
-  const name =
-    document.getElementById(
-      "sidebarProfileName"
-    );
-
-
-  const sub =
-    document.getElementById(
-      "sidebarProfileSub"
-    );
-
-
-  if(
-    !avatar ||
-    !name ||
-    !sub
-  ){
-
-    return;
-
-  }
-
-
-  if(profile){
-
-    avatar.innerHTML =
-      profile.image
-        ? `
-          <img
-            src="${profile.image}"
-            alt="Profile"
-          >
-        `
-        : "👤";
-
-
-    name.textContent =
-      profile.name ||
-      "User";
-
-
-    sub.textContent =
-      profile.email ||
-      "Account";
-
-  }else{
-
-    avatar.textContent =
-      "👤";
-
-
-    name.textContent =
-      "Log in / Sign up";
-
-
-    sub.textContent =
-      "Sync your chats";
-
-  }
-
-}
-
-
-/* ================= LOGIN ================= */
-
-function openLogin(){
-
-  const profile =
-    getProfile();
-
-
-  if(profile){
-
-    openModal(
-
-      "Profile",
-
-      `
-
-        <div
-          style="
-            text-align:center;
-            margin-bottom:15px;
-          "
-        >
-
-          <div
-            class="profile-avatar"
-            style="
-              width:76px;
-              height:76px;
-              min-width:76px;
-              margin:auto;
-              font-size:27px;
-            "
-          >
-
-            ${
-              profile.image
-                ? `
-                  <img
-                    src="${profile.image}"
-                    alt="Profile"
-                  >
-                `
-                : "👤"
-            }
-
-          </div>
-
-        </div>
-
-
-        <div
-          class="modal-text"
-          style="text-align:center;"
-        >
-
-          ${escapeHTML(
-            profile.name ||
-            "User"
-          )}
-
-          ${
-            profile.email
-              ? `
-                <br>
-                ${escapeHTML(
-                  profile.email
-                )}
-              `
-              : ""
-          }
-
-        </div>
-
-
-        <button
-          class="modal-btn primary"
-          onclick="chooseProfileImage()"
-        >
-          Change profile image
-        </button>
-
-
-        <button
-          class="modal-btn"
-          onclick="editProfile()"
-        >
-          Edit profile
-        </button>
-
-
-        <button
-          class="modal-btn"
-          onclick="logoutLocal()"
-        >
-          Log out
-        </button>
-
-      `
-
-    );
-
-
-    return;
-
-  }
-
-
-  openModal(
-
-    "Log in / Sign up",
-
-    `
-
-      <div class="modal-text">
-
-        Create your local profile now.
-        Real Google/Email authentication
-        will be connected separately.
-
-      </div>
-
-
-      <button
-        class="modal-btn primary"
-        onclick="
-          saveLocalProfile();
-          hideModal();
-        "
-      >
-        Continue
-      </button>
-
-    `
-
-  );
-
-}
-
-
-function editProfile(){
-
-  const profile =
-    getProfile() || {};
-
-
-  const name =
-    prompt(
-      "Your name:",
-      profile.name || ""
-    );
-
-
-  if(
-    !name ||
-    !name.trim()
-  ){
-
-    return;
-
-  }
-
-
-  const email =
-    prompt(
-      "Your email:",
-      profile.email || ""
-    ) || "";
-
-
-  localStorage.setItem(
-
-    "rg_creator_profile",
-
-    JSON.stringify({
-
-      name:
-        name.trim(),
-
-      email:
-        email.trim(),
-
-      image:
-        profile.image || ""
-
-    })
-
-  );
-
-
-  loadProfile();
-
-  hideModal();
-
-  toast(
-    "Profile updated"
-  );
-
-}
-
-
-function saveLocalProfile(){
-
-  const old =
-    getProfile() || {};
-
-
-  const name =
-    prompt(
-      "Your name:"
-    );
-
-
-  if(
-    !name ||
-    !name.trim()
-  ){
-
-    return;
-
-  }
-
-
-  const email =
-    prompt(
-      "Your email:"
-    ) || "";
-
-
-  localStorage.setItem(
-
-    "rg_creator_profile",
-
-    JSON.stringify({
-
-      name:
-        name.trim(),
-
-      email:
-        email.trim(),
-
-      image:
-        old.image || ""
-
-    })
-
-  );
-
-
-  loadProfile();
-
-  toast(
-    "Profile saved"
-  );
-
-}
-
-
-function chooseProfileImage(){
-
-  const picker =
-    document.createElement(
-      "input"
-    );
-
-
-  picker.type =
-    "file";
-
-
-  picker.accept =
-    "image/*";
-
-
-  picker.onchange =
-    function(){
-
-      const file =
-        picker.files?.[0];
-
-
-      if(!file){
-        return;
-      }
-
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload =
-        function(){
-
-          const old =
-            getProfile() || {};
-
-
-          localStorage.setItem(
-
-            "rg_creator_profile",
-
-            JSON.stringify({
-
-              name:
-                old.name ||
-                "User",
-
-              email:
-                old.email ||
-                "",
-
-              image:
-                String(
-                  reader.result || ""
-                )
-
-            })
-
-          );
-
-
-          loadProfile();
-
-          hideModal();
-
-          toast(
-            "Profile image updated"
-          );
-
-        };
-
-
-      reader.readAsDataURL(
-        file
-      );
-
-    };
-
-
-  picker.click();
-
-}
-
-
-function logoutLocal(){
-
-  localStorage.removeItem(
-    "rg_creator_profile"
-  );
-
-
-  loadProfile();
-
-  hideModal();
-
-  toast(
-    "Logged out"
-  );
-
-}
-
-
-/* ================= HELP ================= */
-
-function showHelp(){
-
-  closeMore();
-
-
-  openModal(
-
-    "Help",
-
-    `
-
-      <div class="modal-text">
-
-        Use the message box to chat with
-        RG Creator AI.
-
-        <br><br>
-
-        Use + for Image, Camera, Video,
-        File, PDF and Think.
-
-        <br><br>
-
-        Use 🎤 for voice input.
-
-        <br><br>
-
-        Use Projects to save project notes.
-
-      </div>
-
-    `
-
-  );
-
-}
-
-
-/* ================= FEEDBACK ================= */
-
-function showFeedback(){
-
-  closeMore();
-
-
-  const feedbackText =
-    prompt(
-      "Tell us your feedback:"
-    );
-
-
-  if(
-    feedbackText &&
-    feedbackText.trim()
-  ){
-
-    toast(
-      "Thanks for your feedback"
-    );
-
-  }
-
-}
-
-
-/* ================= ABOUT ================= */
-
-function showAbout(){
-
-  closeMore();
-
-
-  openModal(
-
-    "About RG Creator AI",
-
-    `
-
-      <div class="modal-text">
-
-        RG Creator AI is an AI-powered
-        creative workspace for chat,
-        images, writing, coding,
-        YouTube and Instagram tools.
-
-      </div>
-
-    `
-
-  );
 
 }
 
@@ -4167,11 +2584,39 @@ function closeMore(){
 }
 
 
+document.addEventListener(
+  "click",
+  function(event){
+
+    const menu =
+      document.getElementById(
+        "moreMenu"
+      );
+
+    const button =
+      event.target.closest(
+        ".header-right"
+      );
+
+    if(
+      menu &&
+      !menu.contains(event.target) &&
+      !button
+    ){
+
+      closeMore();
+
+    }
+
+  }
+);
+
+
 /* ================= MODAL ================= */
 
-function openModal(
+function showModal(
   title,
-  html
+  body
 ){
 
   document
@@ -4181,14 +2626,12 @@ function openModal(
     .textContent =
     title;
 
-
   document
     .getElementById(
       "modalBody"
     )
     .innerHTML =
-    html;
-
+    body;
 
   document
     .getElementById(
@@ -4228,39 +2671,303 @@ function closeModal(event){
 }
 
 
+/* ================= HELP ================= */
+
+function showHelp(){
+
+  closeMore();
+
+  showModal(
+    "Help",
+    `
+      <p>
+        Ask RG Creator AI anything.
+        You can also attach an image,
+        file or PDF using the + button.
+      </p>
+    `
+  );
+
+}
+
+
+/* ================= FEEDBACK ================= */
+
+function showFeedback(){
+
+  closeMore();
+
+  showModal(
+    "Feedback",
+    `
+      <p>
+        Tell us what you think about
+        RG Creator AI.
+      </p>
+
+      <textarea
+        id="feedbackText"
+        placeholder="Your feedback..."
+        rows="5"
+      ></textarea>
+
+      <button
+        class="modal-primary"
+        onclick="submitFeedback()"
+      >
+        Send Feedback
+      </button>
+    `
+  );
+
+}
+
+
+function submitFeedback(){
+
+  const text =
+    document.getElementById(
+      "feedbackText"
+    )?.value
+    .trim();
+
+
+  if(!text){
+
+    toast(
+      "Please enter feedback"
+    );
+
+    return;
+
+  }
+
+
+  hideModal();
+
+  toast(
+    "Thanks for your feedback"
+  );
+
+}
+
+
+/* ================= ABOUT ================= */
+
+function showAbout(){
+
+  closeMore();
+
+  showModal(
+    "RG Creator AI",
+    `
+      <p>
+        RG Creator AI is an AI assistant
+        and creator toolkit.
+      </p>
+
+      <p
+        style="
+          margin-top:10px;
+          color:#777;
+        "
+      >
+        Built for creators.
+      </p>
+    `
+  );
+
+}
+
+
+/* ================= DELETE ================= */
+
+function deleteConversation(){
+
+  closeMore();
+
+  if(
+    !conversation.length
+  ){
+
+    toast(
+      "Nothing to delete"
+    );
+
+    return;
+
+  }
+
+
+  showModal(
+    "Delete conversation?",
+    `
+      <p>
+        This will remove the current
+        conversation from this browser.
+      </p>
+
+      <button
+        class="modal-primary"
+        onclick="confirmDeleteConversation()"
+      >
+        Delete
+      </button>
+    `
+  );
+
+}
+
+
+function confirmDeleteConversation(){
+
+  conversation =
+    [];
+
+  saveConversation();
+
+  renderConversation();
+
+  renderHistory();
+
+  hideModal();
+
+  toast(
+    "Conversation deleted"
+  );
+
+}
+
+
+/* ================= SHARE CONVERSATION ================= */
+
+async function shareConversation(){
+
+  closeMore();
+
+  const text =
+    conversation
+      .map(
+        function(item){
+
+          return (
+            item.role.toUpperCase() +
+            ":\n" +
+            (
+              item.content ||
+              "[Image]"
+            )
+          );
+
+        }
+      )
+      .join(
+        "\n\n"
+      );
+
+
+  if(
+    !text
+  ){
+
+    toast(
+      "Nothing to share"
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    if(
+      navigator.share
+    ){
+
+      await navigator.share({
+
+        title:
+          "RG Creator AI",
+
+        text:
+          text
+
+      });
+
+    }else{
+
+      await navigator.clipboard.writeText(
+        text
+      );
+
+      toast(
+        "Conversation copied"
+      );
+
+    }
+
+  }catch{
+
+    toast(
+      "Share cancelled"
+    );
+
+  }
+
+}
+
+
+/* ================= AI MORE ================= */
+
+function aiMore(index){
+
+  showModal(
+    "Message",
+    `
+      <button
+        class="modal-primary"
+        onclick="copyAI(${index});hideModal()"
+      >
+        Copy response
+      </button>
+
+      <button
+        class="modal-primary"
+        style="
+          background:#252525;
+          color:#fff;
+        "
+        onclick="shareAI(${index});hideModal()"
+      >
+        Share response
+      </button>
+    `
+  );
+
+}
+
+
 /* ================= ICONS ================= */
 
 function copyIcon(){
 
   return `
-
     <svg
       class="icon"
       viewBox="0 0 24 24"
     >
-
       <rect
-        x="8"
-        y="8"
+        x="9"
+        y="9"
         width="11"
         height="11"
         rx="2"
       />
-
       <path
-        d="
-          M16 8V6
-          a2 2 0 0 0-2-2
-          H6
-          a2 2 0 0 0-2 2
-          v8
-          a2 2 0 0 0 2 2
-          h2
-        "
+        d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
       />
-
     </svg>
-
   `;
 
 }
@@ -4269,20 +2976,14 @@ function copyIcon(){
 function shareIcon(){
 
   return `
-
     <svg
       class="icon"
       viewBox="0 0 24 24"
     >
-
-      <path d="M12 15V3"/>
-
+      <path d="M12 3v12"/>
       <path d="m7 8 5-5 5 5"/>
-
-      <path d="M5 12v8h14v-8"/>
-
+      <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/>
     </svg>
-
   `;
 
 }
@@ -4291,34 +2992,17 @@ function shareIcon(){
 function refreshIcon(){
 
   return `
-
     <svg
       class="icon"
       viewBox="0 0 24 24"
     >
-
       <path
-        d="
-          M20 11
-          a8 8 0 0 0-14-4
-          L4 9
-        "
+        d="M20 11a8 8 0 1 0 1 4"
       />
-
-      <path d="M4 4v5h5"/>
-
       <path
-        d="
-          M4 13
-          a8 8 0 0 0 14 4
-          l2-2
-        "
+        d="M20 4v7h-7"
       />
-
-      <path d="M20 20v-5h-5"/>
-
     </svg>
-
   `;
 
 }
@@ -4327,32 +3011,26 @@ function refreshIcon(){
 function moreIcon(){
 
   return `
-
     <svg
       class="icon"
       viewBox="0 0 24 24"
     >
-
       <circle
         cx="5"
         cy="12"
-        r="1"
+        r="1.2"
       />
-
       <circle
         cx="12"
         cy="12"
-        r="1"
+        r="1.2"
       />
-
       <circle
         cx="19"
         cy="12"
-        r="1"
+        r="1.2"
       />
-
     </svg>
-
   `;
 
 }
@@ -4360,30 +3038,27 @@ function moreIcon(){
 
 /* ================= ESCAPE ================= */
 
-function escapeHTML(value){
+function escapeHTML(text){
 
-  return String(value)
-
+  return String(
+    text ?? ""
+  )
     .replace(
       /&/g,
       "&amp;"
     )
-
     .replace(
       /</g,
       "&lt;"
     )
-
     .replace(
       />/g,
       "&gt;"
     )
-
     .replace(
       /"/g,
       "&quot;"
     )
-
     .replace(
       /'/g,
       "&#039;"
@@ -4392,64 +3067,248 @@ function escapeHTML(value){
 }
 
 
-/* ================= OUTSIDE CLICK ================= */
+/* ================= TOOLS ================= */
 
-document.addEventListener(
-  "click",
-  function(event){
+function openTool(file){
 
-    const plus =
-      document.querySelector(
-        ".plus-wrap"
-      );
+  window.location.href =
+    file;
+
+}
 
 
-    const plusMenu =
-      document.getElementById(
-        "plusMenu"
-      );
+/* ================= SETTINGS ================= */
+
+function openSettings(){
+
+  showModal(
+    "Settings",
+    `
+      <label>
+        Appearance
+      </label>
+
+      <select
+        onchange="setTheme(this.value)"
+      >
+        <option value="dark">
+          Dark
+        </option>
+      </select>
+
+      <label>
+        Chat storage
+      </label>
+
+      <p
+        style="
+          margin-top:8px;
+          color:#777;
+        "
+      >
+        Conversations are currently
+        stored in this browser.
+      </p>
+    `
+  );
+
+}
 
 
-    if(
-      plusMenu &&
-      plusMenu.classList.contains(
-        "open"
-      ) &&
-      !plus.contains(
-        event.target
-      )
-    ){
+/* ================= THEME ================= */
 
-      closePlus();
+function setTheme(){
 
-    }
+  toast(
+    "Dark mode is active"
+  );
+
+}
 
 
-    const more =
-      document.getElementById(
-        "moreMenu"
-      );
+/* ================= LOGIN ================= */
+
+function openLogin(){
+
+  showModal(
+    "Log in / Sign up",
+    `
+      <p>
+        Login will be connected here.
+      </p>
+
+      <button
+        class="modal-primary"
+        onclick="hideModal()"
+      >
+        Continue
+      </button>
+    `
+  );
+
+}
 
 
-    if(
-      more &&
-      more.classList.contains(
-        "open"
-      ) &&
-      !event.target.closest(
-        ".header-right"
-      ) &&
-      !event.target.closest(
-        ".more-menu"
-      )
-    ){
+/* ================= VOICE ================= */
 
-      closeMore();
+function startVoice(){
 
-    }
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+  if(
+    !SpeechRecognition
+  ){
+
+    toast(
+      "Voice input is not supported in this browser."
+    );
+
+    return;
 
   }
-);
+
+
+  const recognition =
+    new SpeechRecognition();
+
+
+  recognition.lang =
+    "en-IN";
+
+  recognition.interimResults =
+    true;
+
+  recognition.continuous =
+    false;
+
+
+  recognition.onstart =
+    function(){
+
+      toast(
+        "Listening..."
+      );
+
+    };
+
+
+  recognition.onresult =
+    function(event){
+
+      let transcript =
+        "";
+
+      for(
+        let i =
+          event.resultIndex;
+
+        i <
+          event.results.length;
+
+        i++
+      ){
+
+        transcript +=
+          event.results[i][0].transcript;
+
+      }
+
+
+      input.value =
+        transcript;
+
+      autoResize();
+
+      input.focus();
+
+    };
+
+
+  recognition.onerror =
+    function(){
+
+      toast(
+        "Voice input failed"
+      );
+
+    };
+
+
+  recognition.start();
+
+}
+
+
+/* ================= ATTACHMENT CLEAR ================= */
+
+function clearAttachment(){
+
+  currentAttachment =
+    null;
+
+
+  const box =
+    document.getElementById(
+      "attachment"
+    );
+
+  const preview =
+    document.getElementById(
+      "attachmentPreview"
+    );
+
+  const name =
+    document.getElementById(
+      "attachmentName"
+    );
+
+
+  box.classList.remove(
+    "show"
+  );
+
+  preview.removeAttribute(
+    "src"
+  );
+
+  preview.style.display =
+    "none";
+
+  name.textContent =
+    "";
+
+
+  [
+    "imageInput",
+    "cameraInput",
+    "videoInput",
+    "fileInput",
+    "pdfInput"
+  ].forEach(
+    function(id){
+
+      const el =
+        document.getElementById(
+          id
+        );
+
+      if(el){
+
+        el.value =
+          "";
+
+      }
+
+    }
+  );
+
+}
+
+
+/* ================= END ================= */
 
 </script>
 
