@@ -7,14 +7,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const apiKey =
-      process.env.GEMINI_API_KEY ||
-      process.env.GOOGLE_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
       return res.status(500).json({
         ok: false,
-        error: "GEMINI_API_KEY is not configured in Vercel Environment Variables."
+        error: "GEMINI_API_KEY is missing."
       });
     }
 
@@ -38,31 +36,19 @@ export default async function handler(req, res) {
     if (!message && images.length === 0) {
       return res.status(400).json({
         ok: false,
-        error: "Message or image is required."
+        error: "Message or attachment is required."
       });
     }
-
-    /*
-     * =====================================================
-     * RG CREATOR AI
-     * Gemini chat + image understanding
-     * =====================================================
-     */
 
     const contents = [];
 
     /*
-     * Existing conversation history
+     * Previous conversation
      */
     for (const item of history) {
       if (!item || typeof item !== "object") {
         continue;
       }
-
-      const role =
-        item.role === "assistant"
-          ? "model"
-          : "user";
 
       const text =
         typeof item.content === "string"
@@ -74,7 +60,11 @@ export default async function handler(req, res) {
       }
 
       contents.push({
-        role,
+        role:
+          item.role === "assistant"
+            ? "model"
+            : "user",
+
         parts: [
           {
             text
@@ -84,18 +74,18 @@ export default async function handler(req, res) {
     }
 
     /*
-     * Current user message
+     * Current message
      */
-    const currentParts = [];
+    const parts = [];
 
     if (message) {
-      currentParts.push({
+      parts.push({
         text: message
       });
     }
 
     /*
-     * Image attachments
+     * Images
      */
     for (const image of images) {
       if (
@@ -111,208 +101,137 @@ export default async function handler(req, res) {
         String(image.mimeType);
 
       /*
-       * Gemini vision-compatible image types
+       * Gemini multimodal image input
        */
-      if (
-        !mimeType.startsWith("image/")
-      ) {
-        continue;
+      if (mimeType.startsWith("image/")) {
+        parts.push({
+          inline_data: {
+            mime_type: mimeType,
+            data: String(image.data)
+          }
+        });
       }
-
-      currentParts.push({
-        inline_data: {
-          mime_type: mimeType,
-          data: String(image.data)
-        }
-      });
     }
 
     /*
-     * If there is an image but no text,
-     * give Gemini a useful instruction.
+     * If only an image was uploaded
      */
-    if (
-      currentParts.length === 0 &&
-      images.length > 0
-    ) {
-      currentParts.push({
+    if (!message && parts.length > 0) {
+      parts.push({
         text:
-          "Please analyze and describe the uploaded image. Explain what you see and answer any relevant question about it."
+          "Analyze the uploaded image carefully and explain what you see."
       });
     }
 
     contents.push({
       role: "user",
-      parts: currentParts
+      parts
     });
 
     /*
-     * =====================================================
-     * GEMINI REQUEST
-     * =====================================================
-     *
-     * Use the current Gemini Flash model.
-     *
-     * Billing does NOT get enabled by this code.
-     * If the Google project has billing disabled,
-     * Gemini cannot automatically turn billing on.
+     * Stable multimodal Gemini model
      */
+    const model = "gemini-2.5-flash";
 
-    const model =
-      "gemini-3.6-flash";
+    const url =
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
-    const endpoint =
-      "https://generativelanguage.googleapis.com/v1beta/models/" +
-      model +
-      ":generateContent";
+    const response = await fetch(url, {
+      method: "POST",
 
-    const response =
-      await fetch(
-        endpoint,
-        {
-          method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": apiKey
+      },
 
-          headers: {
-            "Content-Type":
-              "application/json",
+      body: JSON.stringify({
+        contents,
 
-            "x-goog-api-key":
-              apiKey
-          },
+        systemInstruction: {
+          parts: [
+            {
+              text:
+                "You are RG Creator AI, a helpful AI assistant for creators. " +
+                "Answer clearly and naturally. " +
+                "Do not use unnecessary emojis. " +
+                "When an image is provided, analyze it instead of ignoring it. " +
+                "Help with general questions, content writing, YouTube, Instagram, coding and image understanding."
+            }
+          ]
+        },
 
-          body:
-            JSON.stringify({
-              contents,
-
-              systemInstruction: {
-                parts: [
-                  {
-                    text:
-                      [
-                        "You are RG Creator AI.",
-                        "You are a helpful AI assistant for creators.",
-                        "Answer clearly and naturally.",
-                        "Do not add unnecessary emojis.",
-                        "Use emojis only when they genuinely help.",
-                        "When the user uploads an image, actually analyze the image.",
-                        "If the user asks about text inside an image, read and explain it when possible.",
-                        "If the user asks for code, provide clean usable code.",
-                        "For creator requests, help with YouTube, Instagram, content writing and ideas.",
-                        "Do not claim you cannot see an uploaded image when image data was provided."
-                      ].join(" ")
-                  }
-                ]
-              },
-
-              generationConfig: {
-                temperature: 0.7,
-                maxOutputTokens: 4096
-              }
-            })
+        generationConfig: {
+          maxOutputTokens: 4096
         }
-      );
+      })
+    });
 
-    const rawText =
-      await response.text();
+    const raw = await response.text();
 
     let data;
 
     try {
-      data =
-        JSON.parse(rawText);
+      data = JSON.parse(raw);
     } catch {
       return res.status(502).json({
         ok: false,
-        error:
-          "Gemini returned an invalid response."
+        error: "Invalid response from Gemini."
       });
     }
 
     /*
-     * =====================================================
-     * GEMINI ERROR
-     * =====================================================
+     * Gemini API error
      */
-
     if (!response.ok) {
-      let errorMessage =
+      let error =
         data?.error?.message ||
         "Gemini API request failed.";
 
-      /*
-       * Friendly quota message.
-       */
       if (
         response.status === 429 ||
-        /quota|rate.?limit|resource.?exhausted/i.test(
-          errorMessage
-        )
+        /quota|rate.?limit|resource.?exhausted/i.test(error)
       ) {
-        errorMessage =
-          "Gemini free limit has been reached. Billing was not enabled. Please try again after the free quota resets.";
+        error =
+          "Gemini free quota/limit reached. Billing has not been enabled.";
       }
 
       return res.status(response.status).json({
         ok: false,
-        error: errorMessage
+        error
       });
     }
 
     /*
-     * =====================================================
-     * EXTRACT RESPONSE TEXT
-     * =====================================================
+     * Extract Gemini response
      */
+    let reply = "";
 
     const candidates =
-      Array.isArray(data.candidates)
+      Array.isArray(data?.candidates)
         ? data.candidates
         : [];
 
-    let reply = "";
-
     for (const candidate of candidates) {
-      const parts =
+      const responseParts =
         Array.isArray(candidate?.content?.parts)
           ? candidate.content.parts
           : [];
 
-      for (const part of parts) {
-        if (
-          typeof part?.text === "string"
-        ) {
+      for (const part of responseParts) {
+        if (typeof part?.text === "string") {
           reply += part.text;
         }
       }
     }
 
-    reply =
-      reply.trim();
-
-    /*
-     * Some Gemini responses may expose text
-     * in another field.
-     */
-    if (!reply) {
-      reply =
-        typeof data.text === "string"
-          ? data.text.trim()
-          : "";
-    }
+    reply = reply.trim();
 
     if (!reply) {
       return res.status(502).json({
         ok: false,
-        error:
-          "Gemini returned no text response."
+        error: "Gemini returned an empty response."
       });
     }
-
-    /*
-     * =====================================================
-     * SUCCESS
-     * =====================================================
-     */
 
     return res.status(200).json({
       ok: true,
@@ -320,10 +239,7 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error(
-      "RG Creator AI /api/chat error:",
-      error
-    );
+    console.error("RG Creator AI API ERROR:", error);
 
     return res.status(500).json({
       ok: false,
