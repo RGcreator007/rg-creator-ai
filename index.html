@@ -2621,6 +2621,2579 @@ button{
   messageInput.focus();
 
 })();
+  /* =====================================================
+   RG CREATOR AI — SAFE FRONTEND UPDATE
+   Existing HTML/CSS ko preserve rakho.
+===================================================== */
+
+let conversation = JSON.parse(
+  localStorage.getItem("rg_creator_conversation") || "[]"
+);
+
+let currentAttachment = null;
+let currentAttachmentData = null;
+let thinkMode = false;
+
+const input = document.getElementById("input");
+const messages = document.getElementById("messages");
+const welcome = document.getElementById("welcome");
+
+/* ================= INIT ================= */
+
+(function initRG(){
+
+  installLogo();
+  installThinkOption();
+  installCoreNavigation();
+  installMoreAccountItems();
+
+  renderConversation();
+  renderHistory();
+  autoResize();
+
+  bindExtraFeatures();
+
+})();
+
+/* ================= LOGO ================= */
+
+function installLogo(){
+
+  const welcomeLogo =
+    document.querySelector(".welcome-logo");
+
+  if(welcomeLogo){
+
+    welcomeLogo.innerHTML = `
+      <img
+        src="assets/rg-logo.jpg"
+        alt="RG Creator AI"
+        style="
+          width:100%;
+          height:100%;
+          border-radius:18px;
+          object-fit:cover;
+        "
+        onerror="
+          this.style.display='none';
+          this.parentElement.textContent='RG';
+        "
+      >
+    `;
+
+  }
+
+  const sidebarTitle =
+    document.querySelector(".sidebar-title");
+
+  if(
+    sidebarTitle &&
+    !sidebarTitle.querySelector("img")
+  ){
+
+    sidebarTitle.innerHTML = `
+      <img
+        src="assets/rg-logo.jpg"
+        alt="RG Creator AI"
+        style="
+          width:34px;
+          height:34px;
+          border-radius:10px;
+          object-fit:cover;
+          margin-right:8px;
+        "
+        onerror="this.style.display='none'"
+      >
+      <span>RG Creator AI</span>
+    `;
+
+    sidebarTitle.style.display = "flex";
+    sidebarTitle.style.alignItems = "center";
+
+  }
+
+}
+
+/* ================= THINK OPTION ================= */
+
+function installThinkOption(){
+
+  const plusMenu =
+    document.getElementById("plusMenu");
+
+  if(
+    !plusMenu ||
+    document.getElementById("thinkToggle")
+  ){
+    return;
+  }
+
+  const button =
+    document.createElement("button");
+
+  button.className = "plus-item";
+  button.id = "thinkToggle";
+  button.type = "button";
+
+  button.innerHTML =
+    "🧠 Think";
+
+  button.addEventListener(
+    "click",
+    toggleThink
+  );
+
+  plusMenu.appendChild(button);
+
+}
+
+function toggleThink(){
+
+  thinkMode =
+    !thinkMode;
+
+  const button =
+    document.getElementById(
+      "thinkToggle"
+    );
+
+  if(button){
+
+    button.style.background =
+      thinkMode
+        ? "#292929"
+        : "transparent";
+
+  }
+
+  closePlus();
+
+  toast(
+    thinkMode
+      ? "Think mode enabled"
+      : "Think mode disabled"
+  );
+
+}
+
+/* ================= CORE NAVIGATION ================= */
+
+function installCoreNavigation(){
+
+  const sidebar =
+    document.getElementById("sidebar");
+
+  if(
+    !sidebar ||
+    sidebar.dataset.rgCoreNav === "1"
+  ){
+    return;
+  }
+
+  sidebar.dataset.rgCoreNav = "1";
+
+  const labels =
+    Array.from(
+      sidebar.querySelectorAll(
+        ".history-label"
+      )
+    );
+
+  const toolsLabel =
+    labels.find(function(el){
+
+      return (
+        el.textContent
+          .trim()
+          .toLowerCase() ===
+        "tools"
+      );
+
+    });
+
+  if(!toolsLabel){
+    return;
+  }
+
+  const nav =
+    document.createElement("div");
+
+  nav.className =
+    "history";
+
+  nav.innerHTML = `
+
+    <div class="history-label">
+      Main Menu
+    </div>
+
+    <div
+      class="history-item"
+      id="rgHomeNav"
+    >
+      <span>🏠</span>
+      <span class="history-name">
+        Home
+      </span>
+    </div>
+
+    <div
+      class="history-item"
+      id="rgChatNav"
+    >
+      <span>💬</span>
+      <span class="history-name">
+        AI Chat
+      </span>
+    </div>
+
+  `;
+
+  toolsLabel.parentNode.insertBefore(
+    nav,
+    toolsLabel
+  );
+
+  document
+    .getElementById("rgHomeNav")
+    ?.addEventListener(
+      "click",
+      function(){
+
+        closeSidebar();
+
+        newChat();
+
+      }
+    );
+
+  document
+    .getElementById("rgChatNav")
+    ?.addEventListener(
+      "click",
+      function(){
+
+        closeSidebar();
+
+        focusInput();
+
+      }
+    );
+
+  /*
+   * Settings ko 3-dots menu me rakhenge.
+   * Login bottom me current location par rahega.
+   */
+
+  const bottomButtons =
+    Array.from(
+      sidebar.querySelectorAll(
+        ".sidebar-bottom-btn"
+      )
+    );
+
+  const settingsButton =
+    bottomButtons.find(
+      function(btn){
+
+        return btn.textContent
+          .toLowerCase()
+          .includes("settings");
+
+      }
+    );
+
+  if(settingsButton){
+
+    settingsButton.style.display =
+      "none";
+
+  }
+
+}
+
+/* ================= MORE MENU ACCOUNT ================= */
+
+function installMoreAccountItems(){
+
+  const menu =
+    document.getElementById(
+      "moreMenu"
+    );
+
+  if(
+    !menu ||
+    menu.dataset.rgAccounts === "1"
+  ){
+    return;
+  }
+
+  menu.dataset.rgAccounts = "1";
+
+  const settings =
+    document.createElement(
+      "button"
+    );
+
+  settings.className =
+    "more-item";
+
+  settings.type =
+    "button";
+
+  settings.textContent =
+    "⚙️  Settings";
+
+  settings.addEventListener(
+    "click",
+    function(){
+
+      closeMore();
+
+      openSettings();
+
+    }
+  );
+
+  const login =
+    document.createElement(
+      "button"
+    );
+
+  login.className =
+    "more-item";
+
+  login.type =
+    "button";
+
+  login.textContent =
+    "👤  Log in / Sign up";
+
+  login.addEventListener(
+    "click",
+    function(){
+
+      closeMore();
+
+      openLogin();
+
+    }
+  );
+
+  menu.appendChild(settings);
+  menu.appendChild(login);
+
+}
+
+/* ================= EXTRA BINDINGS ================= */
+
+function bindExtraFeatures(){
+
+  if(!input){
+    return;
+  }
+
+  input.addEventListener(
+    "input",
+    autoResize
+  );
+
+  input.addEventListener(
+    "keydown",
+    function(event){
+
+      if(
+        event.key === "Enter" &&
+        !event.shiftKey
+      ){
+
+        event.preventDefault();
+
+        sendMessage();
+
+      }
+
+    }
+  );
+
+}
+
+/* ================= TOAST ================= */
+
+function toast(text){
+
+  const el =
+    document.getElementById("toast");
+
+  if(!el){
+    return;
+  }
+
+  el.textContent =
+    text;
+
+  el.classList.add("show");
+
+  clearTimeout(
+    window.__rgToastTimer
+  );
+
+  window.__rgToastTimer =
+    setTimeout(
+      function(){
+
+        el.classList.remove(
+          "show"
+        );
+
+      },
+      2200
+    );
+
+}
+
+/* ================= INPUT ================= */
+
+function autoResize(){
+
+  if(!input){
+    return;
+  }
+
+  input.style.height =
+    "auto";
+
+  input.style.height =
+    Math.min(
+      input.scrollHeight,
+      150
+    ) + "px";
+
+}
+
+function focusInput(){
+
+  input?.focus();
+
+}
+
+/* ================= PLUS ================= */
+
+function togglePlus(){
+
+  document
+    .getElementById("plusMenu")
+    ?.classList.toggle(
+      "open"
+    );
+
+}
+
+function closePlus(){
+
+  document
+    .getElementById("plusMenu")
+    ?.classList.remove(
+      "open"
+    );
+
+}
+
+function pick(id){
+
+  closePlus();
+
+  document
+    .getElementById(id)
+    ?.click();
+
+}
+
+/* ================= FILE / IMAGE ================= */
+
+function handleFile(el){
+
+  if(
+    !el?.files?.length
+  ){
+    return;
+  }
+
+  const file =
+    el.files[0];
+
+  currentAttachment =
+    file;
+
+  currentAttachmentData =
+    null;
+
+  const name =
+    document.getElementById(
+      "attachmentName"
+    );
+
+  const box =
+    document.getElementById(
+      "attachment"
+    );
+
+  if(name){
+
+    name.textContent =
+      file.name;
+
+  }
+
+  if(box){
+
+    box.classList.add(
+      "show"
+    );
+
+  }
+
+  /*
+   * Image ko actual Base64 data me
+   * convert karke API ko bhejenge.
+   */
+
+  if(
+    file.type &&
+    file.type.startsWith(
+      "image/"
+    )
+  ){
+
+    const reader =
+      new FileReader();
+
+    reader.onload =
+      function(){
+
+        const result =
+          String(
+            reader.result || ""
+          );
+
+        const comma =
+          result.indexOf(",");
+
+        currentAttachmentData = {
+
+          mimeType:
+            file.type,
+
+          data:
+            comma >= 0
+              ? result.slice(
+                  comma + 1
+                )
+              : result,
+
+          preview:
+            result
+
+        };
+
+        showAttachmentPreview(
+          result
+        );
+
+        if(name){
+
+          name.textContent =
+            file.name;
+
+        }
+
+      };
+
+    reader.onerror =
+      function(){
+
+        currentAttachmentData =
+          null;
+
+        toast(
+          "Could not read the image"
+        );
+
+      };
+
+    reader.readAsDataURL(
+      file
+    );
+
+    return;
+
+  }
+
+  toast(
+    "Attached: " +
+    file.name
+  );
+
+}
+
+function showAttachmentPreview(
+  src
+){
+
+  const box =
+    document.getElementById(
+      "attachment"
+    );
+
+  if(!box){
+    return;
+  }
+
+  let img =
+    document.getElementById(
+      "attachmentPreview"
+    );
+
+  if(!img){
+
+    img =
+      document.createElement(
+        "img"
+      );
+
+    img.id =
+      "attachmentPreview";
+
+    img.alt =
+      "Selected image";
+
+    img.style.width =
+      "46px";
+
+    img.style.height =
+      "46px";
+
+    img.style.objectFit =
+      "cover";
+
+    img.style.borderRadius =
+      "9px";
+
+    img.style.border =
+      "1px solid #333";
+
+    box.insertBefore(
+      img,
+      box.firstChild
+    );
+
+  }
+
+  img.src =
+    src;
+
+  img.style.display =
+    "block";
+
+}
+
+function clearAttachment(){
+
+  currentAttachment =
+    null;
+
+  currentAttachmentData =
+    null;
+
+  const box =
+    document.getElementById(
+      "attachment"
+    );
+
+  const img =
+    document.getElementById(
+      "attachmentPreview"
+    );
+
+  const name =
+    document.getElementById(
+      "attachmentName"
+    );
+
+  if(box){
+
+    box.classList.remove(
+      "show"
+    );
+
+  }
+
+  if(img){
+
+    img.removeAttribute(
+      "src"
+    );
+
+    img.style.display =
+      "none";
+
+  }
+
+  if(name){
+
+    name.textContent =
+      "";
+
+  }
+
+  [
+    "imageInput",
+    "cameraInput",
+    "videoInput",
+    "fileInput",
+    "pdfInput"
+  ].forEach(
+    function(id){
+
+      const el =
+        document.getElementById(
+          id
+        );
+
+      if(el){
+
+        el.value =
+          "";
+
+      }
+
+    }
+  );
+
+}
+
+/* ================= SEND ================= */
+
+async function sendMessage(){
+
+  const text =
+    input.value.trim();
+
+  const image =
+    currentAttachmentData;
+
+  if(
+    !text &&
+    !image
+  ){
+
+    toast(
+      currentAttachment
+        ? "Write something about the attachment."
+        : "Write a message first."
+    );
+
+    return;
+
+  }
+
+  const displayImage =
+    image
+      ? {
+
+          mimeType:
+            image.mimeType,
+
+          data:
+            image.data,
+
+          preview:
+            image.preview
+
+        }
+      : null;
+
+  addMessage(
+    "user",
+    text ||
+      "Analyze this image",
+    displayImage
+  );
+
+  input.value =
+    "";
+
+  autoResize();
+
+  clearAttachment();
+
+  const thinkingIndex =
+    addMessage(
+      "assistant",
+      "Thinking..."
+    );
+
+  try{
+
+    const history =
+      conversation
+        .slice(
+          0,
+          thinkingIndex
+        )
+        .filter(
+          function(item){
+
+            return (
+              item.role === "user" ||
+              item.role === "assistant"
+            );
+
+          }
+        )
+        .map(
+          function(item){
+
+            return {
+
+              role:
+                item.role,
+
+              content:
+                item.content
+
+            };
+
+          }
+        );
+
+    const response =
+      await fetch(
+        "/api/chat",
+        {
+
+          method:
+            "POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              message:
+                text,
+
+              history:
+                history,
+
+              thinking:
+                thinkMode,
+
+              images:
+                image
+                  ? [
+                      {
+                        mimeType:
+                          image.mimeType,
+
+                        data:
+                          image.data
+                      }
+                    ]
+                  : []
+
+            })
+
+        }
+      );
+
+    const data =
+      await response
+        .json()
+        .catch(
+          function(){
+
+            return null;
+
+          }
+        );
+
+    if(
+      !response.ok ||
+      !data ||
+      !data.ok
+    ){
+
+      throw new Error(
+        data?.error ||
+        "AI request failed"
+      );
+
+    }
+
+    updateMessage(
+      thinkingIndex,
+      data.reply
+    );
+
+  }catch(error){
+
+    updateMessage(
+
+      thinkingIndex,
+
+      "Sorry, I couldn't complete that request.\n\n" +
+      (
+        error.message ||
+        "Server error"
+      )
+
+    );
+
+  }
+
+}
+
+/* ================= CONVERSATION ================= */
+
+function addMessage(
+  role,
+  content,
+  image
+){
+
+  conversation.push({
+
+    role:
+      role,
+
+    content:
+      content,
+
+    image:
+      image || null,
+
+    time:
+      Date.now()
+
+  });
+
+  saveConversation();
+
+  renderConversation();
+
+  return (
+    conversation.length - 1
+  );
+
+}
+
+function updateMessage(
+  index,
+  content
+){
+
+  if(
+    !conversation[index]
+  ){
+
+    return;
+
+  }
+
+  conversation[index].content =
+    content;
+
+  saveConversation();
+
+  renderConversation();
+
+}
+
+function saveConversation(){
+
+  localStorage.setItem(
+
+    "rg_creator_conversation",
+
+    JSON.stringify(
+      conversation
+    )
+
+  );
+
+}
+
+/* ================= RENDER ================= */
+
+function renderConversation(){
+
+  if(!messages){
+    return;
+  }
+
+  if(
+    !conversation.length
+  ){
+
+    messages.innerHTML =
+      welcome
+        ? welcome.outerHTML
+        : "";
+
+    return;
+
+  }
+
+  messages.innerHTML =
+    "";
+
+  conversation.forEach(
+    function(item,index){
+
+      const wrapper =
+        document.createElement(
+          "div"
+        );
+
+      wrapper.className =
+        "message " +
+        (
+          item.role === "user"
+            ? "user-message"
+            : "ai-message"
+        );
+
+      if(
+        item.role === "user"
+      ){
+
+        let imageHTML =
+          "";
+
+        if(
+          item.image &&
+          item.image.preview
+        ){
+
+          imageHTML = `
+
+            <img
+              class="message-image"
+              src="${item.image.preview}"
+              alt="Uploaded image"
+              style="
+                display:block;
+                max-width:330px;
+                max-height:330px;
+                object-fit:contain;
+                border-radius:15px;
+                border:1px solid #2b2b2b;
+                margin-bottom:7px;
+              "
+            >
+
+          `;
+
+        }
+
+        wrapper.innerHTML = `
+
+          ${imageHTML}
+
+          <div class="user-bubble">
+
+            ${escapeHTML(
+              item.content || ""
+            )}
+
+          </div>
+
+          <div
+            class="message-actions user-actions"
+            style="
+              justify-content:flex-end;
+            "
+          >
+
+            <button
+              class="action-btn"
+              onclick="copyUser(${index})"
+              title="Copy"
+            >
+              ${copyIcon()}
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="editUser(${index})"
+              title="Edit"
+            >
+              ✎
+            </button>
+
+          </div>
+
+        `;
+
+      }else{
+
+        wrapper.innerHTML = `
+
+          <div class="ai-content">
+
+            ${formatAI(
+              item.content || ""
+            )}
+
+          </div>
+
+          <div class="message-actions">
+
+            <button
+              class="action-btn"
+              onclick="copyAI(${index})"
+              title="Copy"
+            >
+              ${copyIcon()}
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="feedback('like')"
+              title="Like"
+            >
+              👍
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="feedback('dislike')"
+              title="Dislike"
+            >
+              👎
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="shareAI(${index})"
+              title="Share"
+            >
+              ${shareIcon()}
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="regenerate(${index})"
+              title="Regenerate"
+            >
+              ${refreshIcon()}
+            </button>
+
+            <button
+              class="action-btn"
+              onclick="aiMore(${index})"
+              title="More"
+            >
+              ${moreIcon()}
+            </button>
+
+          </div>
+
+        `;
+
+      }
+
+      messages.appendChild(
+        wrapper
+      );
+
+    }
+  );
+
+  requestAnimationFrame(
+    function(){
+
+      messages.scrollTop =
+        messages.scrollHeight;
+
+    }
+  );
+
+}
+
+function formatAI(text){
+
+  return escapeHTML(
+    text
+  );
+
+}
+
+/* ================= USER ACTIONS ================= */
+
+function copyUser(index){
+
+  const text =
+    conversation[index]?.content ||
+    "";
+
+  navigator.clipboard
+    .writeText(text)
+    .then(
+      function(){
+
+        toast(
+          "Copied"
+        );
+
+      }
+    )
+    .catch(
+      function(){
+
+        toast(
+          "Copy failed"
+        );
+
+      }
+    );
+
+}
+
+function editUser(index){
+
+  if(
+    !conversation[index]
+  ){
+
+    return;
+
+  }
+
+  input.value =
+    conversation[index]
+      .content || "";
+
+  autoResize();
+
+  input.focus();
+
+  toast(
+    "Message ready to edit"
+  );
+
+}
+
+/* ================= AI ACTIONS ================= */
+
+async function copyAI(index){
+
+  try{
+
+    await navigator.clipboard
+      .writeText(
+        conversation[index]
+          .content || ""
+      );
+
+    toast(
+      "Copied"
+    );
+
+  }catch{
+
+    toast(
+      "Copy failed"
+    );
+
+  }
+
+}
+
+function feedback(type){
+
+  toast(
+    "Thanks for your feedback"
+  );
+
+}
+
+async function shareAI(index){
+
+  const text =
+    conversation[index]?.content ||
+    "";
+
+  if(
+    navigator.share
+  ){
+
+    try{
+
+      await navigator.share({
+
+        title:
+          "RG Creator AI",
+
+        text:
+          text
+
+      });
+
+      return;
+
+    }catch{}
+
+  }
+
+  copyAI(index);
+
+}
+
+async function shareConversation(){
+
+  if(
+    !conversation.length
+  ){
+
+    toast(
+      "No conversation to share"
+    );
+
+    return;
+
+  }
+
+  const text =
+    conversation
+      .map(
+        function(item){
+
+          return (
+
+            item.role === "user"
+              ? "You: "
+              : "RG Creator AI: "
+
+          ) +
+          item.content;
+
+        }
+      )
+      .join(
+        "\n\n"
+      );
+
+  if(
+    navigator.share
+  ){
+
+    try{
+
+      await navigator.share({
+
+        title:
+          "RG Creator AI",
+
+        text:
+          text
+
+      });
+
+      return;
+
+    }catch{}
+
+  }
+
+  try{
+
+    await navigator.clipboard
+      .writeText(text);
+
+    toast(
+      "Conversation copied"
+    );
+
+  }catch{
+
+    toast(
+      "Share unavailable"
+    );
+
+  }
+
+}
+
+/* ================= REGENERATE ================= */
+
+async function regenerate(index){
+
+  let userMessage =
+    "";
+
+  for(
+    let i =
+      index - 1;
+
+    i >= 0;
+
+    i--
+  ){
+
+    if(
+      conversation[i].role ===
+      "user"
+    ){
+
+      userMessage =
+        conversation[i]
+          .content || "";
+
+      break;
+
+    }
+
+  }
+
+  if(!userMessage){
+
+    toast(
+      "No previous user message found"
+    );
+
+    return;
+
+  }
+
+  conversation[index].content =
+    "Regenerating...";
+
+  saveConversation();
+
+  renderConversation();
+
+  try{
+
+    const history =
+      conversation
+        .slice(
+          0,
+          index
+        )
+        .map(
+          function(item){
+
+            return {
+
+              role:
+                item.role,
+
+              content:
+                item.content
+
+            };
+
+          }
+        );
+
+    const response =
+      await fetch(
+        "/api/chat",
+        {
+
+          method:
+            "POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              message:
+                userMessage,
+
+              history:
+                history,
+
+              thinking:
+                thinkMode,
+
+              images:
+                []
+
+            })
+
+        }
+      );
+
+    const data =
+      await response
+        .json()
+        .catch(
+          function(){
+
+            return null;
+
+          }
+        );
+
+    if(
+      !response.ok ||
+      !data?.ok
+    ){
+
+      throw new Error(
+        data?.error ||
+        "Regeneration failed"
+      );
+
+    }
+
+    conversation[index].content =
+      data.reply;
+
+    saveConversation();
+
+    renderConversation();
+
+  }catch(error){
+
+    conversation[index].content =
+      "Unable to regenerate response.\n\n" +
+      (
+        error.message ||
+        "Server error"
+      );
+
+    saveConversation();
+
+    renderConversation();
+
+  }
+
+}
+
+/* ================= AI MORE ================= */
+
+function aiMore(index){
+
+  const option =
+    prompt(
+
+      "Choose:\n\n" +
+
+      "1 = Copy\n" +
+
+      "2 = Regenerate\n" +
+
+      "3 = Read aloud\n" +
+
+      "4 = Share\n" +
+
+      "5 = Save to Favorites\n" +
+
+      "6 = Delete response\n" +
+
+      "7 = Report"
+
+    );
+
+  if(
+    option === "1"
+  ){
+
+    copyAI(index);
+
+  }else if(
+    option === "2"
+  ){
+
+    regenerate(index);
+
+  }else if(
+    option === "3"
+  ){
+
+    readAloud(
+      conversation[index]
+        .content
+    );
+
+  }else if(
+    option === "4"
+  ){
+
+    shareAI(index);
+
+  }else if(
+    option === "5"
+  ){
+
+    localStorage.setItem(
+
+      "rg_favorite_" +
+      Date.now(),
+
+      conversation[index]
+        .content
+
+    );
+
+    toast(
+      "Saved to Favorites"
+    );
+
+  }else if(
+    option === "6"
+  ){
+
+    conversation.splice(
+      index,
+      1
+    );
+
+    saveConversation();
+
+    renderConversation();
+
+    toast(
+      "Response deleted"
+    );
+
+  }else if(
+    option === "7"
+  ){
+
+    toast(
+      "Report submitted"
+    );
+
+  }
+
+}
+
+/* ================= READ ALOUD ================= */
+
+function readAloud(text){
+
+  if(
+    !window.speechSynthesis
+  ){
+
+    toast(
+      "Read aloud is not supported"
+    );
+
+    return;
+
+  }
+
+  speechSynthesis.cancel();
+
+  speechSynthesis.speak(
+
+    new SpeechSynthesisUtterance(
+      text
+    )
+
+  );
+
+}
+
+/* ================= NEW CHAT ================= */
+
+function newChat(){
+
+  conversation =
+    [];
+
+  localStorage.removeItem(
+    "rg_chat_title"
+  );
+
+  saveConversation();
+
+  renderConversation();
+
+  renderHistory();
+
+  closeSidebar();
+
+  toast(
+    "New chat started"
+  );
+
+}
+
+/* ================= DELETE ================= */
+
+function deleteConversation(){
+
+  if(
+    !conversation.length
+  ){
+
+    toast(
+      "No conversation to delete"
+    );
+
+    return;
+
+  }
+
+  if(
+    !confirm(
+      "Delete this conversation?"
+    )
+  ){
+
+    return;
+
+  }
+
+  conversation =
+    [];
+
+  saveConversation();
+
+  renderConversation();
+
+  renderHistory();
+
+  closeMore();
+
+  toast(
+    "Conversation deleted"
+  );
+
+}
+
+/* ================= SIDEBAR ================= */
+
+function openSidebar(){
+
+  closeMore();
+
+  document
+    .getElementById(
+      "sidebar"
+    )
+    ?.classList.add(
+      "open"
+    );
+
+  document
+    .getElementById(
+      "overlay"
+    )
+    ?.classList.add(
+      "show"
+    );
+
+}
+
+function closeSidebar(){
+
+  document
+    .getElementById(
+      "sidebar"
+    )
+    ?.classList.remove(
+      "open"
+    );
+
+  document
+    .getElementById(
+      "overlay"
+    )
+    ?.classList.remove(
+      "show"
+    );
+
+}
+
+/* ================= HISTORY ================= */
+
+function renderHistory(){
+
+  const box =
+    document.getElementById(
+      "history"
+    );
+
+  const searchEl =
+    document.getElementById(
+      "historySearch"
+    );
+
+  if(!box){
+    return;
+  }
+
+  const search =
+    (
+      searchEl?.value ||
+      ""
+    )
+      .toLowerCase();
+
+  box.innerHTML =
+    "";
+
+  if(
+    !conversation.length
+  ){
+
+    box.innerHTML = `
+
+      <div class="history-label">
+        Today
+      </div>
+
+      <div
+        style="
+          padding:12px 8px;
+          color:#666;
+          font-size:12px;
+        "
+      >
+        No chats yet
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+  const firstUser =
+    conversation.find(
+      function(item){
+
+        return (
+          item.role ===
+          "user"
+        );
+
+      }
+    );
+
+  const savedTitle =
+    localStorage.getItem(
+      "rg_chat_title"
+    );
+
+  const title =
+    savedTitle ||
+    (
+      firstUser
+        ? firstUser.content
+            .slice(
+              0,
+              45
+            )
+        : "New Chat"
+    );
+
+  if(
+    search &&
+    !title
+      .toLowerCase()
+      .includes(search)
+  ){
+
+    return;
+
+  }
+
+  box.innerHTML = `
+
+    <div class="history-label">
+      Today
+    </div>
+
+    <div
+      class="history-item"
+      onclick="closeSidebar()"
+    >
+
+      <span>💬</span>
+
+      <span class="history-name">
+        ${escapeHTML(title)}
+      </span>
+
+      <button
+        class="history-more"
+        onclick="
+          event.stopPropagation();
+          renameChat();
+        "
+        title="Chat actions"
+      >
+        ⋯
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+function renameChat(){
+
+  const firstUser =
+    conversation.find(
+      function(item){
+
+        return (
+          item.role ===
+          "user"
+        );
+
+      }
+    );
+
+  const oldName =
+    localStorage.getItem(
+      "rg_chat_title"
+    ) ||
+    (
+      firstUser
+        ? firstUser.content
+            .slice(
+              0,
+              45
+            )
+        : "New Chat"
+    );
+
+  const name =
+    prompt(
+      "Chat name:",
+      oldName
+    );
+
+  if(
+    !name?.trim()
+  ){
+
+    return;
+
+  }
+
+  localStorage.setItem(
+    "rg_chat_title",
+    name.trim()
+  );
+
+  renderHistory();
+
+  toast(
+    "Chat renamed"
+  );
+
+}
+
+/* ================= VOICE ================= */
+
+function startVoice(){
+
+  const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if(!Recognition){
+
+    toast(
+      "Voice input is not supported"
+    );
+
+    return;
+
+  }
+
+  const recognition =
+    new Recognition();
+
+  recognition.lang =
+    "en-IN";
+
+  recognition.interimResults =
+    false;
+
+  recognition.maxAlternatives =
+    1;
+
+  recognition.onstart =
+    function(){
+
+      toast(
+        "Listening..."
+      );
+
+    };
+
+  recognition.onresult =
+    function(event){
+
+      input.value =
+        event.results[0][0]
+          .transcript;
+
+      autoResize();
+
+      input.focus();
+
+    };
+
+  recognition.onerror =
+    function(){
+
+      toast(
+        "Voice input failed"
+      );
+
+    };
+
+  recognition.start();
+
+}
+
+/* ================= TOOLS ================= */
+
+function openTool(file){
+
+  window.location.href =
+    file;
+
+}
+
+/* ================= SETTINGS ================= */
+
+function openSettings(){
+
+  openModal(
+
+    "Settings",
+
+    `
+
+      <div class="modal-text">
+
+        Manage your RG Creator AI settings.
+
+      </div>
+
+      <button
+        class="modal-btn"
+        onclick="
+          toast(
+            'Appearance settings coming next'
+          );
+        "
+      >
+        🌙 Appearance
+      </button>
+
+      <button
+        class="modal-btn"
+        onclick="
+          toast(
+            'Chat settings coming next'
+          );
+        "
+      >
+        💬 Chat Settings
+      </button>
+
+      <button
+        class="modal-btn"
+        onclick="
+          toast(
+            'Privacy settings coming next'
+          );
+        "
+      >
+        🔒 Privacy & Data
+      </button>
+
+    `
+
+  );
+
+}
+
+/* ================= LOGIN ================= */
+
+function openLogin(){
+
+  openModal(
+
+    "Log in / Sign up",
+
+    `
+
+      <div class="modal-text">
+
+        Log in to sync your chats and creator
+        workspace across devices.
+
+      </div>
+
+      <button
+        class="modal-btn primary"
+        onclick="
+          toast(
+            'Google login will be connected in the authentication step'
+          );
+        "
+      >
+        Continue with Google
+      </button>
+
+      <button
+        class="modal-btn"
+        onclick="
+          toast(
+            'Email login will be connected in the authentication step'
+          );
+        "
+      >
+        Continue with Email
+      </button>
+
+      <button
+        class="modal-btn"
+        onclick="
+          toast(
+            'Create account will be connected in the authentication step'
+          );
+        "
+      >
+        Create account
+      </button>
+
+    `
+
+  );
+
+}
+
+/* ================= HELP ================= */
+
+function showHelp(){
+
+  closeMore();
+
+  openModal(
+
+    "Help",
+
+    `
+
+      <div class="modal-text">
+
+        Use the message box to chat with
+        RG Creator AI.
+
+        <br><br>
+
+        Use + to attach an image, camera photo,
+        video, file or PDF.
+
+        <br><br>
+
+        Use 🧠 Think for deeper reasoning
+        and 🎤 for voice input.
+
+      </div>
+
+      <button
+        class="modal-btn"
+        onclick="hideModal()"
+      >
+        Close
+      </button>
+
+    `
+
+  );
+
+}
+
+/* ================= FEEDBACK ================= */
+
+function showFeedback(){
+
+  closeMore();
+
+  const value =
+    prompt(
+      "Tell us your feedback:"
+    );
+
+  if(
+    value?.trim()
+  ){
+
+    toast(
+      "Thanks for your feedback"
+    );
+
+  }
+
+}
+
+/* ================= ABOUT ================= */
+
+function showAbout(){
+
+  closeMore();
+
+  openModal(
+
+    "About RG Creator AI",
+
+    `
+
+      <div class="modal-text">
+
+        RG Creator AI is an AI-powered
+        creative workspace for chat, images,
+        writing, coding, YouTube and Instagram tools.
+
+      </div>
+
+      <button
+        class="modal-btn"
+        onclick="hideModal()"
+      >
+        Close
+      </button>
+
+    `
+
+  );
+
+}
+
+/* ================= MORE ================= */
+
+function toggleMore(){
+
+  document
+    .getElementById(
+      "moreMenu"
+    )
+    ?.classList.toggle(
+      "open"
+    );
+
+}
+
+function closeMore(){
+
+  document
+    .getElementById(
+      "moreMenu"
+    )
+    ?.classList.remove(
+      "open"
+    );
+
+}
+
+/* ================= MODAL ================= */
+
+function openModal(
+  title,
+  html
+){
+
+  document
+    .getElementById(
+      "modalTitle"
+    )
+    .textContent =
+    title;
+
+  document
+    .getElementById(
+      "modalBody"
+    )
+    .innerHTML =
+    html;
+
+  document
+    .getElementById(
+      "modalBackdrop"
+    )
+    .classList.add(
+      "show"
+    );
+
+}
+
+function hideModal(){
+
+  document
+    .getElementById(
+      "modalBackdrop"
+    )
+    ?.classList.remove(
+      "show"
+    );
+
+}
+
+function closeModal(
+  event
+){
+
+  if(
+    event.target.id ===
+    "modalBackdrop"
+  ){
+
+    hideModal();
+
+  }
+
+}
+
+/* ================= ICONS ================= */
+
+function copyIcon(){
+
+  return `
+
+    <svg
+      class="icon"
+      viewBox="0 0 24 24"
+    >
+
+      <rect
+        x="8"
+        y="8"
+        width="11"
+        height="11"
+        rx="2"
+      />
+
+      <path
+        d="
+          M16 8V6
+          a2 2 0 0 0-2-2
+          H6
+          a2 2 0 0 0-2 2
+          v8
+          a2 2 0 0 0 2 2
+          h2
+        "
+      />
+
+    </svg>
+
+  `;
+
+}
+
+function shareIcon(){
+
+  return `
+
+    <svg
+      class="icon"
+      viewBox="0 0 24 24"
+    >
+
+      <path
+        d="M12 15V3"
+      />
+
+      <path
+        d="m7 8 5-5 5 5"
+      />
+
+      <path
+        d="M5 12v8h14v-8"
+      />
+
+    </svg>
+
+  `;
+
+}
+
+function refreshIcon(){
+
+  return `
+
+    <svg
+      class="icon"
+      viewBox="0 0 24 24"
+    >
+
+      <path
+        d="
+          M20 11
+          a8 8 0 0 0-14-4
+          L4 9
+        "
+      />
+
+      <path
+        d="M4 4v5h5"
+      />
+
+      <path
+        d="
+          M4 13
+          a8 8 0 0 0 14 4
+          l2-2
+        "
+      />
+
+      <path
+        d="M20 20v-5h-5"
+      />
+
+    </svg>
+
+  `;
+
+}
+
+function moreIcon(){
+
+  return `
+
+    <svg
+      class="icon"
+      viewBox="0 0 24 24"
+    >
+
+      <circle
+        cx="5"
+        cy="12"
+        r="1"
+      />
+
+      <circle
+        cx="12"
+        cy="12"
+        r="1"
+      />
+
+      <circle
+        cx="19"
+        cy="12"
+        r="1"
+      />
+
+    </svg>
+
+  `;
+
+}
+
+/* ================= ESCAPE ================= */
+
+function escapeHTML(
+  value
+){
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+/* ================= OUTSIDE CLICK ================= */
+
+document.addEventListener(
+  "click",
+  function(event){
+
+    const plus =
+      document.querySelector(
+        ".plus-wrap"
+      );
+
+    const plusMenu =
+      document.getElementById(
+        "plusMenu"
+      );
+
+    if(
+      plusMenu?.classList.contains(
+        "open"
+      ) &&
+      plus &&
+      !plus.contains(
+        event.target
+      )
+    ){
+
+      closePlus();
+
+    }
+
+    const more =
+      document.getElementById(
+        "moreMenu"
+      );
+
+    if(
+      more?.classList.contains(
+        "open"
+      ) &&
+      !event.target.closest(
+        ".header-right"
+      ) &&
+      !event.target.closest(
+        ".more-menu"
+      )
+    ){
+
+      closeMore();
+
+    }
+
+  }
+);
 </script>
 
 </body>
