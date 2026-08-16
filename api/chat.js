@@ -1,370 +1,596 @@
-const MODEL = "gemini-3.6-flash";
+const DEFAULT_MODEL = "gemini-3.6-flash";
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({
-      ok: false,
-      error: "Method not allowed"
-    });
+function cleanBase64(value) {
+
+  if (
+    typeof value !== "string"
+  ) {
+    return "";
   }
 
-  try {
-    const apiKey = process.env.GEMINI_API_KEY;
+  const text =
+    value.trim();
 
-    if (!apiKey) {
-      return res.status(500).json({
-        ok: false,
-        error: "GEMINI_API_KEY is not configured in Vercel Environment Variables."
-      });
-    }
+  if (
+    text.startsWith("data:")
+  ) {
 
-    const body = req.body || {};
+    const comma =
+      text.indexOf(",");
 
-    const message =
-      typeof body.message === "string"
-        ? body.message.trim()
-        : "";
+    return comma >= 0
+      ? text.slice(
+          comma + 1
+        )
+      : "";
 
-    const history =
-      Array.isArray(body.history)
-        ? body.history
-        : [];
+  }
 
-    const images =
-      Array.isArray(body.images)
-        ? body.images
-        : [];
+  return text;
+}
 
-    if (!message && images.length === 0) {
-      return res.status(400).json({
-        ok: false,
-        error: "Message or image is required."
-      });
-    }
+function normalizeHistory(
+  history
+) {
 
-    /*
-     * RG Creator AI system instruction
-     */
-    const systemInstruction = {
-      parts: [
-        {
-          text: `
-You are RG Creator AI.
+  if (
+    !Array.isArray(history)
+  ) {
 
-You are a helpful, intelligent and natural AI assistant.
+    return [];
 
-Answer the user's questions clearly and directly.
-Do not add emojis to every response. Use emojis only when they are genuinely useful.
+  }
 
-If the user provides an image:
-- Actually analyze the image.
-- Identify visible objects, people, text, scenes, designs or other relevant details.
-- Answer the user's question based on the image.
-- If the user asks what is in the image, describe it.
-- If the user asks to read text from the image, extract the visible text.
-- If the user asks for an opinion about the image, provide a useful answer.
-- Never pretend that an image was not provided when image data is available.
+  return history
 
-If the user asks for code, provide clean and useful code.
-If the user asks for explanations, explain in a simple way.
+    .filter(
+      function(item){
 
-You are RG Creator AI, not Gemini. Do not unnecessarily mention the underlying model.
-          `.trim()
-        }
-      ]
-    };
+        return (
+          item &&
+          typeof item.content === "string" &&
+          item.content.trim()
+        );
 
-    /*
-     * Build conversation history
-     */
-    const contents = [];
+      }
+    )
 
-    for (const item of history) {
-      if (!item || typeof item !== "object") {
+    .map(
+      function(item){
+
+        return {
+
+          /*
+           * Gemini uses:
+           * user / model
+           */
+
+          role:
+            item.role === "assistant" ||
+            item.role === "model"
+              ? "model"
+              : "user",
+
+          parts:[
+            {
+              text:
+                item.content.trim()
+            }
+          ]
+
+        };
+
+      }
+    );
+
+}
+
+function buildUserParts(
+  message,
+  images
+) {
+
+  const parts =
+    [];
+
+  if(
+    typeof message === "string" &&
+    message.trim()
+  ){
+
+    parts.push({
+
+      text:
+        message.trim()
+
+    });
+
+  }
+
+  if(
+    Array.isArray(images)
+  ){
+
+    for(
+      const image of images
+    ){
+
+      if(
+        !image ||
+        typeof image !== "object"
+      ){
+
         continue;
+
       }
 
-      const content =
-        typeof item.content === "string"
-          ? item.content.trim()
-          : "";
+      const data =
+        cleanBase64(
+          image.data
+        );
 
-      if (!content) {
+      if(!data){
+
         continue;
+
       }
 
-      let role = "user";
-
-      if (item.role === "assistant" || item.role === "model") {
-        role = "model";
-      }
-
-      contents.push({
-        role,
-        parts: [
-          {
-            text: content
-          }
-        ]
-      });
-    }
-
-    /*
-     * Current user message
-     */
-    const currentParts = [];
-
-    if (message) {
-      currentParts.push({
-        text: message
-      });
-    }
-
-    /*
-     * Add uploaded images as real inline image data.
-     *
-     * Frontend sends:
-     * {
-     *   mimeType: "image/jpeg",
-     *   data: "BASE64_DATA"
-     * }
-     */
-    for (const image of images) {
-      if (!image || typeof image !== "object") {
-        continue;
-      }
-
-      if (
-        typeof image.data !== "string" ||
-        !image.data.trim()
-      ) {
-        continue;
-      }
-
-      let mimeType =
-        typeof image.mimeType === "string"
+      const mimeType =
+        typeof image.mimeType === "string" &&
+        image.mimeType.startsWith("image/")
           ? image.mimeType
           : "image/jpeg";
 
-      /*
-       * Only allow image MIME types here.
-       */
-      if (!mimeType.startsWith("image/")) {
-        mimeType = "image/jpeg";
-      }
+      parts.push({
 
-      let base64Data =
-        image.data.trim();
+        inline_data:{
 
-      /*
-       * Support both:
-       * BASE64_ONLY
-       *
-       * and:
-       * data:image/jpeg;base64,XXXX
-       */
-      if (
-        base64Data.startsWith("data:")
-      ) {
-        const commaIndex =
-          base64Data.indexOf(",");
+          mime_type:
+            mimeType,
 
-        if (commaIndex !== -1) {
-          const header =
-            base64Data.substring(
-              0,
-              commaIndex
-            );
+          data:
+            data
 
-          const data =
-            base64Data.substring(
-              commaIndex + 1
-            );
-
-          base64Data = data;
-
-          const detectedMime =
-            header.match(
-              /^data:([^;]+);base64$/i
-            );
-
-          if (
-            detectedMime &&
-            detectedMime[1] &&
-            detectedMime[1].startsWith(
-              "image/"
-            )
-          ) {
-            mimeType =
-              detectedMime[1];
-          }
         }
-      }
 
-      currentParts.push({
-        inline_data: {
-          mime_type: mimeType,
-          data: base64Data
-        }
       });
+
     }
 
-    if (currentParts.length === 0) {
-      return res.status(400).json({
-        ok: false,
-        error: "No valid message or image data was received."
+  }
+
+  return parts;
+
+}
+
+async function callGemini({
+  apiKey,
+  model,
+  contents,
+  systemText
+}) {
+
+  const endpoint =
+    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+
+  const response =
+    await fetch(
+      endpoint,
+      {
+
+        method:
+          "POST",
+
+        headers:{
+
+          "Content-Type":
+            "application/json",
+
+          "x-goog-api-key":
+            apiKey
+
+        },
+
+        body:
+          JSON.stringify({
+
+            systemInstruction:{
+
+              parts:[
+                {
+                  text:
+                    systemText
+                }
+              ]
+
+            },
+
+            contents:
+
+              contents,
+
+            generationConfig:{
+
+              temperature:
+                0.7,
+
+              topP:
+                0.95,
+
+              maxOutputTokens:
+                4096
+
+            }
+
+          })
+
+      }
+    );
+
+  const data =
+    await response
+      .json()
+      .catch(
+        function(){
+
+          return {};
+
+        }
+      );
+
+  if(
+    !response.ok
+  ){
+
+    const error =
+      new Error(
+
+        data?.error?.message ||
+
+        `Gemini request failed with HTTP ${response.status}.`
+
+      );
+
+    error.status =
+      response.status;
+
+    error.data =
+      data;
+
+    throw error;
+
+  }
+
+  const text =
+    (
+      data?.candidates?.[0]
+        ?.content
+        ?.parts ||
+      []
+    )
+
+      .map(
+        function(part){
+
+          return typeof part?.text === "string"
+            ? part.text
+            : "";
+
+        }
+      )
+
+      .join("")
+      .trim();
+
+  if(!text){
+
+    throw new Error(
+
+      data?.candidates?.[0]
+        ?.finishReason
+
+        ?
+
+        `Gemini returned no text. Finish reason: ${data.candidates[0].finishReason}.`
+
+        :
+
+        "Gemini returned an empty response."
+
+    );
+
+  }
+
+  return text;
+
+}
+
+export default async function handler(
+  req,
+  res
+) {
+
+  if(
+    req.method !== "POST"
+  ){
+
+    return res
+      .status(405)
+      .json({
+
+        ok:
+          false,
+
+        error:
+          "Method not allowed."
+
       });
+
+  }
+
+  const apiKey =
+    process.env.GEMINI_API_KEY;
+
+  if(!apiKey){
+
+    return res
+      .status(500)
+      .json({
+
+        ok:
+          false,
+
+        error:
+          "GEMINI_API_KEY is missing in Vercel Environment Variables."
+
+      });
+
+  }
+
+  try{
+
+    const body =
+      req.body || {};
+
+    const message =
+      typeof body.message === "string"
+        ? body.message
+        : "";
+
+    const history =
+      normalizeHistory(
+        body.history
+      );
+
+    const images =
+      Array.isArray(
+        body.images
+      )
+        ? body.images
+        : [];
+
+    const thinking =
+      Boolean(
+        body.thinking
+      );
+
+    const currentParts =
+      buildUserParts(
+        message,
+        images
+      );
+
+    if(
+      !currentParts.length
+    ){
+
+      return res
+        .status(400)
+        .json({
+
+          ok:
+            false,
+
+          error:
+            "Message or image is required."
+
+        });
+
     }
 
-    contents.push({
-      role: "user",
-      parts: currentParts
-    });
+    const contents = [
 
-    /*
-     * Gemini API request
-     */
-    const url =
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
+      ...history,
 
-    const response =
-      await fetch(
-        url,
-        {
-          method: "POST",
+      {
 
-          headers: {
-            "Content-Type":
-              "application/json",
+        role:
+          "user",
 
-            "x-goog-api-key":
-              apiKey
-          },
+        parts:
+          currentParts
 
-          body: JSON.stringify({
-            systemInstruction,
+      }
 
+    ];
+
+    const systemText = `
+
+You are RG Creator AI, the main AI assistant inside RG Creator AI.
+
+Be helpful, accurate, clear and natural.
+
+Do not add emojis to normal conversation unless they are genuinely useful.
+
+Keep answers appropriately concise unless the user asks for detail.
+
+If an image is attached, actually analyze it and use it as context for the answer.
+
+You can:
+- describe the image
+- read visible text
+- extract text
+- answer questions about the image
+- explain what is shown
+- understand the image as a reference
+- follow image-related instructions when possible
+
+Never claim that an image was not provided when valid image data is present.
+
+If the user asks for code, return clean and usable code.
+
+If the user asks for content, write content appropriate to the requested platform.
+
+If the user asks about YouTube or Instagram, provide practical creator-focused answers.
+
+If Think mode is enabled, reason carefully before answering and prioritize accuracy.
+
+Do not expose private chain-of-thought.
+Provide only the useful conclusion and concise explanation.
+
+You are RG Creator AI.
+Do not unnecessarily mention the underlying Gemini model.
+
+    `.trim();
+
+    let model =
+      process.env.GEMINI_MODEL ||
+      DEFAULT_MODEL;
+
+    let reply;
+
+    try{
+
+      reply =
+        await callGemini({
+
+          apiKey:
+            apiKey,
+
+          model:
+            model,
+
+          contents:
             contents,
 
-            generationConfig: {
-              temperature: 0.8,
-              topP: 0.95,
-              maxOutputTokens: 2048
-            }
-          })
-        }
-      );
+          systemText:
+            systemText
 
-    const data =
-      await response.json();
-
-    /*
-     * Gemini API error
-     */
-    if (!response.ok) {
-      console.error(
-        "Gemini API error:",
-        JSON.stringify(data)
-      );
-
-      if (response.status === 429) {
-        return res.status(429).json({
-          ok: false,
-          error:
-            "Gemini free limit has been reached. Please try again later."
         });
+
+    }catch(error){
+
+      /*
+       * If the preferred model is unavailable,
+       * try a broadly available fallback.
+       */
+
+      if(
+        error.status === 404 &&
+        model !==
+          "gemini-2.5-flash"
+      ){
+
+        model =
+          "gemini-2.5-flash";
+
+        reply =
+          await callGemini({
+
+            apiKey:
+              apiKey,
+
+            model:
+              model,
+
+            contents:
+              contents,
+
+            systemText:
+              systemText
+
+          });
+
+      }else{
+
+        throw error;
+
       }
 
-      if (response.status === 400) {
-        return res.status(400).json({
-          ok: false,
-          error:
-            data?.error?.message ||
-            "Invalid Gemini request."
-        });
-      }
+    }
 
-      if (response.status === 401) {
-        return res.status(401).json({
-          ok: false,
-          error:
-            "Gemini API key is invalid or unavailable."
-        });
-      }
+    return res
+      .status(200)
+      .json({
 
-      return res.status(response.status).json({
-        ok: false,
-        error:
-          data?.error?.message ||
-          "Gemini API request failed."
+        ok:
+          true,
+
+        reply:
+          reply,
+
+        model:
+          model
+
       });
-    }
 
-    /*
-     * Extract Gemini response
-     */
-    const candidate =
-      data?.candidates?.[0];
+  }catch(error){
 
-    const parts =
-      candidate?.content?.parts;
-
-    let reply = "";
-
-    if (Array.isArray(parts)) {
-      reply =
-        parts
-          .map(
-            part =>
-              typeof part?.text === "string"
-                ? part.text
-                : ""
-          )
-          .join("")
-          .trim();
-    }
-
-    /*
-     * Handle blocked/empty response
-     */
-    if (!reply) {
-      const finishReason =
-        candidate?.finishReason ||
-        "";
-
-      console.error(
-        "Empty Gemini response:",
-        JSON.stringify(data)
-      );
-
-      return res.status(502).json({
-        ok: false,
-        error:
-          finishReason
-            ? `Gemini did not return a text response. Reason: ${finishReason}`
-            : "Gemini returned an empty response."
-      });
-    }
-
-    /*
-     * Send successful response to frontend
-     */
-    return res.status(200).json({
-      ok: true,
-      reply
-    });
-
-  } catch (error) {
     console.error(
-      "RG Creator AI API error:",
+      "RG Creator AI Gemini error:",
       error
     );
 
-    return res.status(500).json({
-      ok: false,
-      error:
-        error?.message ||
-        "Internal server error."
-    });
+    if(
+      error.status === 429
+    ){
+
+      return res
+        .status(429)
+        .json({
+
+          ok:
+            false,
+
+          error:
+            "Gemini API limit reached. Billing is not started by this code. Try again after the free quota resets."
+
+        });
+
+    }
+
+    if(
+      error.status === 401 ||
+      error.status === 403
+    ){
+
+      return res
+        .status(401)
+        .json({
+
+          ok:
+            false,
+
+          error:
+            "Gemini API key is invalid, disabled, or does not have access to this model."
+
+        });
+
+    }
+
+    return res
+      .status(500)
+      .json({
+
+        ok:
+          false,
+
+        error:
+          error?.message ||
+          "Gemini request failed."
+
+      });
+
   }
+
 }
